@@ -1,8 +1,3 @@
-
-    // 112233 meets these criteria because the digits never decrease and all repeated digits are exactly two digits long.
-    // 123444 no longer meets the criteria (the repeated 44 is part of a larger group of 444).
-    // 111122 meets the criteria (even though 1 is repeated more than twice, it still contains a double 22).
-
 use digits_iterator::*;
 use std::u8::MAX as U8_MAX;
 
@@ -38,25 +33,9 @@ fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
                 adjacent_sequence.push(digit as char);
             }
         }
-        // if last_number == digit {
-        //     if adjacent_sequence.is_empty() {
-        //         adjacent_sequence.push(last_number as char);
-        //         adjacent_sequence.push(digit as char);
-        //     } else if adjacent_sequence.chars().last().unwrap() as u8 != digit {
-        //         adjacent_sequences.push(adjacent_sequence);
-        //         adjacent_sequence = String::new();
-        //     } else {
-        //         adjacent_sequence.push(digit as char);
-        //     }
-        // } else {
-        //     if !adjacent_sequence.is_empty() {
-        //         adjacent_sequences.push(adjacent_sequence);
-        //         adjacent_sequence = String::new();
-        //     }
-        // }
         last_number = digit;
     }
-    
+
     found_a_sequence_of_exactly_two_digits |= adjacent_sequence.len() == 2;
 
     if successful_candidate && found_a_sequence_of_exactly_two_digits {
