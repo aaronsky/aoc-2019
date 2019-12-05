@@ -102,6 +102,6 @@ mod tests {
             .filter_map(|(cursor, idx)| first_wire_path.get(&cursor).map(|m| idx + m))
             .min()
             .unwrap();
-        println!("distance {}", distance);
+        assert_eq!(distance, 5672);
     }
 }

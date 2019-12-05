@@ -12,11 +12,6 @@ fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
     let mut found_a_sequence_of_exactly_two_digits = false;
     let mut last_number = U8_MAX;
     for digit in candidate.digits() {
-        if last_number != U8_MAX && digit < last_number {
-            successful_candidate = false;
-            break;
-        }
-
         if last_number == U8_MAX {
             adjacent_sequence.push(digit as char);
         } else {
@@ -26,9 +21,7 @@ fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
             } else if digit == last_number {
                 adjacent_sequence.push(digit as char);
             } else {
-                if adjacent_sequence.len() == 2 {
-                    found_a_sequence_of_exactly_two_digits = true;
-                }
+                found_a_sequence_of_exactly_two_digits |= adjacent_sequence.len() == 2;
                 adjacent_sequence = String::new();
                 adjacent_sequence.push(digit as char);
             }
@@ -63,7 +56,7 @@ mod tests {
         let possibilities_count = (start..end)
             .filter(|num| is_valid_password(*num, start, end))
             .count();
-        println!("{}", possibilities_count);
+        assert_eq!(possibilities_count, 1196);
     }
 
     #[test]
