@@ -1,11 +1,6 @@
-// R75,D30,R83,U83,L12,D49,R71,U7,L72
-// U62,R66,U55,R34,D71,R55,D58,R83
-
-// R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
-// U98,R91,D20,R16,D67,R40,U7,R15,U6,R7
-use std::collections::HashMap;
 use std::iter;
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 enum Direction {
     Up,
@@ -14,12 +9,14 @@ enum Direction {
     Right,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
 struct Cursor {
     x: i32,
     y: i32,
 }
 
+#[allow(dead_code)]
 impl Cursor {
     fn move_in_direction(&mut self, direction: Direction) {
         self.x += match direction {
@@ -39,18 +36,21 @@ impl Cursor {
     }
 }
 
+#[allow(dead_code)]
 impl Default for Cursor {
     fn default() -> Self {
         Cursor { x: 0, y: 0 }
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 struct Node {
     direction: Direction,
     len: u32,
 }
 
+#[allow(dead_code)]
 impl Node {
     fn parse(string: &str) -> Self {
         let direction = match string.chars().next() {
@@ -65,11 +65,13 @@ impl Node {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 struct Wire {
     nodes: Vec<Node>,
 }
 
+#[allow(dead_code)]
 impl Wire {
     fn from(string: &str) -> Self {
         let nodes: Vec<Node> = string.split(",").map(Node::parse).collect();
@@ -90,6 +92,7 @@ impl Wire {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashMap;
 
     #[test]
     fn test_advent_puzzle() {

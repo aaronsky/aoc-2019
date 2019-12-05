@@ -1,6 +1,7 @@
 use digits_iterator::*;
 use std::u8::MAX as U8_MAX;
 
+#[allow(dead_code)]
 fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
     if candidate.digits().count() != 6 {
         return false;

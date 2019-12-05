@@ -1,14 +1,18 @@
+#[allow(dead_code)]
 type Memory = Vec<u32>;
 
+#[allow(dead_code)]
 enum CpuCall {
     Stride(usize),
     Halt,
 }
 
+#[allow(dead_code)]
 struct Cpu {
     mem: Memory,
 }
 
+#[allow(dead_code)]
 impl Cpu {
     fn new(mem: Memory) -> Self {
         Cpu { mem }
@@ -17,8 +21,9 @@ impl Cpu {
     fn run(&mut self) {
         let mut pointer: usize = 0;
         loop {
-            let call = match self.mem.get(pointer) {
-                Some(code) => self.call(*code, &pointer),
+            let instruction = self.mem.get(pointer).cloned();
+            let call = match instruction {
+                Some(code) => self.call(code, &pointer),
                 None => panic!("Address {} does not exist", pointer),
             };
             match call {

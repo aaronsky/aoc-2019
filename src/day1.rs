@@ -1,7 +1,9 @@
+#[allow(dead_code)]
 fn fuel_required_for_mass(mass: &i32) -> i32 {
     mass / 3 - 2
 }
 
+#[allow(dead_code)]
 fn fuel_required_to_launch(modules: &[u32]) -> u32 {
     let mut fuel_required = 0;
     for module in modules {
