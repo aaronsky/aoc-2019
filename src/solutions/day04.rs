@@ -1,7 +1,7 @@
+use crate::utils;
 use digits_iterator::*;
 use std::u8::MAX as U8_MAX;
 
-#[allow(dead_code)]
 fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
     if candidate.digits().count() != 6 {
         return false;
@@ -53,7 +53,7 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let (start, end) = parse("152085-670283");
+        let (start, end) = utils::load_input_file("day04.txt", parse).unwrap();
         let possibilities_count = (start..end)
             .filter(|num| is_valid_password(*num, start, end))
             .count();
