@@ -1,8 +1,7 @@
-use crate::utils;
 use digits_iterator::*;
 use std::u8::MAX as U8_MAX;
 
-fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
+pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
     if candidate.digits().count() != 6 {
         return false;
     } else if candidate < range_start || candidate > range_end {
@@ -41,6 +40,7 @@ fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utils;
 
     fn parse(input: &str) -> (u32, u32) {
         let range: Vec<u32> = input.split("-").take(2).map(str_to_u32).collect();

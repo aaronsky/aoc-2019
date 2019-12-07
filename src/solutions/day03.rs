@@ -1,4 +1,3 @@
-use crate::utils;
 use std::iter;
 
 #[derive(Debug, Clone, Copy)]
@@ -10,7 +9,7 @@ enum Direction {
 }
 
 #[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
-struct Cursor {
+pub struct Cursor {
     x: i32,
     y: i32,
 }
@@ -29,7 +28,7 @@ impl Cursor {
         }
     }
 
-    fn manhattan_distance(self) -> i32 {
+    pub fn manhattan_distance(self) -> i32 {
         self.x.abs() + self.y.abs()
     }
 }
@@ -61,7 +60,7 @@ impl Node {
 }
 
 #[derive(Debug)]
-struct Wire {
+pub struct Wire {
     nodes: Vec<Node>,
 }
 
@@ -71,7 +70,7 @@ impl Wire {
         Wire { nodes }
     }
 
-    fn iter(&self) -> impl Iterator<Item = Cursor> + '_ {
+    pub fn iter(&self) -> impl Iterator<Item = Cursor> + '_ {
         self.nodes
             .iter()
             .flat_map(|node| iter::repeat(node.direction).take(node.len as usize))
@@ -85,6 +84,7 @@ impl Wire {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utils;
     use std::collections::HashMap;
 
     fn parse_wires(input: &str) -> (Wire, Wire) {

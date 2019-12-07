@@ -1,9 +1,7 @@
-use crate::intcode::Intcode;
-use crate::utils;
-
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::intcode::Intcode;
+    use crate::utils;
 
     #[test]
     fn smoke_simple_program_1() {

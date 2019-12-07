@@ -1,10 +1,8 @@
-use crate::utils;
-
-fn fuel_required_for_mass(mass: &i32) -> i32 {
+pub fn fuel_required_for_mass(mass: &i32) -> i32 {
     mass / 3 - 2
 }
 
-fn fuel_required_to_launch(modules: &[u32]) -> u32 {
+pub fn fuel_required_to_launch(modules: &[u32]) -> u32 {
     let mut fuel_required = 0;
     for module in modules {
         let mass = *module as i32;
@@ -29,6 +27,7 @@ fn fuel_required_to_launch(modules: &[u32]) -> u32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utils;
 
     #[test]
     fn test_advent_puzzle() {

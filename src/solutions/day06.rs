@@ -1,4 +1,3 @@
-use crate::utils;
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 
@@ -118,6 +117,7 @@ impl OrbitMap {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utils;
 
     #[test]
     fn smoke_simple_program_1() {
