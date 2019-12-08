@@ -2,7 +2,7 @@ use digits_iterator::*;
 
 type Memory = Vec<i32>;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 enum InstructionArgument {
     Position(usize),
     Immediate(i32),
@@ -21,30 +21,36 @@ enum ProgramCounter {
     Stride(usize),
     Halt,
     Jump(usize),
+    StateChange(ExecutionState),
 }
 
-pub struct Intcode<I, O> {
+#[derive(Debug)]
+pub enum ExecutionState {
+    Halted,
+    WaitingForInput,
+    Output(i32),
+}
+
+struct Input(InstructionArgument, Option<i32>);
+
+pub struct Intcode {
     mem: Memory,
     pc: usize,
-    input: I,
-    output: O,
+    pending_input: Option<Input>,
+    pending_output: Option<i32>,
 }
 
-impl<I, O> Intcode<I, O>
-where
-    I: FnMut() -> i32,
-    O: FnMut(i32),
-{
-    pub fn new(mem: Memory, input: I, output: O) -> Self {
+impl Intcode {
+    pub fn new(mem: Memory) -> Self {
         Intcode {
             mem,
             pc: 0,
-            input,
-            output,
+            pending_input: None,
+            pending_output: None,
         }
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> ExecutionState {
         loop {
             let instruction = self.mem.get(self.pc).cloned();
             let call = match instruction {
@@ -53,9 +59,18 @@ where
             };
             match call {
                 ProgramCounter::Stride(stride) => self.pc += stride,
+                ProgramCounter::StateChange(state) => {
+                    return state;
+                }
                 ProgramCounter::Jump(addr) => self.pc = addr,
-                ProgramCounter::Halt => break,
+                ProgramCounter::Halt => return ExecutionState::Halted,
             };
+        }
+    }
+
+    pub fn set_input(&mut self, input: i32) {
+        if let Some(Input(arg, _)) = self.pending_input.take() {
+            self.pending_input = Some(Input(arg, Some(input)))
         }
     }
 
@@ -75,13 +90,25 @@ where
             }
             3 => {
                 let (arg, _, _) = args;
-                self.ld(arg.unwrap());
-                ProgramCounter::Stride(2)
+                if let Some(Input(arg, Some(input))) = self.pending_input {
+                    self.ld(arg, input);
+                    self.pending_input = None;
+                    ProgramCounter::Stride(2)
+                } else {
+                    self.pending_input = Some(Input(arg.unwrap(), None));
+                    ProgramCounter::StateChange(ExecutionState::WaitingForInput)
+                }
             }
             4 => {
-                let (arg, _, _) = args;
-                self.output_arg(arg.unwrap());
-                ProgramCounter::Stride(2)
+                if let Some(_) = self.pending_output {
+                    self.pending_output = None;
+                    ProgramCounter::Stride(2)
+                } else {
+                    let (arg, _, _) = args;
+                    let output = self.output_arg(&arg.unwrap());
+                    self.pending_output = Some(output);
+                    ProgramCounter::StateChange(ExecutionState::Output(output))
+                }
             }
             5 => {
                 let (arg0, arg1, _) = args;
@@ -137,7 +164,15 @@ where
         }
         let arg2 = args.pop();
         let arg1 = args.pop();
-        let arg0 = args.pop();
+        let arg0 = if let Some(arg) = args.pop() {
+            Some(arg)
+        } else if let Some(arg) = arg1 {
+            Some(arg)
+        } else if let Some(arg) = arg2 {
+            Some(arg)
+        } else {
+            None
+        };
         (arg0, arg1, arg2)
     }
 
@@ -167,12 +202,16 @@ where
         }
     }
 
-    fn ld(&mut self, addr: InstructionArgument) {
+    fn ld(&mut self, addr: InstructionArgument, input: i32) {
         if let InstructionArgument::Position(addr_pos) = addr {
-            self.mem[addr_pos] = (self.input)();
+            self.mem[addr_pos] = input;
         } else {
             panic!("Immediate mode is not supported for ld");
         }
+    }
+
+    fn output_arg(&mut self, addr: &InstructionArgument) -> i32 {
+        addr.get(&self.mem)
     }
 
     fn jump_if_true(
@@ -231,10 +270,6 @@ where
         } else {
             panic!("Immediate mode is not supported for ld");
         }
-    }
-
-    fn output_arg(&mut self, addr: InstructionArgument) {
-        (self.output)(addr.get(&self.mem))
     }
 
     pub fn dump_memory(&self) -> String {
