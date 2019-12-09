@@ -3,7 +3,7 @@ use crate::utils;
 use std::collections::{HashSet, VecDeque};
 use std::iter::FromIterator;
 
-pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i32]) -> i32 {
+pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i64]) -> i64 {
     let load_rom = || utils::parse_comma_separated_content_into_vec_of_fromstr_data(rom);
 
     let mut programs = vec![
@@ -42,7 +42,7 @@ pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i32]) -> i3
     output
 }
 
-pub fn output_for_amplifier_sequence(rom: &str, amplifier_sequence: &[i32]) -> i32 {
+pub fn output_for_amplifier_sequence(rom: &str, amplifier_sequence: &[i64]) -> i64 {
     let mut last_output = 0;
     for i in 0..5 {
         let mut has_provided_first_input = false;
@@ -70,14 +70,14 @@ pub fn output_for_amplifier_sequence(rom: &str, amplifier_sequence: &[i32]) -> i
 pub struct AmplifierSequence;
 
 impl AmplifierSequence {
-    pub fn permutations(possible_numbers: HashSet<i32>) -> Vec<Vec<i32>> {
+    pub fn permutations(possible_numbers: HashSet<i64>) -> Vec<Vec<i64>> {
         let mut permutations = vec![];
         let mut queue = VecDeque::from_iter(possible_numbers.into_iter());
         AmplifierSequence::permute(&mut vec![], &mut queue, &mut permutations);
         permutations
     }
 
-    fn permute(used: &mut Vec<i32>, unused: &mut VecDeque<i32>, output: &mut Vec<Vec<i32>>) {
+    fn permute(used: &mut Vec<i64>, unused: &mut VecDeque<i64>, output: &mut Vec<Vec<i64>>) {
         if unused.is_empty() {
             output.push(used.clone());
             return;
