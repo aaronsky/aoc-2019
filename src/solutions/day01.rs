@@ -1,4 +1,4 @@
-pub fn fuel_required_for_mass(mass: &i32) -> i32 {
+pub fn fuel_required_for_mass(mass: i32) -> i32 {
     mass / 3 - 2
 }
 
@@ -6,14 +6,14 @@ pub fn fuel_required_to_launch(modules: &[u32]) -> u32 {
     let mut fuel_required = 0;
     for module in modules {
         let mass = *module as i32;
-        let minimum_fuel_required = fuel_required_for_mass(&mass);
+        let minimum_fuel_required = fuel_required_for_mass(mass);
         if minimum_fuel_required <= 0 {
             continue;
         }
         let mut remaining_mass = minimum_fuel_required;
         let mut additional_fuel_required = 0;
         while remaining_mass > 0 {
-            remaining_mass = fuel_required_for_mass(&remaining_mass);
+            remaining_mass = fuel_required_for_mass(remaining_mass);
             if remaining_mass <= 0 {
                 break;
             }

@@ -66,7 +66,7 @@ pub struct Wire {
 
 impl Wire {
     pub fn from(string: &str) -> Self {
-        let nodes: Vec<Node> = string.split(",").map(Node::parse).collect();
+        let nodes: Vec<Node> = string.split(',').map(Node::parse).collect();
         Wire { nodes }
     }
 

@@ -90,7 +90,7 @@ impl<'a> From<RawImage<'a>> for Layer {
         }
         Layer {
             pixels: pixels_vec,
-            pixel_count_map: pixel_count_map,
+            pixel_count_map,
             width: raw_image.width,
             height: raw_image.height,
         }

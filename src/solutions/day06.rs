@@ -48,8 +48,8 @@ impl OrbitMap {
     pub fn parse(input: &str) -> Self {
         let mut all_objects = HashSet::new();
         let mut reverse_lookup = HashMap::new();
-        for line in input.split("\n") {
-            let adjacency: Vec<&str> = line.split(")").take(2).map(str::trim).collect();
+        for line in input.split('\n') {
+            let adjacency: Vec<&str> = line.split(')').take(2).map(str::trim).collect();
             if adjacency.len() != 2 {
                 continue;
             }
@@ -94,8 +94,8 @@ impl OrbitMap {
             last_matching_santa_index = santa_orbits.len() - reverse_index - 1;
         }
         let path: Vec<&OrbitalObject> = you_orbits[..last_matching_you_index]
-            .into_iter()
-            .chain(santa_orbits[..=last_matching_santa_index].into_iter().rev())
+            .iter()
+            .chain(santa_orbits[..=last_matching_santa_index].iter().rev())
             .collect();
         path.len() - 1
     }

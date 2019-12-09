@@ -29,9 +29,7 @@ struct Memory {
 impl Memory {
     fn load_program(program: &[i64]) -> Self {
         let mut ram = vec![0; program.len() * 2];
-        for i in 0..program.len() {
-            ram[i] = program[i];
-        }
+        ram[..program.len()].clone_from_slice(&program[..]);
         Memory {
             ram,
             program_size: program.len(),
@@ -269,7 +267,8 @@ impl Intcode {
             }
             Opcode::SetRelativeBase => {
                 let arg = self.get_arg(code, 0);
-                self.memory.checked_adjust_relative_base(self.memory.get(arg));
+                self.memory
+                    .checked_adjust_relative_base(self.memory.get(arg));
                 ProgramCounter::Stride(2)
             }
             Opcode::Halt => ProgramCounter::Halt,

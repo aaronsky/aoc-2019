@@ -24,7 +24,7 @@ pub fn parse_comma_separated_content<F, S: FromStr>(input: &str, transform: F) -
 where
     F: Fn(&str) -> S,
 {
-    input.split(",").map(transform).collect()
+    input.split(',').map(transform).collect()
 }
 
 pub fn parse_comma_separated_content_into_vec_of_fromstr_data<S: FromStr>(input: &str) -> Vec<S> {

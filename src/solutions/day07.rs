@@ -1,4 +1,4 @@
-use crate::intcode::{Interrupt, Intcode};
+use crate::intcode::{Intcode, Interrupt};
 use crate::utils;
 use std::collections::{HashSet, VecDeque};
 use std::iter::FromIterator;
@@ -25,8 +25,7 @@ pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i64]) -> i6
 
     loop {
         let mut halted = false;
-        for i in 0..5 {
-            let program = &mut programs[i];
+        for program in &mut programs {
             program.set_input(output);
             match program.run() {
                 Interrupt::WaitingForInput => continue,
@@ -44,7 +43,7 @@ pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i64]) -> i6
 
 pub fn output_for_amplifier_sequence(rom: &str, amplifier_sequence: &[i64]) -> i64 {
     let mut last_output = 0;
-    for i in 0..5 {
+    for code in amplifier_sequence {
         let mut has_provided_first_input = false;
         let mut output = 0;
         let mut program =
@@ -55,7 +54,7 @@ pub fn output_for_amplifier_sequence(rom: &str, amplifier_sequence: &[i64]) -> i
                     (last, true) => program.set_input(last),
                     (_, false) => {
                         has_provided_first_input = true;
-                        program.set_input(amplifier_sequence[i])
+                        program.set_input(*code)
                     }
                 },
                 Interrupt::Output(o) => output = o,

@@ -15,17 +15,15 @@ pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bo
         let digit = utils::digit_at_index(num_digits - i, candidate);
         if last_number == U8_MAX {
             adjacent_sequence.push(digit as char);
+        } else if digit < last_number {
+            successful_candidate = false;
+            break;
+        } else if digit == last_number {
+            adjacent_sequence.push(digit as char);
         } else {
-            if digit < last_number {
-                successful_candidate = false;
-                break;
-            } else if digit == last_number {
-                adjacent_sequence.push(digit as char);
-            } else {
-                found_a_sequence_of_exactly_two_digits |= adjacent_sequence.len() == 2;
-                adjacent_sequence = String::new();
-                adjacent_sequence.push(digit as char);
-            }
+            found_a_sequence_of_exactly_two_digits |= adjacent_sequence.len() == 2;
+            adjacent_sequence = String::new();
+            adjacent_sequence.push(digit as char);
         }
         last_number = digit;
     }
