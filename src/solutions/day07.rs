@@ -1,4 +1,4 @@
-use crate::intcode::{ExecutionState, Intcode};
+use crate::intcode::{Interrupt, Intcode};
 use crate::utils;
 use std::collections::{HashSet, VecDeque};
 use std::iter::FromIterator;
@@ -7,11 +7,11 @@ pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i64]) -> i6
     let load_rom = || utils::parse_comma_separated_content_into_vec_of_fromstr_data(rom);
 
     let mut programs = vec![
-        Intcode::new(load_rom()),
-        Intcode::new(load_rom()),
-        Intcode::new(load_rom()),
-        Intcode::new(load_rom()),
-        Intcode::new(load_rom()),
+        Intcode::new(&load_rom()),
+        Intcode::new(&load_rom()),
+        Intcode::new(&load_rom()),
+        Intcode::new(&load_rom()),
+        Intcode::new(&load_rom()),
     ];
 
     for i in 0..5 {
@@ -29,9 +29,9 @@ pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i64]) -> i6
             let program = &mut programs[i];
             program.set_input(output);
             match program.run() {
-                ExecutionState::WaitingForInput => continue,
-                ExecutionState::Output(o) => output = o,
-                ExecutionState::Halted => halted = true,
+                Interrupt::WaitingForInput => continue,
+                Interrupt::Output(o) => output = o,
+                Interrupt::Halted => halted = true,
             }
         }
         if halted {
@@ -48,17 +48,17 @@ pub fn output_for_amplifier_sequence(rom: &str, amplifier_sequence: &[i64]) -> i
         let mut has_provided_first_input = false;
         let mut output = 0;
         let mut program =
-            Intcode::new(utils::parse_comma_separated_content_into_vec_of_fromstr_data(rom));
+            Intcode::new(&utils::parse_comma_separated_content_into_vec_of_fromstr_data(rom));
         loop {
             match program.run() {
-                ExecutionState::Output(o) => output = o,
-                ExecutionState::WaitingForInput => match (last_output, has_provided_first_input) {
+                Interrupt::WaitingForInput => match (last_output, has_provided_first_input) {
                     (last, true) => program.set_input(last),
                     (_, false) => {
                         has_provided_first_input = true;
                         program.set_input(amplifier_sequence[i])
                     }
                 },
+                Interrupt::Output(o) => output = o,
                 _ => break,
             }
         }

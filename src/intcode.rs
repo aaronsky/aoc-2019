@@ -1,7 +1,4 @@
-use digits_iterator::*;
-
-type Program = Vec<i64>;
-type Memory = Vec<i64>;
+use std::ops::{Index, IndexMut};
 
 #[derive(Debug, Clone, Copy)]
 enum InstructionArgument {
@@ -11,186 +8,272 @@ enum InstructionArgument {
 }
 
 impl InstructionArgument {
-    fn get(&self, mem: &Memory, relative_base: &usize) -> i64 {
-        match *self {
-            InstructionArgument::Position(pos) => mem[pos],
-            InstructionArgument::Immediate(value) => value,
-            InstructionArgument::Relative(value) => {
-                mem[((*relative_base as isize) + value) as usize]
-            }
+    fn from(mode: u8, value: i64) -> Self {
+        match mode {
+            0 => InstructionArgument::Position(value as usize),
+            1 => InstructionArgument::Immediate(value),
+            2 => InstructionArgument::Relative(value as isize),
+            _ => panic!("unsupported instruction argument value {}", mode),
         }
     }
 }
 
-enum ProgramCounter {
-    Stride(usize),
-    Halt,
-    Jump(usize),
-    StateChange(ExecutionState),
+#[derive(Debug)]
+struct Memory {
+    ram: Vec<i64>,
+    program_size: usize,
+    program_counter: usize,
+    relative_base: usize,
+}
+
+impl Memory {
+    fn load_program(program: &[i64]) -> Self {
+        let mut ram = vec![0; program.len() * 2];
+        for i in 0..program.len() {
+            ram[i] = program[i];
+        }
+        Memory {
+            ram,
+            program_size: program.len(),
+            program_counter: 0,
+            relative_base: 0,
+        }
+    }
+
+    fn get_instruction(&self) -> Option<i64> {
+        self.ram.get(self.program_counter).cloned()
+    }
+
+    fn get(&self, arg: InstructionArgument) -> i64 {
+        match arg {
+            InstructionArgument::Position(addr) => self.ram[addr],
+            InstructionArgument::Immediate(value) => value,
+            InstructionArgument::Relative(rel_addr) => {
+                let addr = ((self.relative_base as isize) + rel_addr) as usize;
+                self.ram[addr]
+            }
+        }
+    }
+
+    fn set(&mut self, arg: InstructionArgument, value: i64) {
+        match arg {
+            InstructionArgument::Position(addr) => self.ram[addr] = value,
+            InstructionArgument::Immediate(_) => {
+                panic!("writes with immediate arguments are not supported")
+            }
+            InstructionArgument::Relative(rel_addr) => {
+                let addr = ((self.relative_base as isize) + rel_addr) as usize;
+                self.ram[addr] = value;
+            }
+        };
+    }
+
+    fn checked_adjust_relative_base(&mut self, modifier: i64) {
+        if modifier < 0 {
+            self.relative_base -= i64::abs(modifier) as usize;
+        } else {
+            self.relative_base += modifier as usize;
+        }
+    }
+
+    fn dump(&self) -> String {
+        format!("{:?}", self.ram)
+    }
+}
+
+impl Index<usize> for Memory {
+    type Output = i64;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.ram[index]
+    }
+}
+
+impl IndexMut<usize> for Memory {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.ram[index]
+    }
 }
 
 #[derive(Debug)]
-pub enum ExecutionState {
+enum ProgramCounter {
+    Stride(usize),
+    Interrupt(Interrupt),
+    Jump(usize),
+    Halt,
+}
+
+#[derive(Debug)]
+pub enum Interrupt {
     Halted,
     WaitingForInput,
     Output(i64),
 }
 
-struct Input(InstructionArgument, Option<i64>);
+pub enum Opcode {
+    Add = 1,
+    Multiply = 2,
+    Load = 3,
+    Output = 4,
+    JumpIfTrue = 5,
+    JumpIfFalse = 6,
+    LessThan = 7,
+    Equals = 8,
+    SetRelativeBase = 9,
+    Halt = 99,
+}
 
+impl From<u8> for Opcode {
+    fn from(byte: u8) -> Self {
+        match byte {
+            1 => Opcode::Add,
+            2 => Opcode::Multiply,
+            3 => Opcode::Load,
+            4 => Opcode::Output,
+            5 => Opcode::JumpIfTrue,
+            6 => Opcode::JumpIfFalse,
+            7 => Opcode::LessThan,
+            8 => Opcode::Equals,
+            9 => Opcode::SetRelativeBase,
+            99 => Opcode::Halt,
+            _ => panic!("{} is not a valid opcode", byte),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct Input {
+    arg: InstructionArgument,
+    value: Option<i64>,
+}
+
+#[derive(Debug)]
 pub struct Intcode {
-    mem: Memory,
-    pc: usize,
-    relative_base: usize,
+    memory: Memory,
     pending_input: Option<Input>,
     pending_output: Option<i64>,
 }
 
 impl Intcode {
-    pub fn new(program: Program) -> Self {
-        let mut mem = vec![0; program.len() * 2];
-        for i in 0..program.len() {
-            mem[i] = program[i];
-        }
+    pub fn new(program: &[i64]) -> Self {
         Intcode {
-            mem,
-            pc: 0,
-            relative_base: 0,
+            memory: Memory::load_program(program),
             pending_input: None,
             pending_output: None,
         }
     }
 
-    pub fn run(&mut self) -> ExecutionState {
+    pub fn dump_memory(&self) -> String {
+        self.memory.dump()
+    }
+
+    pub fn run(&mut self) -> Interrupt {
         loop {
-            let instruction = self.mem.get(self.pc).cloned();
+            let instruction = self.memory.get_instruction();
             let call = match instruction {
                 Some(code) => self.call(code),
-                None => panic!("Address {} does not exist", self.pc),
+                None => panic!("Address {} does not exist", self.memory.program_counter),
             };
             match call {
-                ProgramCounter::Stride(stride) => self.pc += stride,
-                ProgramCounter::StateChange(state) => {
-                    return state;
-                }
-                ProgramCounter::Jump(addr) => self.pc = addr,
-                ProgramCounter::Halt => return ExecutionState::Halted,
+                ProgramCounter::Stride(stride) => self.memory.program_counter += stride,
+                ProgramCounter::Interrupt(cause) => return cause,
+                ProgramCounter::Jump(addr) => self.memory.program_counter = addr,
+                ProgramCounter::Halt => return Interrupt::Halted,
             };
         }
     }
 
     pub fn set_input(&mut self, input: i64) {
-        if let Some(Input(arg, _)) = self.pending_input.take() {
-            self.pending_input = Some(Input(arg, Some(input)))
+        if let Some(pending_input) = self.pending_input.take() {
+            self.pending_input = Some(Input {
+                arg: pending_input.arg,
+                value: Some(input),
+            });
         }
+    }
+
+    fn get_arg(&self, code: i64, index: usize) -> InstructionArgument {
+        let power = (index as u32) + 2;
+        let mask = i64::pow(10, power);
+        let mode = ((code / mask) % 10) as u8;
+        let value = self.memory[self.memory.program_counter + index + 1];
+        InstructionArgument::from(mode, value)
     }
 
     fn call(&mut self, code: i64) -> ProgramCounter {
-        let opcode = code % 100;
-        let args = self.get_args(code);
+        let get_two = || (self.get_arg(code, 0), self.get_arg(code, 1));
+        let get_three = || {
+            (
+                self.get_arg(code, 0),
+                self.get_arg(code, 1),
+                self.get_arg(code, 2),
+            )
+        };
+        let opcode: Opcode = From::from((code % 100) as u8);
+        // let args = mem.get_args(code);
         match opcode {
-            1 => {
-                let (augend, addend, sum) = args;
-                self.add(augend.unwrap(), addend.unwrap(), sum.unwrap());
+            Opcode::Add => {
+                let (augend, addend, sum) = get_three();
+                self.add(augend, addend, sum);
                 ProgramCounter::Stride(4)
             }
-            2 => {
-                let (multiplier, multiplicand, product) = args;
-                self.mult(multiplier.unwrap(), multiplicand.unwrap(), product.unwrap());
+            Opcode::Multiply => {
+                let (multiplier, multiplicand, product) = get_three();
+                self.mult(multiplier, multiplicand, product);
                 ProgramCounter::Stride(4)
             }
-            3 => {
-                let (arg, _, _) = args;
-                if let Some(Input(arg, Some(input))) = self.pending_input {
+            Opcode::Load => match self.pending_input {
+                Some(Input {
+                    arg,
+                    value: Some(input),
+                }) => {
                     self.ld(arg, input);
                     self.pending_input = None;
                     ProgramCounter::Stride(2)
-                } else {
-                    self.pending_input = Some(Input(arg.unwrap(), None));
-                    ProgramCounter::StateChange(ExecutionState::WaitingForInput)
                 }
-            }
-            4 => {
-                if let Some(_) = self.pending_output {
+                _ => {
+                    let arg = self.get_arg(code, 0);
+                    self.pending_input = Some(Input { arg, value: None });
+                    ProgramCounter::Interrupt(Interrupt::WaitingForInput)
+                }
+            },
+            Opcode::Output => match self.pending_output {
+                Some(_) => {
                     self.pending_output = None;
                     ProgramCounter::Stride(2)
-                } else {
-                    let (arg, _, _) = args;
-                    let output = self.output_arg(&arg.unwrap());
-                    self.pending_output = Some(output);
-                    ProgramCounter::StateChange(ExecutionState::Output(output))
                 }
+                None => {
+                    let arg = self.get_arg(code, 0);
+                    let output = self.output_arg(arg);
+                    self.pending_output = Some(output);
+                    ProgramCounter::Interrupt(Interrupt::Output(output))
+                }
+            },
+            Opcode::JumpIfTrue => {
+                let (arg0, arg1) = get_two();
+                self.jump_if_true(arg0, arg1)
             }
-            5 => {
-                let (arg0, arg1, _) = args;
-                self.jump_if_true(arg0.unwrap(), arg1.unwrap())
+            Opcode::JumpIfFalse => {
+                let (arg0, arg1) = get_two();
+                self.jump_if_false(arg0, arg1)
             }
-            6 => {
-                let (arg0, arg1, _) = args;
-                self.jump_if_false(arg0.unwrap(), arg1.unwrap())
-            }
-            7 => {
-                let (lhs, rhs, addr) = args;
-                self.less_than(lhs.unwrap(), rhs.unwrap(), addr.unwrap());
+            Opcode::LessThan => {
+                let (lhs, rhs, addr) = get_three();
+                self.less_than(lhs, rhs, addr);
                 ProgramCounter::Stride(4)
             }
-            8 => {
-                let (lhs, rhs, addr) = args;
-                self.equals(lhs.unwrap(), rhs.unwrap(), addr.unwrap());
+            Opcode::Equals => {
+                let (lhs, rhs, addr) = get_three();
+                self.equals(lhs, rhs, addr);
                 ProgramCounter::Stride(4)
             }
-            9 => {
-                let (arg, _, _) = args;
-                self.set_relative_base(arg.unwrap());
+            Opcode::SetRelativeBase => {
+                let arg = self.get_arg(code, 0);
+                self.memory.checked_adjust_relative_base(self.memory.get(arg));
                 ProgramCounter::Stride(2)
             }
-            99 => ProgramCounter::Halt,
-            _ => panic!(
-                "opcode {} (evaluated as {}) @ {} is not supported {:?}",
-                code, opcode, self.pc, args
-            ),
+            Opcode::Halt => ProgramCounter::Halt,
         }
-    }
-
-    fn get_args(
-        &mut self,
-        code: i64,
-    ) -> (
-        Option<InstructionArgument>,
-        Option<InstructionArgument>,
-        Option<InstructionArgument>,
-    ) {
-        let mut args: Vec<InstructionArgument> = vec![];
-        let mut digits = code.digits().rev().skip(2).take(3);
-        for index in 0..=2 {
-            if self.pc + index + 1 >= self.mem.len() {
-                continue;
-            }
-            let value = self.mem[self.pc + index + 1];
-            if let Some(digit) = digits.next() {
-                let arg = match digit {
-                    0 => InstructionArgument::Position(value as usize),
-                    1 => InstructionArgument::Immediate(value),
-                    2 => InstructionArgument::Relative(value as isize),
-                    _ => panic!("Unsupported digit for argument"),
-                };
-                args.push(arg);
-            } else {
-                args.push(InstructionArgument::Position(value as usize))
-            }
-        }
-        let arg2 = args.pop();
-        let arg1 = args.pop();
-        let arg0 = if let Some(arg) = args.pop() {
-            Some(arg)
-        } else if let Some(arg) = arg1 {
-            Some(arg)
-        } else if let Some(arg) = arg2 {
-            Some(arg)
-        } else {
-            None
-        };
-        (arg0, arg1, arg2)
     }
 
     fn add(
@@ -199,20 +282,8 @@ impl Intcode {
         addend: InstructionArgument,
         sum: InstructionArgument,
     ) {
-        match sum {
-            InstructionArgument::Position(sum_pos) => {
-                self.mem[sum_pos] = augend.get(&self.mem, &self.relative_base)
-                    + addend.get(&self.mem, &self.relative_base);
-            }
-            InstructionArgument::Relative(sum_pos) => {
-                self.mem[((self.relative_base as isize) + sum_pos) as usize] = augend
-                    .get(&self.mem, &self.relative_base)
-                    + addend.get(&self.mem, &self.relative_base);
-            }
-            InstructionArgument::Immediate(_) => {
-                panic!("Immediate mode is not supported for addition")
-            }
-        };
+        self.memory
+            .set(sum, self.memory.get(augend) + self.memory.get(addend));
     }
 
     fn mult(
@@ -221,34 +292,18 @@ impl Intcode {
         multiplicand: InstructionArgument,
         product: InstructionArgument,
     ) {
-        match product {
-            InstructionArgument::Position(product_pos) => {
-                self.mem[product_pos] = multiplier.get(&self.mem, &self.relative_base)
-                    * multiplicand.get(&self.mem, &self.relative_base)
-            }
-            InstructionArgument::Relative(product_pos) => {
-                self.mem[((self.relative_base as isize) + product_pos) as usize] = multiplier
-                    .get(&self.mem, &self.relative_base)
-                    * multiplicand.get(&self.mem, &self.relative_base)
-            }
-            InstructionArgument::Immediate(_) => {
-                panic!("Immediate mode is not supported for multiplication")
-            }
-        };
+        self.memory.set(
+            product,
+            self.memory.get(multiplier) * self.memory.get(multiplicand),
+        );
     }
 
     fn ld(&mut self, addr: InstructionArgument, input: i64) {
-        match addr {
-            InstructionArgument::Position(addr_pos) => self.mem[addr_pos] = input,
-            InstructionArgument::Relative(addr_pos) => {
-                self.mem[((self.relative_base as isize) + addr_pos) as usize] = input
-            }
-            InstructionArgument::Immediate(_) => panic!("Immediate mode is not supported for ld"),
-        };
+        self.memory.set(addr, input);
     }
 
-    fn output_arg(&mut self, addr: &InstructionArgument) -> i64 {
-        addr.get(&self.mem, &self.relative_base)
+    fn output_arg(&mut self, addr: InstructionArgument) -> i64 {
+        self.memory.get(addr)
     }
 
     fn jump_if_true(
@@ -256,8 +311,8 @@ impl Intcode {
         arg0: InstructionArgument,
         arg1: InstructionArgument,
     ) -> ProgramCounter {
-        if arg0.get(&self.mem, &self.relative_base) != 0 {
-            ProgramCounter::Jump(arg1.get(&self.mem, &self.relative_base) as usize)
+        if self.memory.get(arg0) != 0 {
+            ProgramCounter::Jump(self.memory.get(arg1) as usize)
         } else {
             ProgramCounter::Stride(3)
         }
@@ -268,8 +323,8 @@ impl Intcode {
         arg0: InstructionArgument,
         arg1: InstructionArgument,
     ) -> ProgramCounter {
-        if arg0.get(&self.mem, &self.relative_base) == 0 {
-            ProgramCounter::Jump(arg1.get(&self.mem, &self.relative_base) as usize)
+        if self.memory.get(arg0) == 0 {
+            ProgramCounter::Jump(self.memory.get(arg1) as usize)
         } else {
             ProgramCounter::Stride(3)
         }
@@ -281,28 +336,11 @@ impl Intcode {
         rhs: InstructionArgument,
         addr: InstructionArgument,
     ) {
-        match addr {
-            InstructionArgument::Position(addr_pos) => {
-                if lhs.get(&self.mem, &self.relative_base) < rhs.get(&self.mem, &self.relative_base)
-                {
-                    self.mem[addr_pos] = 1;
-                } else {
-                    self.mem[addr_pos] = 0;
-                }
-            }
-            InstructionArgument::Relative(addr_pos) => {
-                let write_addr = ((self.relative_base as isize) + addr_pos) as usize;
-                if lhs.get(&self.mem, &self.relative_base) < rhs.get(&self.mem, &self.relative_base)
-                {
-                    self.mem[write_addr] = 1;
-                } else {
-                    self.mem[write_addr] = 0;
-                }
-            }
-            InstructionArgument::Immediate(_) => {
-                panic!("Immediate mode is not supported for less_than")
-            }
-        };
+        if self.memory.get(lhs) < self.memory.get(rhs) {
+            self.memory.set(addr, 1);
+        } else {
+            self.memory.set(addr, 0);
+        }
     }
 
     fn equals(
@@ -311,42 +349,10 @@ impl Intcode {
         rhs: InstructionArgument,
         addr: InstructionArgument,
     ) {
-        match addr {
-            InstructionArgument::Position(addr_pos) => {
-                if lhs.get(&self.mem, &self.relative_base)
-                    == rhs.get(&self.mem, &self.relative_base)
-                {
-                    self.mem[addr_pos] = 1;
-                } else {
-                    self.mem[addr_pos] = 0;
-                }
-            }
-            InstructionArgument::Relative(addr_pos) => {
-                let write_addr = ((self.relative_base as isize) + addr_pos) as usize;
-                if lhs.get(&self.mem, &self.relative_base)
-                    == rhs.get(&self.mem, &self.relative_base)
-                {
-                    self.mem[write_addr] = 1;
-                } else {
-                    self.mem[write_addr] = 0;
-                }
-            }
-            InstructionArgument::Immediate(_) => {
-                panic!("Immediate mode is not supported for equals")
-            }
-        };
-    }
-
-    fn set_relative_base(&mut self, arg: InstructionArgument) {
-        let modifier = arg.get(&self.mem, &self.relative_base);
-        if modifier < 0 {
-            self.relative_base -= i64::abs(modifier) as usize;
+        if self.memory.get(lhs) == self.memory.get(rhs) {
+            self.memory.set(addr, 1);
         } else {
-            self.relative_base += modifier as usize;
+            self.memory.set(addr, 0);
         }
-    }
-
-    pub fn dump_memory(&self) -> String {
-        format!("{:?}", self.mem)
     }
 }

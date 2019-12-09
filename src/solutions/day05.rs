@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::intcode::{ExecutionState, Intcode};
+    use crate::intcode::{Intcode, Interrupt};
     use crate::utils;
 
     #[test]
@@ -11,11 +11,11 @@ mod tests {
             utils::parse_comma_separated_content_into_vec_of_fromstr_data,
         )
         .unwrap();
-        let mut program = Intcode::new(rom);
+        let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
-                ExecutionState::Output(o) => output = Some(o),
-                ExecutionState::WaitingForInput => program.set_input(5),
+                Interrupt::WaitingForInput => program.set_input(5),
+                Interrupt::Output(o) => output = Some(o),
                 _ => break,
             }
         }

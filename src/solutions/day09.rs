@@ -1,8 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use crate::intcode::{ExecutionState, Intcode};
+    use crate::intcode::{Intcode, Interrupt};
     use crate::utils;
-    use digits_iterator::*;
 
     #[test]
     fn test_advent_puzzle_1() {
@@ -12,11 +11,11 @@ mod tests {
             utils::parse_comma_separated_content_into_vec_of_fromstr_data,
         )
         .unwrap();
-        let mut program = Intcode::new(rom);
+        let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
-                ExecutionState::WaitingForInput => program.set_input(1),
-                ExecutionState::Output(o) => output = Some(o),
+                Interrupt::WaitingForInput => program.set_input(1),
+                Interrupt::Output(o) => output = Some(o),
                 _ => break,
             }
         }
@@ -32,11 +31,11 @@ mod tests {
             utils::parse_comma_separated_content_into_vec_of_fromstr_data,
         )
         .unwrap();
-        let mut program = Intcode::new(rom);
+        let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
-                ExecutionState::WaitingForInput => program.set_input(2),
-                ExecutionState::Output(o) => output = Some(o),
+                Interrupt::WaitingForInput => program.set_input(2),
+                Interrupt::Output(o) => output = Some(o),
                 _ => break,
             }
         }
@@ -46,7 +45,7 @@ mod tests {
 
     #[test]
     fn smoke_simple_program_1() {
-        let mut program = Intcode::new(vec![
+        let mut program = Intcode::new(&vec![
             109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99,
         ]);
         loop {
@@ -65,26 +64,29 @@ mod tests {
     #[test]
     fn smoke_simple_program_2() {
         let mut output = None;
-        let mut program = Intcode::new(vec![1102, 34915192, 34915192, 7, 4, 7, 99, 0]);
+        let mut program = Intcode::new(&vec![1102, 34915192, 34915192, 7, 4, 7, 99, 0]);
         loop {
             match program.run() {
-                ExecutionState::Output(o) => output = Some(o),
-                ExecutionState::WaitingForInput => program.set_input(5),
+                Interrupt::Output(o) => output = Some(o),
+                Interrupt::WaitingForInput => program.set_input(5),
                 _ => break,
             }
         }
         program.run();
-        assert_eq!(output.map(|o| o.digits().count()), Some(16));
+        assert_eq!(
+            output.map(|o| utils::number_of_digits(o as f64) as i64),
+            Some(16)
+        );
     }
 
     #[test]
     fn smoke_simple_program_3() {
         let mut output = None;
-        let mut program = Intcode::new(vec![104, 1125899906842624, 99]);
+        let mut program = Intcode::new(&vec![104, 1125899906842624, 99]);
         loop {
             match program.run() {
-                ExecutionState::Output(o) => output = Some(o),
-                ExecutionState::WaitingForInput => program.set_input(5),
+                Interrupt::Output(o) => output = Some(o),
+                Interrupt::WaitingForInput => program.set_input(5),
                 _ => break,
             }
         }

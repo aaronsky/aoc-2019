@@ -1,17 +1,18 @@
-use digits_iterator::*;
+use crate::utils;
 use std::u8::MAX as U8_MAX;
 
 pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
-    if candidate.digits().count() != 6 {
-        return false;
-    } else if candidate < range_start || candidate > range_end {
-        return false;
-    }
+    let num_digits = utils::number_of_digits(candidate as f64) as u32;
+    assert!(num_digits == 6);
+    assert!(candidate >= range_start && candidate <= range_end);
+
     let mut successful_candidate = true;
     let mut adjacent_sequence = String::new();
     let mut found_a_sequence_of_exactly_two_digits = false;
     let mut last_number = U8_MAX;
-    for digit in candidate.digits() {
+
+    for i in 0..=num_digits {
+        let digit = utils::digit_at_index(num_digits - i, candidate);
         if last_number == U8_MAX {
             adjacent_sequence.push(digit as char);
         } else {
