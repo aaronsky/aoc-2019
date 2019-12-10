@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::intcode::Intcode;
-    use crate::utils;
+    use crate::util;
 
     #[test]
     fn smoke_simple_program_1() {
@@ -55,9 +55,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let rom = utils::load_input_file(
+        let rom = util::load_input_file(
             "day02.txt",
-            utils::parse_comma_separated_content_into_vec_of_fromstr_data,
+            util::input_as_vec,
         )
         .unwrap();
         let mut program = Intcode::new(&rom);

@@ -1,14 +1,14 @@
 #[cfg(test)]
 mod tests {
     use crate::intcode::{Intcode, Interrupt};
-    use crate::utils;
+    use crate::util;
 
     #[test]
     fn test_advent_puzzle() {
         let mut output = None;
-        let rom = utils::load_input_file(
+        let rom = util::load_input_file(
             "day05.txt",
-            utils::parse_comma_separated_content_into_vec_of_fromstr_data,
+            util::input_as_vec,
         )
         .unwrap();
         let mut program = Intcode::new(&rom);

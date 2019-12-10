@@ -165,11 +165,11 @@ impl<'a> From<RawImage<'a>> for Layers {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils;
+    use crate::util;
 
     #[test]
     fn test_advent_puzzle() {
-        let layers = utils::load_input_file("day08.txt", |input| {
+        let layers = util::load_input_file("day08.txt", |input| {
             Layers::from(RawImage {
                 pixels: input,
                 width: 25,

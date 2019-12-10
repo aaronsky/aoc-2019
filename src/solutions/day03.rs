@@ -84,7 +84,7 @@ impl Wire {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils;
+    use crate::util;
     use std::collections::HashMap;
 
     fn parse_wires(input: &str) -> (Wire, Wire) {
@@ -95,7 +95,7 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let (first_wire, second_wire) = utils::load_input_file("day03.txt", parse_wires).unwrap();
+        let (first_wire, second_wire) = util::load_input_file("day03.txt", parse_wires).unwrap();
         let first_wire_path: HashMap<_, u32> = first_wire.iter().zip(1..).collect();
         let distance = second_wire
             .iter()

@@ -27,13 +27,13 @@ pub fn fuel_required_to_launch(modules: &[u32]) -> u32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils;
+    use crate::util;
 
     #[test]
     fn test_advent_puzzle() {
-        let modules_str = utils::load_input_file(
+        let modules_str = util::load_input_file(
             "day01.txt",
-            utils::parse_comma_separated_content_into_vec_of_fromstr_data,
+            util::input_as_vec,
         )
         .unwrap();
         let required_fuel = fuel_required_to_launch(&modules_str);

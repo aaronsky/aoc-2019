@@ -117,7 +117,7 @@ impl OrbitMap {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils;
+    use crate::util;
 
     #[test]
     fn smoke_simple_program_1() {
@@ -157,7 +157,7 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let orbit_map = utils::load_input_file("day06.txt", OrbitMap::parse).unwrap();
+        let orbit_map = util::load_input_file("day06.txt", OrbitMap::parse).unwrap();
         assert_eq!(
             orbit_map.number_of_orbital_transfers_from_you_to_santa(),
             496

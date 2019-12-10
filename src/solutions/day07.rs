@@ -1,10 +1,10 @@
 use crate::intcode::{Intcode, Interrupt};
-use crate::utils;
+use crate::util;
 use std::collections::{HashSet, VecDeque};
 use std::iter::FromIterator;
 
 pub fn output_for_amplifier_looping(rom: &str, amplifier_sequence: &[i64]) -> i64 {
-    let load_rom = || utils::parse_comma_separated_content_into_vec_of_fromstr_data(rom);
+    let load_rom = || util::input_as_vec(rom);
 
     let mut programs = vec![
         Intcode::new(&load_rom()),
@@ -47,7 +47,7 @@ pub fn output_for_amplifier_sequence(rom: &str, amplifier_sequence: &[i64]) -> i
         let mut has_provided_first_input = false;
         let mut output = 0;
         let mut program =
-            Intcode::new(&utils::parse_comma_separated_content_into_vec_of_fromstr_data(rom));
+            Intcode::new(&util::input_as_vec(rom));
         loop {
             match program.run() {
                 Interrupt::WaitingForInput => match (last_output, has_provided_first_input) {
@@ -101,7 +101,7 @@ mod tests {
         possible_numbers.insert(2);
         possible_numbers.insert(3);
         possible_numbers.insert(4);
-        let rom = utils::load_input_file("day07.txt", str::to_string).unwrap();
+        let rom = util::load_input_file("day07.txt", str::to_string).unwrap();
         let max_output = AmplifierSequence::permutations(possible_numbers)
             .iter()
             .map(|seq| output_for_amplifier_sequence(&rom, &seq))
@@ -117,7 +117,7 @@ mod tests {
         possible_numbers.insert(7);
         possible_numbers.insert(8);
         possible_numbers.insert(9);
-        let rom = utils::load_input_file("day07.txt", str::to_string).unwrap();
+        let rom = util::load_input_file("day07.txt", str::to_string).unwrap();
         let max_output = AmplifierSequence::permutations(possible_numbers)
             .iter()
             .map(|seq| output_for_amplifier_looping(&rom, &seq))

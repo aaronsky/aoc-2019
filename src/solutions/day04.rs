@@ -1,8 +1,8 @@
-use crate::utils;
+use crate::util;
 use std::u8::MAX as U8_MAX;
 
 pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
-    let num_digits = utils::number_of_digits(candidate as f64) as u32;
+    let num_digits = util::number_of_digits(candidate as f64) as u32;
     assert!(num_digits == 6);
     assert!(candidate >= range_start && candidate <= range_end);
 
@@ -12,7 +12,7 @@ pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bo
     let mut last_number = U8_MAX;
 
     for i in 0..=num_digits {
-        let digit = utils::digit_at_index(num_digits - i, candidate);
+        let digit = util::digit_at_index(num_digits - i, candidate);
         if last_number == U8_MAX {
             adjacent_sequence.push(digit as char);
         } else if digit < last_number {
@@ -39,7 +39,7 @@ pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bo
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils;
+    use crate::util;
 
     fn parse(input: &str) -> (u32, u32) {
         let range: Vec<u32> = input.split("-").take(2).map(str_to_u32).collect();
@@ -52,7 +52,7 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let (start, end) = utils::load_input_file("day04.txt", parse).unwrap();
+        let (start, end) = util::load_input_file("day04.txt", parse).unwrap();
         let possibilities_count = (start..end)
             .filter(|num| is_valid_password(*num, start, end))
             .count();

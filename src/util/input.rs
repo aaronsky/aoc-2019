@@ -20,22 +20,13 @@ where
         .map(|_| parse(&contents))
 }
 
-pub fn parse_comma_separated_content<F, S: FromStr>(input: &str, transform: F) -> Vec<S>
+pub fn comma_separate<F, S: FromStr>(input: &str, transform: F) -> Vec<S>
 where
     F: Fn(&str) -> S,
 {
     input.split(',').map(transform).collect()
 }
 
-pub fn parse_comma_separated_content_into_vec_of_fromstr_data<S: FromStr>(input: &str) -> Vec<S> {
-    parse_comma_separated_content(input, |string| string.parse().ok().unwrap())
-}
-
-pub fn number_of_digits(num: f64) -> f64 {
-    f64::floor(f64::log10(num) + 1.0)
-}
-
-pub fn digit_at_index(index: u32, num: u32) -> u8 {
-    let mask = u32::pow(10, index);
-    ((num / mask) % 10) as u8
+pub fn input_as_vec<S: FromStr>(input: &str) -> Vec<S> {
+    comma_separate(input, |string| string.parse().ok().unwrap())
 }

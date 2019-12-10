@@ -1,16 +1,12 @@
 #[cfg(test)]
 mod tests {
     use crate::intcode::{Intcode, Interrupt};
-    use crate::utils;
+    use crate::util;
 
     #[test]
     fn test_advent_puzzle_1() {
         let mut output = None;
-        let rom = utils::load_input_file(
-            "day09.txt",
-            utils::parse_comma_separated_content_into_vec_of_fromstr_data,
-        )
-        .unwrap();
+        let rom = util::load_input_file("day09.txt", util::input_as_vec).unwrap();
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
@@ -26,11 +22,7 @@ mod tests {
     #[test]
     fn test_advent_puzzle_2() {
         let mut output = None;
-        let rom = utils::load_input_file(
-            "day09.txt",
-            utils::parse_comma_separated_content_into_vec_of_fromstr_data,
-        )
-        .unwrap();
+        let rom = util::load_input_file("day09.txt", util::input_as_vec).unwrap();
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
@@ -74,7 +66,7 @@ mod tests {
         }
         program.run();
         assert_eq!(
-            output.map(|o| utils::number_of_digits(o as f64) as i64),
+            output.map(|o| util::number_of_digits(o as f64) as i64),
             Some(16)
         );
     }

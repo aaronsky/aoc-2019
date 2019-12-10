@@ -1,3 +1,3 @@
 pub mod intcode;
 pub mod solutions;
-pub mod utils;
+pub mod util;
