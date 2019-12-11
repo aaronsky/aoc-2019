@@ -11,7 +11,7 @@ const TAU: f64 = f64::consts::PI * 2.0;
 struct FloatDistance(f64);
 
 impl FloatDistance {
-    fn key(&self) -> u64 {
+    fn key(self) -> u64 {
         unsafe { mem::transmute(self.0) }
     }
 }
@@ -80,13 +80,13 @@ impl Coordinate {
         Coordinate { x: 0, y: 0 }
     }
 
-    fn polar_angle_to(&self, other: &Coordinate) -> f64 {
+    fn polar_angle_to(self, other: Coordinate) -> f64 {
         let x_diff: f64 = (other.x - self.x) as f64;
         let y_diff: f64 = (other.y - self.y) as f64;
         f64::atan2(y_diff, x_diff)
     }
 
-    pub fn manhattan_distance(&self, to: &Coordinate) -> i32 {
+    pub fn manhattan_distance(self, to: Coordinate) -> i32 {
         i32::abs(self.x - to.x) + i32::abs(self.y - to.y)
     }
 }
@@ -133,7 +133,7 @@ impl Map {
     pub fn asteroid_with_most_other_asteroids_visible(&self) -> (&Coordinate, u32) {
         let mut max = None;
         for asteroid in &self.asteroids {
-            let num_visible = self.number_of_visible_asteroids_from_asteroid(&asteroid);
+            let num_visible = self.number_of_visible_asteroids_from_asteroid(*asteroid);
             if let Some((_, visible)) = max {
                 if num_visible > visible {
                     max = Some((asteroid, num_visible));
@@ -145,7 +145,7 @@ impl Map {
         max.unwrap()
     }
 
-    fn number_of_visible_asteroids_from_asteroid(&self, asteroid: &Coordinate) -> u32 {
+    fn number_of_visible_asteroids_from_asteroid(&self, asteroid: Coordinate) -> u32 {
         let mut angles = Vec::new();
         for other in &self.asteroids {
             let angle = other.polar_angle_to(asteroid);
@@ -156,7 +156,7 @@ impl Map {
         angles.len() as u32
     }
 
-    pub fn vaporize_asteroids_from_coord(&mut self, coord: &Coordinate) -> Coordinate {
+    pub fn vaporize_asteroids_from_coord(&mut self, coord: Coordinate) -> Coordinate {
         let mut angles: HashMap<FloatDistance, Vec<&Coordinate>> = Default::default();
         for asteroid in &self.asteroids {
             let angle = FloatDistance((asteroid.polar_angle_to(coord) + TAU).rem_euclid(TAU));
@@ -178,7 +178,7 @@ impl Map {
         sorted_angles.sort();
         let mut angle_index = sorted_angles
             .iter()
-            .position(|a| a >= &FloatDistance(TAU / 4.0_f64))
+            .position(|a| *a >= FloatDistance(TAU / 4.0_f64))
             .unwrap();
         let mut most_recently_vaporized = Coordinate::zero();
         for _ in 0..200 {
@@ -190,7 +190,7 @@ impl Map {
             let next_asteroids = angles.get_mut(&next_angle).unwrap();
             most_recently_vaporized = *next_asteroids.remove(0);
             angle_index += 1;
-            angle_index = angle_index % sorted_angles.len();
+            angle_index %= sorted_angles.len();
         }
 
         most_recently_vaporized
@@ -220,7 +220,7 @@ mod tests {
     fn test_advent_puzzle_2() {
         let mut map = util::load_input_file("day10.txt", Map::parse).unwrap();
         let station = Coordinate { x: 20, y: 18 };
-        let two_hundreth_asteroid = map.vaporize_asteroids_from_coord(&station);
+        let two_hundreth_asteroid = map.vaporize_asteroids_from_coord(station);
         assert_eq!(
             (two_hundreth_asteroid.x * 100) + two_hundreth_asteroid.y,
             706
