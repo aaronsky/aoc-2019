@@ -108,7 +108,7 @@ pub enum Interrupt {
     Output(i64),
 }
 
-pub enum Opcode {
+enum Opcode {
     Add = 1,
     Multiply = 2,
     Load = 3,
