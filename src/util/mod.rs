@@ -1,5 +1,5 @@
 mod input;
-mod num;
+mod math;
 
 pub use input::*;
-pub use num::*;
+pub use math::*;

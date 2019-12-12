@@ -1,20 +1,7 @@
 use std::iter;
+use crate::util::{Point2, Direction};
 
-#[derive(Debug, Clone, Copy)]
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
-#[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
-pub struct Cursor {
-    x: i32,
-    y: i32,
-}
-
-impl Cursor {
+impl Point2 {
     fn move_in_direction(&mut self, direction: Direction) {
         self.x += match direction {
             Direction::Right => 1,
@@ -26,16 +13,6 @@ impl Cursor {
             Direction::Down => -1,
             _ => 0,
         }
-    }
-
-    pub fn manhattan_distance(self) -> i32 {
-        self.x.abs() + self.y.abs()
-    }
-}
-
-impl Default for Cursor {
-    fn default() -> Self {
-        Cursor { x: 0, y: 0 }
     }
 }
 
@@ -70,11 +47,11 @@ impl Wire {
         Wire { nodes }
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = Cursor> + '_ {
+    pub fn iter(&self) -> impl Iterator<Item = Point2> + '_ {
         self.nodes
             .iter()
             .flat_map(|node| iter::repeat(node.direction).take(node.len as usize))
-            .scan(Cursor::default(), |cursor, direction| {
+            .scan(Point2::default(), |cursor, direction| {
                 cursor.move_in_direction(direction);
                 Some(*cursor)
             })

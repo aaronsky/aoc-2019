@@ -1,4 +1,5 @@
 use crate::intcode::*;
+use crate::util::{Point2, Direction};
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy)]
@@ -17,32 +18,8 @@ impl From<u8> for Color {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Position {
-    x: i32,
-    y: i32,
-}
-
-impl Position {
-    pub fn new(x: i32, y: i32) -> Self {
-        Position { x, y }
-    }
-
-    pub fn zero() -> Self {
-        Position::new(0, 0)
-    }
-}
-
-#[derive(Debug, Clone, Copy)]
-pub enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
 pub struct Robot {
-    position: Position,
+    position: Point2,
     direction: Direction,
 }
 
@@ -51,7 +28,7 @@ impl Robot {
         &mut self,
         starting_color: Color,
         mut program: Intcode,
-    ) -> HashMap<Position, Color> {
+    ) -> HashMap<Point2, Color> {
         let mut navigated_panels = HashMap::new();
         let mut panel_wants_color = true;
         navigated_panels.insert(self.position, starting_color);
@@ -79,10 +56,10 @@ impl Robot {
 
     fn move_by(&mut self, distance: i32) {
         self.position = match self.direction {
-            Direction::Up => Position::new(self.position.x, self.position.y - distance),
-            Direction::Down => Position::new(self.position.x, self.position.y + distance),
-            Direction::Left => Position::new(self.position.x - distance, self.position.y),
-            Direction::Right => Position::new(self.position.x + distance, self.position.y),
+            Direction::Up => Point2::new(self.position.x, self.position.y - distance),
+            Direction::Down => Point2::new(self.position.x, self.position.y + distance),
+            Direction::Left => Point2::new(self.position.x - distance, self.position.y),
+            Direction::Right => Point2::new(self.position.x + distance, self.position.y),
         }
     }
 
@@ -104,7 +81,7 @@ impl Robot {
 impl Default for Robot {
     fn default() -> Self {
         Robot {
-            position: Position::zero(),
+            position: Point2::zero(),
             direction: Direction::Up,
         }
     }
@@ -154,7 +131,7 @@ mod tests {
 
         for y in y_range.0..=y_range.1 {
             for x in x_range.0..=x_range.1 {
-                let panel = panels.get(&Position::new(x, y)).unwrap_or(&Color::Black);
+                let panel = panels.get(&Point2::new(x, y)).unwrap_or(&Color::Black);
                 let panel_char = match panel {
                     Color::Black => '.',
                     Color::White => '#',
