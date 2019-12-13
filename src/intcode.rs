@@ -181,6 +181,10 @@ impl Intcode {
         }
     }
 
+    pub fn set_address(&mut self, addr: usize, value: i64) {
+        self.memory.ram[addr] = value;
+    }
+
     pub fn set_input(&mut self, input: i64) {
         if let Some(pending_input) = self.pending_input.take() {
             self.pending_input = Some(Input {

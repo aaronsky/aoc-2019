@@ -16,7 +16,6 @@ mod tests {
                 _ => break,
             }
         }
-        program.run();
         assert_eq!(output, Some(8805067));
     }
 }

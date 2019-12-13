@@ -4,11 +4,11 @@ use std::iter::FromIterator;
 
 pub fn output_for_amplifier_looping(rom: &[i64], amplifier_sequence: &[i64]) -> i64 {
     let mut programs = vec![
-        Intcode::new(&rom.clone()),
-        Intcode::new(&rom.clone()),
-        Intcode::new(&rom.clone()),
-        Intcode::new(&rom.clone()),
-        Intcode::new(&rom.clone()),
+        Intcode::new(&rom.to_vec()),
+        Intcode::new(&rom.to_vec()),
+        Intcode::new(&rom.to_vec()),
+        Intcode::new(&rom.to_vec()),
+        Intcode::new(&rom.to_vec()),
     ];
 
     for i in 0..5 {

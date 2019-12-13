@@ -16,7 +16,6 @@ mod tests {
                 _ => break,
             }
         }
-        program.run();
         assert_eq!(output, Some(3765554916));
     }
 
@@ -32,7 +31,6 @@ mod tests {
                 _ => break,
             }
         }
-        program.run();
         assert_eq!(output, Some(76642));
     }
 
@@ -65,7 +63,6 @@ mod tests {
                 _ => break,
             }
         }
-        program.run();
         assert_eq!(
             output.map(|o| util::number_of_digits(o as f64) as i64),
             Some(16)
@@ -83,7 +80,6 @@ mod tests {
                 _ => break,
             }
         }
-        program.run();
         assert_eq!(output, Some(1125899906842624));
     }
 }

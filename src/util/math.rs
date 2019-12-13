@@ -21,27 +21,15 @@ pub fn gcd(num1: i64, num2: i64) -> i64 {
         return (m | n).abs();
     }
 
-    // find common factors of 2
     let shift = (m | n).trailing_zeros();
-
-    // The algorithm needs positive numbers, but the minimum value
-    // can't be represented as a positive one.
-    // It's also a power of two, so the gcd can be
-    // calculated by bitshifting in that case
-
-    // Assuming two's complement, the number created by the shift
-    // is positive for all numbers except gcd = abs(min value)
-    // The call to .abs() causes a panic in debug mode
     if m == i64::min_value() || n == i64::min_value() {
         let shifted: i64 = 1 << shift;
         return shifted.abs();
     }
 
-    // guaranteed to be positive now, rest like unsigned algorithm
     m = m.abs();
     n = n.abs();
 
-    // divide n and m by 2 until odd
     m >>= m.trailing_zeros();
     n >>= n.trailing_zeros();
 

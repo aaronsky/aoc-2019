@@ -55,10 +55,10 @@ impl Moon {
 impl From<&str> for Moon {
     fn from(point_str: &str) -> Self {
         let components: Vec<i32> = point_str
-            .replace("<", "")
-            .replace(">", "")
-            .split(",")
-            .flat_map(|component| component.trim().split("=").nth(1).map(str::parse))
+            .replace('<', "")
+            .replace('>', "")
+            .split(',')
+            .flat_map(|component| component.trim().split('=').nth(1).map(str::parse))
             .flat_map(|result| result.ok())
             .take(3)
             .collect();
@@ -162,7 +162,6 @@ impl LunarSystem {
             }
             should_continue
         });
-        println!("{:?}", steps);
         lcm(lcm(steps[0].unwrap(), steps[1].unwrap()), steps[2].unwrap()) as usize
     }
 
@@ -195,11 +194,10 @@ mod tests {
         assert_eq!(system.energy_in_system(), 14907);
     }
 
-    // #[ignore]
     #[test]
     fn test_advent_puzzle_2() {
         let mut system: LunarSystem = util::load_input_file("day12.txt").unwrap();
-        println!("{:?}", system.find_minimum_cycles());
+        assert_eq!(system.find_minimum_cycles(), 467_081_194_429_464);
     }
 
     #[test]
