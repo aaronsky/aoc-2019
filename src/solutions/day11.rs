@@ -1,5 +1,5 @@
 use crate::intcode::*;
-use crate::util::{Point2, Direction};
+use crate::util::{Direction, Point2};
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy)]
@@ -91,6 +91,7 @@ impl Default for Robot {
 mod tests {
     use super::*;
     use crate::util;
+    use crate::util::ListInput;
 
     const PART_2_RENDERED: &'static str = "\
 .####.####..##..#..#.#..#.####..##...##....
@@ -109,7 +110,7 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let rom = util::load_input_file("day11.txt", util::input_as_vec).unwrap();
+        let ListInput(rom) = util::load_input_file("day11.txt").unwrap();
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::Black, program);
@@ -118,7 +119,7 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_2() {
-        let rom = util::load_input_file("day11.txt", util::input_as_vec).unwrap();
+        let ListInput(rom) = util::load_input_file("day11.txt").unwrap();
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::White, program);

@@ -28,14 +28,11 @@ pub fn fuel_required_to_launch(modules: &[u32]) -> u32 {
 mod tests {
     use super::*;
     use crate::util;
+    use crate::util::ListInput;
 
     #[test]
     fn test_advent_puzzle() {
-        let modules_str = util::load_input_file(
-            "day01.txt",
-            util::input_as_vec,
-        )
-        .unwrap();
+        let ListInput(modules_str) = util::load_input_file("day01.txt").unwrap();
         let required_fuel = fuel_required_to_launch(&modules_str);
         assert_eq!(required_fuel, 4892166);
     }

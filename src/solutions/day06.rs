@@ -1,5 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
+use std::str::FromStr;
 
 trait InsertingIntoExistingValue<K, V> {
     fn insert_into_existing_value(&mut self, key: K, value: V);
@@ -45,27 +46,6 @@ pub struct OrbitMap {
 }
 
 impl OrbitMap {
-    pub fn parse(input: &str) -> Self {
-        let mut all_objects = HashSet::new();
-        let mut reverse_lookup = HashMap::new();
-        for line in input.split('\n') {
-            let adjacency: Vec<&str> = line.split(')').take(2).map(str::trim).collect();
-            if adjacency.len() != 2 {
-                continue;
-            }
-            let (key, value) = (
-                OrbitalObject::from(adjacency[1]),
-                OrbitalObject::from(adjacency[0]),
-            );
-            all_objects.insert(key.clone());
-            reverse_lookup.insert(key, value);
-        }
-        OrbitMap {
-            all_objects,
-            reverse_lookup,
-        }
-    }
-
     pub fn number_of_orbits(&self) -> usize {
         self.construct_orbital_path_map()
             .iter()
@@ -114,6 +94,31 @@ impl OrbitMap {
     }
 }
 
+impl FromStr for OrbitMap {
+    type Err = ();
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        let mut all_objects = HashSet::new();
+        let mut reverse_lookup = HashMap::new();
+        for line in input.split('\n') {
+            let adjacency: Vec<&str> = line.split(')').take(2).map(str::trim).collect();
+            if adjacency.len() != 2 {
+                continue;
+            }
+            let (key, value) = (
+                OrbitalObject::from(adjacency[1]),
+                OrbitalObject::from(adjacency[0]),
+            );
+            all_objects.insert(key.clone());
+            reverse_lookup.insert(key, value);
+        }
+        Ok(OrbitMap {
+            all_objects,
+            reverse_lookup,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -132,7 +137,7 @@ mod tests {
         E)J
         J)K
         K)L";
-        let orbit_map = OrbitMap::parse(input);
+        let orbit_map = OrbitMap::from_str(input).unwrap();
         assert_eq!(orbit_map.number_of_orbits(), 42);
     }
 
@@ -151,13 +156,13 @@ mod tests {
         K)L
         K)YOU
         I)SAN";
-        let orbit_map = OrbitMap::parse(input);
+        let orbit_map = OrbitMap::from_str(input).unwrap();
         assert_eq!(orbit_map.number_of_orbital_transfers_from_you_to_santa(), 4);
     }
 
     #[test]
     fn test_advent_puzzle() {
-        let orbit_map = util::load_input_file("day06.txt", OrbitMap::parse).unwrap();
+        let orbit_map: OrbitMap = util::load_input_file("day06.txt").unwrap();
         assert_eq!(
             orbit_map.number_of_orbital_transfers_from_you_to_santa(),
             496

@@ -2,6 +2,7 @@ use crate::util::{FloatDistance, Point2, TAU};
 use std::cmp;
 use std::collections::HashMap;
 use std::ops::Index;
+use std::str::FromStr;
 
 #[derive(Debug)]
 enum Body {
@@ -27,37 +28,6 @@ pub struct Map {
 }
 
 impl Map {
-    pub fn parse(input: &str) -> Self {
-        let mut width = 0;
-        let mut height = 0;
-        let asteroids: Vec<Point2> = input
-            .split('\n')
-            .enumerate()
-            .map(|(y, row)| {
-                height = cmp::max(y, height);
-                let rows: Vec<Point2> = row
-                    .chars()
-                    .enumerate()
-                    .flat_map(|(x, coord)| match Body::from(coord) {
-                        Body::Asteroid => Some(Point2 {
-                            x: x as i32,
-                            y: y as i32,
-                        }),
-                        _ => None,
-                    })
-                    .collect();
-                width = cmp::max(rows.len(), width);
-                rows
-            })
-            .flatten()
-            .collect();
-        Map {
-            asteroids,
-            width,
-            height,
-        }
-    }
-
     pub fn asteroid_with_most_other_asteroids_visible(&self) -> (&Point2, u32) {
         let mut max = None;
         for asteroid in &self.asteroids {
@@ -133,6 +103,41 @@ impl Index<(usize, usize)> for Map {
     }
 }
 
+impl FromStr for Map {
+    type Err = ();
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        let mut width = 0;
+        let mut height = 0;
+        let asteroids: Vec<Point2> = input
+            .split('\n')
+            .enumerate()
+            .map(|(y, row)| {
+                height = cmp::max(y, height);
+                let rows: Vec<Point2> = row
+                    .chars()
+                    .enumerate()
+                    .flat_map(|(x, coord)| match Body::from(coord) {
+                        Body::Asteroid => Some(Point2 {
+                            x: x as i32,
+                            y: y as i32,
+                        }),
+                        _ => None,
+                    })
+                    .collect();
+                width = cmp::max(rows.len(), width);
+                rows
+            })
+            .flatten()
+            .collect();
+        Ok(Map {
+            asteroids,
+            width,
+            height,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -140,13 +145,13 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let map = util::load_input_file("day10.txt", Map::parse).unwrap();
+        let map: Map = util::load_input_file("day10.txt").unwrap();
         assert_eq!(map.asteroid_with_most_other_asteroids_visible().1, 280);
     }
 
     #[test]
     fn test_advent_puzzle_2() {
-        let mut map = util::load_input_file("day10.txt", Map::parse).unwrap();
+        let mut map: Map = util::load_input_file("day10.txt").unwrap();
         let station = Point2 { x: 20, y: 18 };
         let two_hundreth_asteroid = map.vaporize_asteroids_from_coord(station);
         assert_eq!(

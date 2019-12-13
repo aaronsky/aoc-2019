@@ -76,8 +76,8 @@ impl Layer {
     // }
 }
 
-impl<'a> From<RawImage<'a>> for Layer {
-    fn from(raw_image: RawImage<'a>) -> Self {
+impl From<RawImage> for Layer {
+    fn from(raw_image: RawImage) -> Self {
         let mut pixels_vec = vec![];
         let mut pixel_count_map = HashMap::new();
         for pixel in raw_image.pixels.chars() {
@@ -133,16 +133,16 @@ impl fmt::Display for Layer {
     }
 }
 
-struct RawImage<'a> {
-    pixels: &'a str,
+struct RawImage {
+    pixels: String,
     width: usize,
     height: usize,
 }
 
 type Layers = Vec<Layer>;
 
-impl<'a> From<RawImage<'a>> for Layers {
-    fn from(raw_image: RawImage<'a>) -> Self {
+impl From<RawImage> for Layers {
+    fn from(raw_image: RawImage) -> Self {
         assert_eq!(
             raw_image.pixels.len() % (raw_image.width * raw_image.height),
             0
@@ -153,7 +153,7 @@ impl<'a> From<RawImage<'a>> for Layers {
             let low_bound = raw_image.width * raw_image.height * l;
             let high_bound = raw_image.width * raw_image.height * (l + 1);
             layers.push(Layer::from(RawImage {
-                pixels: &raw_image.pixels[low_bound..high_bound],
+                pixels: raw_image.pixels[low_bound..high_bound].to_string(),
                 width: raw_image.width,
                 height: raw_image.height,
             }))
@@ -169,21 +169,22 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let layers = util::load_input_file("day08.txt", |input| {
-            Layers::from(RawImage {
-                pixels: input,
-                width: 25,
-                height: 6,
+        let layers: Layers = util::load_input_file("day08.txt")
+            .map(|input: String| {
+                Layers::from(RawImage {
+                    pixels: input,
+                    width: 25,
+                    height: 6,
+                })
             })
-        })
-        .unwrap();
+            .unwrap();
         let combined = Layer::from(layers);
         assert_eq!(combined.to_string(), "100100110001100111101111010010100101001010000100001111010000100001110011100100101000010110100001000010010100101001010000100001001001100011101000011110");
     }
 
     #[test]
     fn smoke_simple_program_1() {
-        let pixels = "0222112222120000";
+        let pixels = String::from("0222112222120000");
         let layers = Layers::from(RawImage {
             pixels,
             width: 2,

@@ -1,5 +1,6 @@
+use crate::util::{Direction, Point2};
 use std::iter;
-use crate::util::{Point2, Direction};
+use std::str::FromStr;
 
 impl Point2 {
     fn move_in_direction(&mut self, direction: Direction) {
@@ -41,12 +42,16 @@ pub struct Wire {
     nodes: Vec<Node>,
 }
 
-impl Wire {
-    pub fn from(string: &str) -> Self {
-        let nodes: Vec<Node> = string.split(',').map(Node::parse).collect();
-        Wire { nodes }
-    }
+impl FromStr for Wire {
+    type Err = ();
 
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let nodes: Vec<Node> = s.split(',').map(Node::parse).collect();
+        Ok(Wire { nodes })
+    }
+}
+
+impl Wire {
     pub fn iter(&self) -> impl Iterator<Item = Point2> + '_ {
         self.nodes
             .iter()
@@ -65,14 +70,20 @@ mod tests {
     use std::collections::HashMap;
 
     fn parse_wires(input: &str) -> (Wire, Wire) {
-        let mut wires: Vec<Wire> = input.split("\n").take(2).map(Wire::from).collect();
+        let mut wires: Vec<Wire> = input
+            .split("\n")
+            .take(2)
+            .map(Wire::from_str)
+            .filter_map(Result::ok)
+            .collect();
         assert_eq!(wires.len(), 2);
         (wires.remove(0), wires.remove(0))
     }
 
     #[test]
     fn test_advent_puzzle() {
-        let (first_wire, second_wire) = util::load_input_file("day03.txt", parse_wires).unwrap();
+        let wires_str: String = util::load_input_file("day03.txt").unwrap();
+        let (first_wire, second_wire): (Wire, Wire) = parse_wires(&wires_str);
         let first_wire_path: HashMap<_, u32> = first_wire.iter().zip(1..).collect();
         let distance = second_wire
             .iter()

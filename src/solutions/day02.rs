@@ -2,6 +2,7 @@
 mod tests {
     use crate::intcode::Intcode;
     use crate::util;
+    use crate::util::ListInput;
 
     #[test]
     fn smoke_simple_program_1() {
@@ -11,7 +12,10 @@ mod tests {
                 _ => break,
             }
         }
-        assert_eq!(program.dump_memory(), String::from("[2, 0, 0, 0, 99, 0, 0, 0, 0, 0]"));
+        assert_eq!(
+            program.dump_memory(),
+            String::from("[2, 0, 0, 0, 99, 0, 0, 0, 0, 0]")
+        );
     }
 
     #[test]
@@ -22,7 +26,10 @@ mod tests {
                 _ => break,
             }
         }
-        assert_eq!(program.dump_memory(), String::from("[2, 3, 0, 6, 99, 0, 0, 0, 0, 0]"));
+        assert_eq!(
+            program.dump_memory(),
+            String::from("[2, 3, 0, 6, 99, 0, 0, 0, 0, 0]")
+        );
     }
 
     #[test]
@@ -55,11 +62,7 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let rom = util::load_input_file(
-            "day02.txt",
-            util::input_as_vec,
-        )
-        .unwrap();
+        let ListInput(rom) = util::load_input_file("day02.txt").unwrap();
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {

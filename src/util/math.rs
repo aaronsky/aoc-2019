@@ -2,6 +2,7 @@ use std::cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd};
 use std::f64;
 use std::hash::{Hash, Hasher};
 use std::mem;
+use std::ops;
 
 pub fn number_of_digits(num: f64) -> f64 {
     f64::floor(f64::log10(num) + 1.0)
@@ -10,6 +11,57 @@ pub fn number_of_digits(num: f64) -> f64 {
 pub fn digit_at_index(index: u32, num: u32) -> u8 {
     let mask = u32::pow(10, index);
     ((num / mask) % 10) as u8
+}
+
+pub fn gcd(num1: i64, num2: i64) -> i64 {
+    // Use Stein's algorithm
+    let mut m = num1;
+    let mut n = num2;
+    if m == 0 || n == 0 {
+        return (m | n).abs();
+    }
+
+    // find common factors of 2
+    let shift = (m | n).trailing_zeros();
+
+    // The algorithm needs positive numbers, but the minimum value
+    // can't be represented as a positive one.
+    // It's also a power of two, so the gcd can be
+    // calculated by bitshifting in that case
+
+    // Assuming two's complement, the number created by the shift
+    // is positive for all numbers except gcd = abs(min value)
+    // The call to .abs() causes a panic in debug mode
+    if m == i64::min_value() || n == i64::min_value() {
+        let shifted: i64 = 1 << shift;
+        return shifted.abs();
+    }
+
+    // guaranteed to be positive now, rest like unsigned algorithm
+    m = m.abs();
+    n = n.abs();
+
+    // divide n and m by 2 until odd
+    m >>= m.trailing_zeros();
+    n >>= n.trailing_zeros();
+
+    while m != n {
+        if m > n {
+            m -= n;
+            m >>= m.trailing_zeros();
+        } else {
+            n -= m;
+            n >>= n.trailing_zeros();
+        }
+    }
+    m << shift
+}
+
+pub fn lcm(num1: i64, num2: i64) -> i64 {
+    if num1 == 0 && num2 == 0 {
+        return 0;
+    }
+    num1 * (num2 / gcd(num1, num2))
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -64,6 +116,22 @@ impl Point3 {
 impl Default for Point3 {
     fn default() -> Self {
         Point3::zero()
+    }
+}
+
+impl ops::Add for Point3 {
+    type Output = Point3;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Point3::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
+    }
+}
+
+impl ops::AddAssign for Point3 {
+    fn add_assign(&mut self, other: Self) {
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
     }
 }
 

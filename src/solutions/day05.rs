@@ -2,15 +2,12 @@
 mod tests {
     use crate::intcode::{Intcode, Interrupt};
     use crate::util;
+    use crate::util::ListInput;
 
     #[test]
     fn test_advent_puzzle() {
         let mut output = None;
-        let rom = util::load_input_file(
-            "day05.txt",
-            util::input_as_vec,
-        )
-        .unwrap();
+        let ListInput(rom) = util::load_input_file("day05.txt").unwrap();
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
