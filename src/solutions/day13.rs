@@ -51,14 +51,13 @@ mod tests {
         let mut tile_position_buffer: [Option<i32>; 2] = [None, None];
         let mut ball: Option<Tile> = None;
         let mut paddle: Option<Tile> = None;
-        let mut joystick = JoystickPosition::Neutral;
 
         program.set_address(0, 2);
 
         loop {
             match program.run() {
                 Interrupt::WaitingForInput => {
-                    joystick = match (ball, paddle) {
+                    let joystick = match (ball, paddle) {
                         (Some(b), Some(p)) if b.position.x < p.position.x => JoystickPosition::Left,
                         (Some(b), Some(p)) if b.position.x > p.position.x => {
                             JoystickPosition::Right
@@ -66,7 +65,7 @@ mod tests {
                         (Some(b), Some(p)) if b.position.x == p.position.x => {
                             JoystickPosition::Neutral
                         }
-                        _ => joystick,
+                        _ => JoystickPosition::Neutral,
                     };
                     program.set_input(joystick as i64)
                 }
