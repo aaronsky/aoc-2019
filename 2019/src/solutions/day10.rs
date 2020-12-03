@@ -1,4 +1,4 @@
-use crate::util::{FloatDistance, Point2, TAU};
+use util::{FloatDistance, Point2, TAU};
 use std::cmp;
 use std::collections::HashMap;
 use std::ops::Index;
@@ -141,7 +141,7 @@ impl FromStr for Map {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
+    use util;
 
     #[test]
     fn test_advent_puzzle_1() {

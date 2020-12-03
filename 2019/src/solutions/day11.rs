@@ -1,5 +1,5 @@
 use crate::intcode::*;
-use crate::util::{Direction, Point2};
+use util::{Direction, Point2};
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy)]
@@ -90,8 +90,8 @@ impl Default for Robot {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
-    use crate::util::ListInput;
+    use util;
+    use util::ListInput;
 
     const PART_2_RENDERED: &'static str = "\
 .####.####..##..#..#.#..#.####..##...##....

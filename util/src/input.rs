@@ -3,16 +3,13 @@ use std::io::Read;
 use std::path::Path;
 use std::str::FromStr;
 
-fn inputs_directory<'a>() -> &'a Path {
-    Path::new("src/inputs/")
-}
-
 // load file
 pub fn load_input_file<S>(name: &str) -> Result<S, ()>
 where
     S: FromStr,
 {
-    let input_file = inputs_directory().join(name);
+    // TODO: This path will cease to work, maybe? 
+    let input_file = Path::new("src/inputs/").join(name);
     let mut contents = String::new();
     File::open(input_file)
         .and_then(|mut file| file.read_to_string(&mut contents))

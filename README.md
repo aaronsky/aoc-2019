@@ -1,3 +1,5 @@
-# Advent of Code 2019
+# Advent of Code
 
-[![Actions Status](https://github.com/aaronsky/aoc-2019/workflows/Smoke%20Test/badge.svg?branch=master)](https://github.com/aaronsky/aoc-2019/actions)
+[![Actions Status](https://github.com/aaronsky/advent-of-code/workflows/Test/badge.svg?branch=main)](https://github.com/aaronsky/advent-of-code/actions)
+
+[Advent of Code](https://adventofcode.com/) solutions, done in Rust.

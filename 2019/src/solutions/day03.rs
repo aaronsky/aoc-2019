@@ -1,21 +1,6 @@
-use crate::util::{Direction, Point2};
+use util::{Direction, Point2};
 use std::iter;
 use std::str::FromStr;
-
-impl Point2 {
-    fn move_in_direction(&mut self, direction: Direction) {
-        self.x += match direction {
-            Direction::Right => 1,
-            Direction::Left => -1,
-            _ => 0,
-        };
-        self.y += match direction {
-            Direction::Up => 1,
-            Direction::Down => -1,
-            _ => 0,
-        }
-    }
-}
 
 #[derive(Debug)]
 struct Node {
@@ -66,7 +51,7 @@ impl Wire {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
+    use util;
     use std::collections::HashMap;
 
     fn parse_wires(input: &str) -> (Wire, Wire) {

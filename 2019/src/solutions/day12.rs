@@ -1,4 +1,4 @@
-use crate::util::{lcm, Point3};
+use util::{lcm, Point3};
 use std::str::FromStr;
 
 #[derive(Debug, Clone)]
@@ -185,7 +185,7 @@ impl FromStr for LunarSystem {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
+    use util;
 
     #[test]
     fn test_advent_puzzle_1() {

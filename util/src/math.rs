@@ -76,6 +76,19 @@ impl Point2 {
     pub fn manhattan_distance(self, to: Point2) -> i32 {
         i32::abs(self.x - to.x) + i32::abs(self.y - to.y)
     }
+
+    pub fn move_in_direction(&mut self, direction: Direction) {
+        self.x += match direction {
+            Direction::Right => 1,
+            Direction::Left => -1,
+            _ => 0,
+        };
+        self.y += match direction {
+            Direction::Up => 1,
+            Direction::Down => -1,
+            _ => 0,
+        }
+    }
 }
 
 impl Default for Point2 {

@@ -1,4 +1,4 @@
-use crate::util;
+use util;
 use std::u8::MAX as U8_MAX;
 
 pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
@@ -39,7 +39,7 @@ pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bo
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
+    use util;
 
     fn parse(input: &str) -> (u32, u32) {
         let range: Vec<u32> = input.split("-").take(2).map(str_to_u32).collect();

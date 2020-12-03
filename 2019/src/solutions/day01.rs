@@ -27,8 +27,8 @@ pub fn fuel_required_to_launch(modules: &[u32]) -> u32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
-    use crate::util::ListInput;
+    use util;
+    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle() {

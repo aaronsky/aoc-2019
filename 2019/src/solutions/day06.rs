@@ -122,7 +122,7 @@ impl FromStr for OrbitMap {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
+    use util;
 
     #[test]
     fn smoke_simple_program_1() {

@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod tests {
     use crate::intcode::Intcode;
-    use crate::util;
-    use crate::util::ListInput;
+    use util;
+    use util::ListInput;
 
     #[test]
     fn smoke_simple_program_1() {

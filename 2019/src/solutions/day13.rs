@@ -1,4 +1,4 @@
-use crate::util::Point2;
+use util::Point2;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Identifier {
@@ -39,8 +39,8 @@ pub enum JoystickPosition {
 mod tests {
     use super::*;
     use crate::intcode::{Intcode, Interrupt};
-    use crate::util;
-    use crate::util::ListInput;
+    use util;
+    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle() {

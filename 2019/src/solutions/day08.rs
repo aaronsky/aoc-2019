@@ -165,7 +165,7 @@ impl From<RawImage> for Layers {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
+    use util;
 
     #[test]
     fn test_advent_puzzle() {

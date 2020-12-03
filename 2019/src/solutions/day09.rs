@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod tests {
     use crate::intcode::{Intcode, Interrupt};
-    use crate::util;
-    use crate::util::ListInput;
+    use util;
+    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle_1() {

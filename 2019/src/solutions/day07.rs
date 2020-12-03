@@ -88,8 +88,8 @@ impl AmplifierSequence {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util;
-    use crate::util::ListInput;
+    use util;
+    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle_1() {
