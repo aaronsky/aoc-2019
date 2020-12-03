@@ -1,7 +1,6 @@
 use std::cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd};
 use std::f64;
 use std::hash::{Hash, Hasher};
-use std::mem;
 use std::ops;
 
 pub fn number_of_digits(num: f64) -> f64 {
@@ -152,7 +151,7 @@ pub struct FloatDistance(pub f64);
 
 impl FloatDistance {
     fn key(self) -> u64 {
-        unsafe { mem::transmute(self.0) }
+        self.0.to_bits()
     }
 }
 
@@ -167,21 +166,13 @@ impl Hash for FloatDistance {
 
 impl PartialEq for FloatDistance {
     fn eq(&self, other: &FloatDistance) -> bool {
-        self.key() == other.key()
+        self.key().eq(&other.key())
     }
 }
 
 impl PartialOrd for FloatDistance {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        if self.key() == other.key() {
-            Some(Ordering::Equal)
-        } else if self.key() < other.key() {
-            Some(Ordering::Less)
-        } else if self.key() > other.key() {
-            Some(Ordering::Greater)
-        } else {
-            None
-        }
+        Some(self.key().cmp(&other.key()))
     }
 }
 
