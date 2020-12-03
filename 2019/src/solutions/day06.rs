@@ -162,7 +162,10 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let orbit_map: OrbitMap = util::load_input_file("day06.txt").unwrap();
+        let orbit_map: OrbitMap = util::load_input_file("day06.txt", crate::YEAR)
+            .unwrap()
+            .into()
+            .unwrap();
         assert_eq!(
             orbit_map.number_of_orbital_transfers_from_you_to_santa(),
             496

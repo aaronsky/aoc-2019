@@ -34,11 +34,12 @@ pub fn fix_expense_report_triples(input: &[u32]) -> u32 {
 mod tests {
     use super::*;
     use util;
-    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle() {
-        let ListInput(input) = util::load_input_file("day01.txt").unwrap();
+        let input = util::load_input_file("day01.txt", crate::YEAR)
+            .unwrap()
+            .into_vec("\n");
         assert_eq!(fix_expense_report_doubles(&input), 32064);
         assert_eq!(fix_expense_report_triples(&input), 193598720);
     }

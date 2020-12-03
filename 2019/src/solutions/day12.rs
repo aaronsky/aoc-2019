@@ -1,5 +1,5 @@
-use util::{lcm, Point3};
 use std::str::FromStr;
+use util::{lcm, Point3};
 
 #[derive(Debug, Clone)]
 pub struct Moon {
@@ -189,14 +189,20 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let mut system: LunarSystem = util::load_input_file("day12.txt").unwrap();
+        let mut system: LunarSystem = util::load_input_file("day12.txt", crate::YEAR)
+            .unwrap()
+            .into()
+            .unwrap();
         system.simulate(|system| system.step < 1000);
         assert_eq!(system.energy_in_system(), 14907);
     }
 
     #[test]
     fn test_advent_puzzle_2() {
-        let mut system: LunarSystem = util::load_input_file("day12.txt").unwrap();
+        let mut system: LunarSystem = util::load_input_file("day12.txt", crate::YEAR)
+            .unwrap()
+            .into()
+            .unwrap();
         assert_eq!(system.find_minimum_cycles(), 467_081_194_429_464);
     }
 

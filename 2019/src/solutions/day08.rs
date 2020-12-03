@@ -169,7 +169,8 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let layers: Layers = util::load_input_file("day08.txt")
+        let layers: Layers = util::load_input_file("day08.txt", crate::YEAR)
+            .map(util::Input::into_raw)
             .map(|input: String| {
                 Layers::from(RawImage {
                     pixels: input,

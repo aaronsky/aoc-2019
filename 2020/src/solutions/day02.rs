@@ -93,11 +93,12 @@ where
 mod tests {
     use super::*;
     use util;
-    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle_one() {
-        let ListInput(input): ListInput<String> = util::load_input_file("day02.txt").unwrap();
+        let input = util::load_input_file("day02.txt", crate::YEAR)
+            .unwrap()
+            .into_vec::<String>("\n");
         let passwords = input
             .into_iter()
             .map(|item| Password::<CountRule>::from(&item))
@@ -107,7 +108,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_two() {
-        let ListInput(input): ListInput<String> = util::load_input_file("day02.txt").unwrap();
+        let input = util::load_input_file("day02.txt", crate::YEAR)
+            .unwrap()
+            .into_vec::<String>("\n");
         let passwords = input
             .into_iter()
             .map(|item| Password::<PositionRule>::from(&item))

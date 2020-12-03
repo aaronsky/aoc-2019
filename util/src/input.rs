@@ -4,33 +4,33 @@ use std::path::Path;
 use std::str::FromStr;
 
 // load file
-pub fn load_input_file<S>(name: &str) -> Result<S, ()>
-where
-    S: FromStr,
-{
-    // TODO: This path will cease to work, maybe? 
+pub fn load_input_file(name: &str, _year: &'static str) -> Result<Input, ()> {
     let input_file = Path::new("src/inputs/").join(name);
     let mut contents = String::new();
+
     File::open(input_file)
         .and_then(|mut file| file.read_to_string(&mut contents))
-        .map_err(|_| ())
-        .and_then(|_| S::from_str(&contents).map_err(|_| ()))
+        .map_err(|_| ())?;
+
+    Ok(Input(contents))
 }
 
-pub struct ListInput<S: FromStr>(pub Vec<S>);
+pub struct Input(String);
 
-impl<S> FromStr for ListInput<S>
-where
-    S: FromStr,
-{
-    type Err = ();
+impl Input {
+    pub fn into_raw(self) -> String {
+        self.0
+    }
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(ListInput(
-            s.split(',')
-                .map(S::from_str)
-                .filter_map(Result::ok)
-                .collect(),
-        ))
+    pub fn into<S: FromStr>(self) -> Option<S> {
+        S::from_str(&self.0).ok()
+    }
+
+    pub fn into_vec<S: FromStr>(self, sep: &str) -> Vec<S> {
+        self.0
+            .split(sep)
+            .map(S::from_str)
+            .filter_map(Result::ok)
+            .collect()
     }
 }

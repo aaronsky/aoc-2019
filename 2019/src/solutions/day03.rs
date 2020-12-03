@@ -1,6 +1,6 @@
-use util::{Direction, Point2};
 use std::iter;
 use std::str::FromStr;
+use util::{Direction, Point2};
 
 #[derive(Debug)]
 struct Node {
@@ -51,8 +51,8 @@ impl Wire {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use util;
     use std::collections::HashMap;
+    use util;
 
     fn parse_wires(input: &str) -> (Wire, Wire) {
         let mut wires: Vec<Wire> = input
@@ -67,7 +67,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let wires_str: String = util::load_input_file("day03.txt").unwrap();
+        let wires_str = util::load_input_file("day03.txt", crate::YEAR)
+            .unwrap()
+            .into_raw();
         let (first_wire, second_wire): (Wire, Wire) = parse_wires(&wires_str);
         let first_wire_path: HashMap<_, u32> = first_wire.iter().zip(1..).collect();
         let distance = second_wire

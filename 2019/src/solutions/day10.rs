@@ -1,8 +1,8 @@
-use util::{FloatDistance, Point2, TAU};
 use std::cmp;
 use std::collections::HashMap;
 use std::ops::Index;
 use std::str::FromStr;
+use util::{FloatDistance, Point2, TAU};
 
 #[derive(Debug)]
 enum Body {
@@ -145,13 +145,19 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let map: Map = util::load_input_file("day10.txt").unwrap();
+        let map: Map = util::load_input_file("day10.txt", crate::YEAR)
+            .unwrap()
+            .into()
+            .unwrap();
         assert_eq!(map.asteroid_with_most_other_asteroids_visible().1, 280);
     }
 
     #[test]
     fn test_advent_puzzle_2() {
-        let mut map: Map = util::load_input_file("day10.txt").unwrap();
+        let mut map: Map = util::load_input_file("day10.txt", crate::YEAR)
+            .unwrap()
+            .into()
+            .unwrap();
         let station = Point2 { x: 20, y: 18 };
         let two_hundreth_asteroid = map.vaporize_asteroids_from_coord(station);
         assert_eq!(

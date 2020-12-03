@@ -1,6 +1,6 @@
 use crate::intcode::*;
-use util::{Direction, Point2};
 use std::collections::HashMap;
+use util::{Direction, Point2};
 
 #[derive(Debug, Clone, Copy)]
 pub enum Color {
@@ -91,7 +91,6 @@ impl Default for Robot {
 mod tests {
     use super::*;
     use util;
-    use util::ListInput;
 
     const PART_2_RENDERED: &'static str = "\
 .####.####..##..#..#.#..#.####..##...##....
@@ -110,7 +109,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let ListInput(rom) = util::load_input_file("day11.txt").unwrap();
+        let rom = util::load_input_file("day11.txt", crate::YEAR)
+            .unwrap()
+            .into_vec(",");
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::Black, program);
@@ -119,7 +120,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_2() {
-        let ListInput(rom) = util::load_input_file("day11.txt").unwrap();
+        let rom = util::load_input_file("day11.txt", crate::YEAR)
+            .unwrap()
+            .into_vec(",");
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::White, program);

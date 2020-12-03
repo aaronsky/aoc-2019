@@ -40,12 +40,13 @@ mod tests {
     use super::*;
     use crate::intcode::{Intcode, Interrupt};
     use util;
-    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle() {
         let mut score = None;
-        let ListInput(rom) = util::load_input_file("day13.txt").unwrap();
+        let rom = util::load_input_file("day13.txt", crate::YEAR)
+            .unwrap()
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
 
         let mut tile_position_buffer: [Option<i32>; 2] = [None, None];

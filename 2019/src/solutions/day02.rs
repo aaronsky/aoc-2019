@@ -2,7 +2,6 @@
 mod tests {
     use crate::intcode::Intcode;
     use util;
-    use util::ListInput;
 
     #[test]
     fn smoke_simple_program_1() {
@@ -62,7 +61,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let ListInput(rom) = util::load_input_file("day02.txt").unwrap();
+        let rom = util::load_input_file("day02.txt", crate::YEAR)
+            .unwrap()
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {

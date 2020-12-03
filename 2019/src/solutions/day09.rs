@@ -2,12 +2,13 @@
 mod tests {
     use crate::intcode::{Intcode, Interrupt};
     use util;
-    use util::ListInput;
 
     #[test]
     fn test_advent_puzzle_1() {
         let mut output = None;
-        let ListInput(rom) = util::load_input_file("day09.txt").unwrap();
+        let rom = util::load_input_file("day09.txt", crate::YEAR)
+            .unwrap()
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
@@ -22,7 +23,9 @@ mod tests {
     #[test]
     fn test_advent_puzzle_2() {
         let mut output = None;
-        let ListInput(rom) = util::load_input_file("day09.txt").unwrap();
+        let rom = util::load_input_file("day09.txt", crate::YEAR)
+            .unwrap()
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
