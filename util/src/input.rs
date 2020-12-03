@@ -29,6 +29,7 @@ impl Input {
     pub fn into_vec<S: FromStr>(self, sep: &str) -> Vec<S> {
         self.0
             .split(sep)
+            .filter(|s| !s.is_empty()) // skip empty lines
             .map(S::from_str)
             .filter_map(Result::ok)
             .collect()
