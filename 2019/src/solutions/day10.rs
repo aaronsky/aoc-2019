@@ -67,7 +67,7 @@ impl Map {
         }
         let mut sorted_angles: Vec<FloatDistance> = vec![];
         for (angle, asteroids) in &mut angles {
-            sorted_angles.push(angle.clone());
+            sorted_angles.push(*angle);
             asteroids.sort_by(|a, b| {
                 a.manhattan_distance(coord)
                     .cmp(&b.manhattan_distance(coord))

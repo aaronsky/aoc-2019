@@ -1,4 +1,3 @@
-use util;
 use std::u8::MAX as U8_MAX;
 
 pub fn is_valid_password(candidate: u32, range_start: u32, range_end: u32) -> bool {
