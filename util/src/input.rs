@@ -15,6 +15,7 @@ pub fn load_input_file(name: &str, _year: &'static str) -> Result<Input, ()> {
     Ok(Input(contents))
 }
 
+#[derive(Debug, Default, Clone)]
 pub struct Input(String);
 
 impl Input {
@@ -33,5 +34,11 @@ impl Input {
             .map(S::from_str)
             .filter_map(Result::ok)
             .collect()
+    }
+}
+
+impl ToString for Input {
+    fn to_string(&self) -> String {
+        self.clone().into_raw()
     }
 }
