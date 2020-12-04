@@ -7,6 +7,17 @@ pub enum Direction {
     Right,
 }
 
+impl Direction {
+    fn offset(&self) -> (i32, i32) {
+        match self {
+            Direction::Up => (0, -1),
+            Direction::Down => (0, 1),
+            Direction::Left => (-1, 0),
+            Direction::Right => (1, 0),
+        }
+    }
+}
+
 impl From<char> for Direction {
     fn from(c: char) -> Self {
         match c {
@@ -25,13 +36,8 @@ pub fn unique_houses_receiving_presents(instructions: &[Direction]) -> usize {
 
     houses.insert(current_position);
 
-    for i in instructions {
-        let offset = match i {
-            Direction::Up => (0, -1),
-            Direction::Down => (0, 1),
-            Direction::Left => (-1, 0),
-            Direction::Right => (1, 0),
-        };
+    for d in instructions {
+        let offset = d.offset();
 
         current_position.0 += offset.0;
         current_position.1 += offset.1;
@@ -52,13 +58,8 @@ pub fn unique_houses_receiving_presents_two_workers(instructions: &[Direction]) 
     houses.insert(current_santa);
     houses.insert(current_robo);
 
-    for i in instructions {
-        let offset = match i {
-            Direction::Up => (0, -1),
-            Direction::Down => (0, 1),
-            Direction::Left => (-1, 0),
-            Direction::Right => (1, 0),
-        };
+    for d in instructions {
+        let offset = d.offset();
 
         if tracking_robo {
             current_robo.0 += offset.0;
