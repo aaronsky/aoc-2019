@@ -78,7 +78,7 @@ impl Passport {
 
         // hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
         if let Some(ref hair_color) = self.hair_color {
-            if !hair_color.starts_with("#") || hair_color.len() != 7 {
+            if !hair_color.starts_with('#') || hair_color.len() != 7 {
                 return false;
             }
             let val = u32::from_str_radix(&hair_color.replace("#", ""), 16);
