@@ -111,7 +111,7 @@ mod tests {
     use util;
 
     #[test]
-    fn test_advent_puzzle_one() {
+    fn test_advent_puzzle() {
         let strings = util::load_input_file("day05.txt", crate::YEAR)
             .unwrap()
             .into_vec("\n");
