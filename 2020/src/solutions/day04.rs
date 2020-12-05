@@ -1,16 +1,31 @@
-use std::collections::HashSet;
+use crate::shared::Passport;
 use std::str::FromStr;
 
-#[derive(Debug)]
-pub struct Passport {
-    birth_year: Option<String>,
-    issue_year: Option<String>,
-    exp_year: Option<String>,
-    height: Option<String>,
-    hair_color: Option<String>,
-    eye_color: Option<String>,
-    passport_id: Option<String>,
-    country_id: Option<String>,
+fn validate_in_range<N>(field: &Option<String>, min: N, max: N) -> bool
+where
+    N: Ord + FromStr,
+{
+    field
+        .to_owned()
+        .and_then(|s| N::from_str(&s).ok())
+        .map(|y| y <= max && y >= min)
+        .unwrap_or_default()
+}
+
+fn validate_cm_in_range(field: &str, min: u32, max: u32) -> bool {
+    validate_in_range(&Some(field.replace("cm", "")), min, max)
+}
+
+fn validate_inch_in_range(field: &str, min: u32, max: u32) -> bool {
+    validate_in_range(&Some(field.replace("in", "")), min, max)
+}
+
+fn validate_number_of_length(field: &Option<String>, len: u32) -> bool {
+    field
+        .to_owned()
+        .filter(|s| s.len() == len as usize)
+        .is_some()
+        && validate_in_range(field, 0, 10_u32.pow(len) - 1)
 }
 
 impl Passport {
@@ -26,142 +41,53 @@ impl Passport {
 
     pub fn required_fields_valid(&self) -> bool {
         // byr (Birth Year) - four digits; at least 1920 and at most 2002.
-        if let Some(ref birth_year) = self.birth_year {
-            let val = u32::from_str(&birth_year).unwrap_or_default();
-            if val > 2002 || val < 1920 {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
         // iyr (Issue Year) - four digits; at least 2010 and at most 2020.
-        if let Some(ref issue_year) = self.issue_year {
-            let val = u32::from_str(&issue_year).unwrap_or_default();
-            if val > 2020 || val < 2010 {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
         // eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
-        if let Some(ref exp_year) = self.exp_year {
-            let val = u32::from_str(&exp_year).unwrap_or_default();
-            if val > 2030 || val < 2020 {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
         // hgt (Height) - a number followed by either cm or in:
         //     If cm, the number must be at least 150 and at most 193.
         //     If in, the number must be at least 59 and at most 76.
-        if let Some(ref height) = self.height {
-            if height.ends_with("cm") {
-                let val = u32::from_str(&height.replace("cm", "")).unwrap_or_default();
-                if val > 193 || val < 150 {
-                    return false;
-                }
-            } else if height.ends_with("in") {
-                let val = u32::from_str(&height.replace("in", "")).unwrap_or_default();
-                if val > 76 || val < 59 {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
         // hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
-        if let Some(ref hair_color) = self.hair_color {
-            if !hair_color.starts_with('#') || hair_color.len() != 7 {
-                return false;
-            }
-            let val = u32::from_str_radix(&hair_color.replace("#", ""), 16);
-            if val.is_err() {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
         // ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
-        let eye_colors = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
-            .iter()
-            .map(ToString::to_string)
-            .collect::<HashSet<String>>();
-        if let Some(ref eye_color) = self.eye_color {
-            if !eye_colors.contains(eye_color) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
         // pid (Passport ID) - a nine-digit number, including leading zeroes.
-        if let Some(ref passport_id) = self.passport_id {
-            if passport_id.len() != 9 {
-                return false;
-            }
-            let val = u32::from_str(&passport_id);
-            if val.is_err() {
-                return false;
-            }
-        } else {
-            return false;
-        }
 
-        true
-    }
-}
+        let height = self
+            .height
+            .to_owned()
+            .filter(|s| validate_cm_in_range(&s, 150, 193) || validate_inch_in_range(&s, 59, 76))
+            .is_some();
 
-impl FromStr for Passport {
-    type Err = ();
+        let hair_color = self
+            .hair_color
+            .to_owned()
+            .filter(|s| s.starts_with('#') && s.len() == 7)
+            .map(|s| u32::from_str_radix(&s.replace("#", ""), 16).ok())
+            .flatten()
+            .is_some();
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut birth_year = None;
-        let mut issue_year = None;
-        let mut exp_year = None;
-        let mut height = None;
-        let mut hair_color = None;
-        let mut eye_color = None;
-        let mut passport_id = None;
-        let mut country_id = None;
+        let eye_color = self
+            .eye_color
+            .to_owned()
+            .filter(|s| {
+                [
+                    String::from("amb"),
+                    String::from("blu"),
+                    String::from("brn"),
+                    String::from("gry"),
+                    String::from("grn"),
+                    String::from("hzl"),
+                    String::from("oth"),
+                ]
+                .contains(s)
+            })
+            .is_some();
 
-        for field in s.replace("\n", " ").split(' ') {
-            if field.is_empty() {
-                continue;
-            }
-
-            let comps: Vec<&str> = field.split(':').take(2).collect();
-            let (key, value) = (comps[0], comps[1]);
-            match key {
-                "byr" => birth_year = Some(value.to_string()),
-                "iyr" => issue_year = Some(value.to_string()),
-                "eyr" => exp_year = Some(value.to_string()),
-                "hgt" => height = Some(value.to_string()),
-                "hcl" => hair_color = Some(value.to_string()),
-                "ecl" => eye_color = Some(value.to_string()),
-                "pid" => passport_id = Some(value.to_string()),
-                "cid" => country_id = Some(value.to_string()),
-                _ => unreachable!("impossible value"),
-            }
-        }
-
-        Ok(Passport {
-            birth_year,
-            issue_year,
-            exp_year,
-            height,
-            hair_color,
-            eye_color,
-            passport_id,
-            country_id,
-        })
+        validate_in_range(&self.birth_year, 1920, 2002)
+            && validate_in_range(&self.issue_year, 2010, 2020)
+            && validate_in_range(&self.exp_year, 2020, 2030)
+            && height
+            && hair_color
+            && eye_color
+            && validate_number_of_length(&self.passport_id, 9)
     }
 }
 
