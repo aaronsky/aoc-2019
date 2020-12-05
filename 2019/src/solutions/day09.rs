@@ -8,7 +8,7 @@ mod tests {
         let mut output = None;
         let rom = util::Input::new("day09.txt", crate::YEAR)
             .unwrap()
-            .to_vec(",");
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {
@@ -25,7 +25,7 @@ mod tests {
         let mut output = None;
         let rom = util::Input::new("day09.txt", crate::YEAR)
             .unwrap()
-            .to_vec(",");
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {

@@ -1,7 +1,9 @@
+use std::fmt;
+use std::fs::File;
+use std::io;
 use std::io::Read;
 use std::path::Path;
 use std::str::FromStr;
-use std::{fs::File, io};
 
 #[derive(Debug, Default)]
 pub struct Input(String);
@@ -16,10 +18,6 @@ impl Input {
         Ok(Input(contents))
     }
 
-    pub fn to_string(self) -> String {
-        self.0
-    }
-
     pub fn try_into<T>(self) -> Result<T, T::Err>
     where
         T: FromStr,
@@ -27,7 +25,7 @@ impl Input {
         T::from_str(&self.0)
     }
 
-    pub fn to_vec<T>(self, sep: &str) -> Vec<T>
+    pub fn into_vec<T>(self, sep: &str) -> Vec<T>
     where
         T: FromStr,
     {
@@ -37,5 +35,11 @@ impl Input {
             .map(T::from_str)
             .filter_map(Result::ok)
             .collect()
+    }
+}
+
+impl fmt::Display for Input {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
     }
 }

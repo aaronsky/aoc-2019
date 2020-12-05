@@ -114,7 +114,7 @@ mod tests {
     fn test_advent_puzzle() {
         let strings = util::Input::new("day05.txt", crate::YEAR)
             .unwrap()
-            .to_vec("\n");
+            .into_vec("\n");
         assert_eq!(count_nice_strings(&strings, is_nice_one), 255);
         assert_eq!(count_nice_strings(&strings, is_nice_two), 55);
     }

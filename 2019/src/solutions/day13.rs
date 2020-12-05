@@ -46,7 +46,7 @@ mod tests {
         let mut score = None;
         let rom = util::Input::new("day13.txt", crate::YEAR)
             .unwrap()
-            .to_vec(",");
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
 
         let mut tile_position_buffer: [Option<i32>; 2] = [None, None];

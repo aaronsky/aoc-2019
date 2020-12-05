@@ -1,26 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 use std::str::FromStr;
-
-trait InsertingIntoExistingValue<K, V> {
-    fn insert_into_existing_value(&mut self, key: K, value: V);
-}
-
-type AdjacencyList<S> = HashMap<S, Vec<S>>;
-
-impl<S> InsertingIntoExistingValue<S, S> for AdjacencyList<S>
-where
-    S: Hash + Eq,
-{
-    fn insert_into_existing_value(&mut self, key: S, value: S) {
-        if let Some(mut existing) = self.remove(&key) {
-            existing.push(value);
-            self.insert(key, existing);
-        } else {
-            self.insert(key, vec![value]);
-        }
-    }
-}
+use util::{AdjacencyList, Graph};
 
 #[derive(Hash, Eq, PartialEq, Debug, Clone)]
 pub enum OrbitalObject {
@@ -47,18 +28,23 @@ pub struct OrbitMap {
 
 impl OrbitMap {
     pub fn number_of_orbits(&self) -> usize {
-        self.construct_orbital_path_map()
-            .iter()
-            .map(|(_, v)| v.len())
-            .sum()
+        self.construct_orbital_path_map().len()
     }
 
     pub fn number_of_orbital_transfers_from_you_to_santa(&self) -> usize {
         let path_map = self.construct_orbital_path_map();
-        assert!(path_map.contains_key(&OrbitalObject::You));
-        assert!(path_map.contains_key(&OrbitalObject::Santa));
-        let you_orbits = path_map.get(&OrbitalObject::You).unwrap();
-        let santa_orbits = path_map.get(&OrbitalObject::Santa).unwrap();
+        assert!(path_map.contains_vertex(&OrbitalObject::You));
+        assert!(path_map.contains_vertex(&OrbitalObject::Santa));
+        let you_orbits: Vec<&OrbitalObject> = path_map
+            .edges(&OrbitalObject::You)
+            .iter()
+            .map(|e| e.destination.as_ref())
+            .collect();
+        let santa_orbits: Vec<&OrbitalObject> = path_map
+            .edges(&OrbitalObject::Santa)
+            .iter()
+            .map(|e| e.destination.as_ref())
+            .collect();
         let mut last_matching_you_index = you_orbits.len() - 1;
         let mut last_matching_santa_index = santa_orbits.len() - 1;
         for (reverse_index, (you, santa)) in you_orbits
@@ -73,7 +59,7 @@ impl OrbitMap {
             last_matching_you_index = you_orbits.len() - reverse_index - 1;
             last_matching_santa_index = santa_orbits.len() - reverse_index - 1;
         }
-        let path: Vec<&OrbitalObject> = you_orbits[..last_matching_you_index]
+        let path: Vec<&&OrbitalObject> = you_orbits[..last_matching_you_index]
             .iter()
             .chain(santa_orbits[..=last_matching_santa_index].iter().rev())
             .collect();
@@ -84,10 +70,14 @@ impl OrbitMap {
         let mut path_map: AdjacencyList<OrbitalObject> = Default::default();
         for obj in &self.all_objects {
             let mut current = obj;
-            path_map.insert(obj.clone(), Default::default());
+            path_map.insert(obj.clone());
             while self.reverse_lookup.contains_key(current) {
                 current = self.reverse_lookup.get(current).unwrap();
-                path_map.insert_into_existing_value(obj.clone(), current.clone());
+                path_map.add_directed_edge(
+                    &std::rc::Rc::new(obj.clone()),
+                    &std::rc::Rc::new(current.clone()),
+                    None,
+                );
             }
         }
         path_map

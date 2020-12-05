@@ -170,7 +170,7 @@ mod tests {
     #[test]
     fn test_advent_puzzle() {
         let layers: Layers = util::Input::new("day08.txt", crate::YEAR)
-            .map(util::Input::to_string)
+            .map(|i| i.to_string())
             .map(|input: String| {
                 Layers::from(RawImage {
                     pixels: input,

@@ -61,7 +61,7 @@ mod tests {
     fn test_advent_puzzle() {
         let mut passes = util::Input::new("day05.txt", crate::YEAR)
             .unwrap()
-            .to_vec::<BoardingPass>("\n");
+            .into_vec::<BoardingPass>("\n");
 
         assert_eq!(passes.iter().map(BoardingPass::id).max(), Some(822));
 

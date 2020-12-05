@@ -58,7 +58,7 @@ mod tests {
     fn test_advent_puzzle() {
         let presents = util::Input::new("day02.txt", crate::YEAR)
             .unwrap()
-            .to_vec("\n");
+            .into_vec("\n");
 
         let total_surface_area: u32 = presents.iter().map(Present::surface_area).sum();
         assert_eq!(total_surface_area, 1598415);

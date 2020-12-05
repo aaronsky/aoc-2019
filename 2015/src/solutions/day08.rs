@@ -56,7 +56,7 @@ mod tests {
     fn test_advent_puzzle() {
         let strings: Vec<String> = util::Input::new("day08.txt", crate::YEAR)
             .unwrap()
-            .to_vec::<String>("\n")
+            .into_vec::<String>("\n")
             .iter()
             .map(|s| s.trim().to_string())
             .collect();

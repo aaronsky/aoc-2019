@@ -111,7 +111,7 @@ mod tests {
     fn test_advent_puzzle_1() {
         let rom = util::Input::new("day11.txt", crate::YEAR)
             .unwrap()
-            .to_vec(",");
+            .into_vec(",");
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::Black, program);
@@ -122,7 +122,7 @@ mod tests {
     fn test_advent_puzzle_2() {
         let rom = util::Input::new("day11.txt", crate::YEAR)
             .unwrap()
-            .to_vec(",");
+            .into_vec(",");
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::White, program);

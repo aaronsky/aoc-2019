@@ -63,7 +63,7 @@ mod tests {
     fn test_advent_puzzle() {
         let rom = util::Input::new("day02.txt", crate::YEAR)
             .unwrap()
-            .to_vec(",");
+            .into_vec(",");
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {

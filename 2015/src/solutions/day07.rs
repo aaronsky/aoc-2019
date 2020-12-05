@@ -90,7 +90,7 @@ mod tests {
     fn test_advent_puzzle_one() {
         let instructions = util::Input::new("day07.txt", crate::YEAR)
             .unwrap()
-            .to_vec::<Instruction>("\n");
+            .into_vec::<Instruction>("\n");
         let mut circuit = Circuit::new();
 
         circuit.evaluate_instructions(&instructions);
@@ -102,7 +102,7 @@ mod tests {
     fn test_advent_puzzle_two() {
         let mut instructions = util::Input::new("day07.txt", crate::YEAR)
             .unwrap()
-            .to_vec::<Instruction>("\n");
+            .into_vec::<Instruction>("\n");
         instructions[89] = Instruction::from_str("956 -> b").unwrap();
         let mut circuit = Circuit::new();
 

@@ -29,7 +29,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(not(debug_assertions))]
+    #[ignore]
     fn test_advent_puzzle_two() {
         let key = util::Input::new("day04.txt", crate::YEAR)
             .unwrap()
