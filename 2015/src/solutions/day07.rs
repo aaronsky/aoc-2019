@@ -23,7 +23,7 @@ impl FromStr for Instruction {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Circuit {
     wires: HashMap<String, u16>,
 }
@@ -56,7 +56,7 @@ impl Circuit {
     }
 
     fn parse_expression(&self, expression: &str) -> Option<u16> {
-        let input: Vec<&str> = expression.trim().split(" ").collect();
+        let input: Vec<&str> = expression.trim().split(' ').collect();
 
         if input.len() == 1 {
             return self.get_value(input[0]);
@@ -77,9 +77,7 @@ impl Circuit {
     }
 
     fn get_value(&self, v: &str) -> Option<u16> {
-        u16::from_str(v)
-            .ok()
-            .or_else(|| self.wires.get(v).map(|n| *n))
+        u16::from_str(v).ok().or_else(|| self.wires.get(v).copied())
     }
 }
 

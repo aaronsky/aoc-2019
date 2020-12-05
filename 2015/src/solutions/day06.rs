@@ -36,7 +36,7 @@ impl FromStr for Instruction {
         let (start_str, end_str) = (coords[0], coords[1]);
 
         let start_comps: Vec<usize> = start_str
-            .split(",")
+            .split(',')
             .take(2)
             .map(usize::from_str)
             .filter_map(Result::ok)
@@ -44,7 +44,7 @@ impl FromStr for Instruction {
         let start = (start_comps[0], start_comps[1]);
 
         let end_comps: Vec<usize> = end_str
-            .split(",")
+            .split(',')
             .take(2)
             .map(usize::from_str)
             .filter_map(Result::ok)
