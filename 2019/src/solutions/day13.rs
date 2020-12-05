@@ -38,7 +38,7 @@ pub enum JoystickPosition {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::intcode::{Intcode, Interrupt};
+    use crate::shared::{Intcode, Interrupt};
     use util;
 
     #[test]

@@ -1,4 +1,4 @@
-use crate::intcode::*;
+use crate::shared::*;
 use std::collections::HashMap;
 use util::{Direction, Point2};
 

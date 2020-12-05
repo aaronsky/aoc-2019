@@ -1,4 +1,4 @@
-use crate::intcode::{Intcode, Interrupt};
+use crate::shared::{Intcode, Interrupt};
 use std::collections::{HashSet, VecDeque};
 use std::iter::FromIterator;
 

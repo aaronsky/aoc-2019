@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::intcode::{Intcode, Interrupt};
+    use crate::shared::{Intcode, Interrupt};
     use util;
 
     #[test]
