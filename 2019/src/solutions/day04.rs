@@ -51,9 +51,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let range_str = util::load_input_file("day04.txt", crate::YEAR)
+        let range_str = util::Input::new("day04.txt", crate::YEAR)
             .unwrap()
-            .into_raw();
+            .to_string();
         let (start, end) = parse(&range_str);
         let possibilities_count = (start..end)
             .filter(|num| is_valid_password(*num, start, end))

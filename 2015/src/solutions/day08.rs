@@ -31,7 +31,10 @@ pub fn len_in_memory(s: &str) -> usize {
 }
 
 pub fn encode_str(s: &str) -> String {
-    let mut encoded = s.chars().fold(String::from('"'), |mut acc, c| {
+    let mut encoded = String::with_capacity(s.len());
+
+    encoded.push('"');
+    encoded = s.chars().fold(encoded, |mut acc, c| {
         match c {
             '"' => acc.push_str(r#"\""#),
             '\\' => acc.push_str(r#"\\"#),
@@ -51,9 +54,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let strings: Vec<String> = util::load_input_file("day08.txt", crate::YEAR)
+        let strings: Vec<String> = util::Input::new("day08.txt", crate::YEAR)
             .unwrap()
-            .into_vec::<String>("\n")
+            .to_vec::<String>("\n")
             .iter()
             .map(|s| s.trim().to_string())
             .collect();

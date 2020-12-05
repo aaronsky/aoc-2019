@@ -98,9 +98,9 @@ mod tests {
         possible_numbers.insert(2);
         possible_numbers.insert(3);
         possible_numbers.insert(4);
-        let rom = util::load_input_file("day07.txt", crate::YEAR)
+        let rom = util::Input::new("day07.txt", crate::YEAR)
             .unwrap()
-            .into_vec(",");
+            .to_vec(",");
         let max_output = AmplifierSequence::permutations(possible_numbers)
             .iter()
             .map(|seq| output_for_amplifier_sequence(&rom, &seq))
@@ -116,9 +116,9 @@ mod tests {
         possible_numbers.insert(7);
         possible_numbers.insert(8);
         possible_numbers.insert(9);
-        let rom = util::load_input_file("day07.txt", crate::YEAR)
+        let rom = util::Input::new("day07.txt", crate::YEAR)
             .unwrap()
-            .into_vec(",");
+            .to_vec(",");
         let max_output = AmplifierSequence::permutations(possible_numbers)
             .iter()
             .map(|seq| output_for_amplifier_looping(&rom, &seq))

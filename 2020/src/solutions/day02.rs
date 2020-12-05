@@ -96,9 +96,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_one() {
-        let input = util::load_input_file("day02.txt", crate::YEAR)
+        let input = util::Input::new("day02.txt", crate::YEAR)
             .unwrap()
-            .into_vec::<String>("\n");
+            .to_vec::<String>("\n");
         let passwords = input
             .into_iter()
             .map(|item| Password::<CountRule>::from(&item))
@@ -108,9 +108,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_two() {
-        let input = util::load_input_file("day02.txt", crate::YEAR)
+        let input = util::Input::new("day02.txt", crate::YEAR)
             .unwrap()
-            .into_vec::<String>("\n");
+            .to_vec::<String>("\n");
         let passwords = input
             .into_iter()
             .map(|item| Password::<PositionRule>::from(&item))

@@ -67,9 +67,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let wires_str = util::load_input_file("day03.txt", crate::YEAR)
+        let wires_str = util::Input::new("day03.txt", crate::YEAR)
             .unwrap()
-            .into_raw();
+            .to_string();
         let (first_wire, second_wire): (Wire, Wire) = parse_wires(&wires_str);
         let first_wire_path: HashMap<_, u32> = first_wire.iter().zip(1..).collect();
         let distance = second_wire

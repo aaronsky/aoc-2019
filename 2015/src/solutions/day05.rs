@@ -112,9 +112,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let strings = util::load_input_file("day05.txt", crate::YEAR)
+        let strings = util::Input::new("day05.txt", crate::YEAR)
             .unwrap()
-            .into_vec("\n");
+            .to_vec("\n");
         assert_eq!(count_nice_strings(&strings, is_nice_one), 255);
         assert_eq!(count_nice_strings(&strings, is_nice_two), 55);
     }

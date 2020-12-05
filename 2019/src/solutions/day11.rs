@@ -109,9 +109,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let rom = util::load_input_file("day11.txt", crate::YEAR)
+        let rom = util::Input::new("day11.txt", crate::YEAR)
             .unwrap()
-            .into_vec(",");
+            .to_vec(",");
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::Black, program);
@@ -120,9 +120,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_2() {
-        let rom = util::load_input_file("day11.txt", crate::YEAR)
+        let rom = util::Input::new("day11.txt", crate::YEAR)
             .unwrap()
-            .into_vec(",");
+            .to_vec(",");
         let program = Intcode::new(&rom);
         let mut robot = Robot::default();
         let panels = robot.navigate_panels(Color::White, program);

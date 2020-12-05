@@ -37,9 +37,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let input = util::load_input_file("day01.txt", crate::YEAR)
+        let input = util::Input::new("day01.txt", crate::YEAR)
             .unwrap()
-            .into_vec("\n");
+            .to_vec("\n");
         assert_eq!(fix_expense_report_doubles(&input), 32064);
         assert_eq!(fix_expense_report_triples(&input), 193598720);
     }

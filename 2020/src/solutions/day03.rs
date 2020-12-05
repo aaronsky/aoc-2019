@@ -82,18 +82,18 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_one() {
-        let map: Map = util::load_input_file("day03.txt", crate::YEAR)
+        let map: Map = util::Input::new("day03.txt", crate::YEAR)
             .unwrap()
-            .into()
+            .try_into()
             .unwrap();
         assert_eq!(map.navigate_with_stride(3, 1).trees_encountered, 225);
     }
 
     #[test]
     fn test_advent_puzzle_two() {
-        let map: Map = util::load_input_file("day03.txt", crate::YEAR)
+        let map: Map = util::Input::new("day03.txt", crate::YEAR)
             .unwrap()
-            .into()
+            .try_into()
             .unwrap();
         let product = map.navigate_with_stride(1, 1).trees_encountered
             * map.navigate_with_stride(3, 1).trees_encountered

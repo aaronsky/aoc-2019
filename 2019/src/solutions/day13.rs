@@ -44,9 +44,9 @@ mod tests {
     #[test]
     fn test_advent_puzzle() {
         let mut score = None;
-        let rom = util::load_input_file("day13.txt", crate::YEAR)
+        let rom = util::Input::new("day13.txt", crate::YEAR)
             .unwrap()
-            .into_vec(",");
+            .to_vec(",");
         let mut program = Intcode::new(&rom);
 
         let mut tile_position_buffer: [Option<i32>; 2] = [None, None];

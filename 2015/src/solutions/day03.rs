@@ -86,9 +86,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let instructions: Vec<Direction> = util::load_input_file("day03.txt", crate::YEAR)
+        let instructions: Vec<Direction> = util::Input::new("day03.txt", crate::YEAR)
             .unwrap()
-            .into_raw()
+            .to_string()
             .chars()
             .map(Direction::from)
             .collect();

@@ -132,9 +132,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_one() {
-        let instructions = util::load_input_file("day06.txt", crate::YEAR)
+        let instructions = util::Input::new("day06.txt", crate::YEAR)
             .unwrap()
-            .into_vec::<Instruction>("\n");
+            .to_vec::<Instruction>("\n");
         let mut lights = LightBoard::new(Mode::OnOff);
 
         lights.apply_instructions(&instructions);
@@ -143,9 +143,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_two() {
-        let instructions = util::load_input_file("day06.txt", crate::YEAR)
+        let instructions = util::Input::new("day06.txt", crate::YEAR)
             .unwrap()
-            .into_vec::<Instruction>("\n");
+            .to_vec::<Instruction>("\n");
         let mut lights = LightBoard::new(Mode::Brightness);
 
         lights.apply_instructions(&instructions);

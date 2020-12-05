@@ -1,44 +1,41 @@
-use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 use std::str::FromStr;
+use std::{fs::File, io};
 
-// load file
-pub fn load_input_file(name: &str, _year: &'static str) -> Result<Input, ()> {
-    let input_file = Path::new("src/inputs/").join(name);
-    let mut contents = String::new();
-
-    File::open(input_file)
-        .and_then(|mut file| file.read_to_string(&mut contents))
-        .map_err(|_| ())?;
-
-    Ok(Input(contents))
-}
-
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default)]
 pub struct Input(String);
 
 impl Input {
-    pub fn into_raw(self) -> String {
+    pub fn new(name: &str, _year: &'static str) -> Result<Self, io::Error> {
+        let input_file = Path::new("src/inputs/").join(name);
+        let mut contents = String::new();
+
+        File::open(input_file).and_then(|mut file| file.read_to_string(&mut contents))?;
+
+        Ok(Input(contents))
+    }
+
+    pub fn to_string(self) -> String {
         self.0
     }
 
-    pub fn into<S: FromStr>(self) -> Option<S> {
-        S::from_str(&self.0).ok()
+    pub fn try_into<T>(self) -> Result<T, T::Err>
+    where
+        T: FromStr,
+    {
+        T::from_str(&self.0)
     }
 
-    pub fn into_vec<S: FromStr>(self, sep: &str) -> Vec<S> {
+    pub fn to_vec<T>(self, sep: &str) -> Vec<T>
+    where
+        T: FromStr,
+    {
         self.0
             .split(sep)
             .filter(|s| !s.is_empty()) // skip empty lines
-            .map(S::from_str)
+            .map(T::from_str)
             .filter_map(Result::ok)
             .collect()
-    }
-}
-
-impl ToString for Input {
-    fn to_string(&self) -> String {
-        self.clone().into_raw()
     }
 }

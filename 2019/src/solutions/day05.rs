@@ -6,9 +6,9 @@ mod tests {
     #[test]
     fn test_advent_puzzle() {
         let mut output = None;
-        let rom = util::load_input_file("day05.txt", crate::YEAR)
+        let rom = util::Input::new("day05.txt", crate::YEAR)
             .unwrap()
-            .into_vec(",");
+            .to_vec(",");
         let mut program = Intcode::new(&rom);
         loop {
             match program.run() {

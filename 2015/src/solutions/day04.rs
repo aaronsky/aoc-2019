@@ -21,9 +21,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_one() {
-        let key = util::load_input_file("day04.txt", crate::YEAR)
+        let key = util::Input::new("day04.txt", crate::YEAR)
             .unwrap()
-            .into_raw();
+            .to_string();
 
         assert_eq!(lowest_number_in_hash(&key, "00000"), Some(346386));
     }
@@ -31,9 +31,9 @@ mod tests {
     #[test]
     #[cfg(not(debug_assertions))]
     fn test_advent_puzzle_two() {
-        let key = util::load_input_file("day04.txt", crate::YEAR)
+        let key = util::Input::new("day04.txt", crate::YEAR)
             .unwrap()
-            .into_raw();
+            .to_string();
 
         assert_eq!(lowest_number_in_hash(&key, "000000"), Some(9958218));
     }

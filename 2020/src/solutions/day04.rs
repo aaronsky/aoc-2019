@@ -98,9 +98,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let passports: Vec<Passport> = util::load_input_file("day04.txt", crate::YEAR)
+        let passports: Vec<Passport> = util::Input::new("day04.txt", crate::YEAR)
             .unwrap()
-            .into_vec::<String>("\n\n")
+            .to_vec::<String>("\n\n")
             .iter()
             .map(|s| Passport::from_str(s).unwrap())
             .collect();

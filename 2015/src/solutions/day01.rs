@@ -33,9 +33,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let input = util::load_input_file("day01.txt", crate::YEAR)
+        let input = util::Input::new("day01.txt", crate::YEAR)
             .unwrap()
-            .into_raw();
+            .to_string();
         assert_eq!(get_floor_number(&input), 232);
         assert_eq!(get_index_for_floor_number(&input, -1), 1783);
     }

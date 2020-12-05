@@ -145,18 +145,18 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let map: Map = util::load_input_file("day10.txt", crate::YEAR)
+        let map: Map = util::Input::new("day10.txt", crate::YEAR)
             .unwrap()
-            .into()
+            .try_into()
             .unwrap();
         assert_eq!(map.asteroid_with_most_other_asteroids_visible().1, 280);
     }
 
     #[test]
     fn test_advent_puzzle_2() {
-        let mut map: Map = util::load_input_file("day10.txt", crate::YEAR)
+        let mut map: Map = util::Input::new("day10.txt", crate::YEAR)
             .unwrap()
-            .into()
+            .try_into()
             .unwrap();
         let station = Point2 { x: 20, y: 18 };
         let two_hundreth_asteroid = map.vaporize_asteroids_from_coord(station);

@@ -189,9 +189,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_1() {
-        let mut system: LunarSystem = util::load_input_file("day12.txt", crate::YEAR)
+        let mut system: LunarSystem = util::Input::new("day12.txt", crate::YEAR)
             .unwrap()
-            .into()
+            .try_into()
             .unwrap();
         system.simulate(|system| system.step < 1000);
         assert_eq!(system.energy_in_system(), 14907);
@@ -199,9 +199,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle_2() {
-        let mut system: LunarSystem = util::load_input_file("day12.txt", crate::YEAR)
+        let mut system: LunarSystem = util::Input::new("day12.txt", crate::YEAR)
             .unwrap()
-            .into()
+            .try_into()
             .unwrap();
         assert_eq!(system.find_minimum_cycles(), 467_081_194_429_464);
     }

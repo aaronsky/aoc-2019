@@ -31,9 +31,9 @@ mod tests {
 
     #[test]
     fn test_advent_puzzle() {
-        let modules = util::load_input_file("day01.txt", crate::YEAR)
+        let modules = util::Input::new("day01.txt", crate::YEAR)
             .unwrap()
-            .into_vec("\n");
+            .to_vec("\n");
         let required_fuel = fuel_required_to_launch(&modules);
         assert_eq!(required_fuel, 4892166);
     }
