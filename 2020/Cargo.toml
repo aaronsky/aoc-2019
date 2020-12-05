@@ -7,4 +7,5 @@ publish = false
 
 [dependencies]
 itertools = "0.9"
+lazy_static = "1"
 util = { path = "../util" }

@@ -1,5 +1,21 @@
 use crate::shared::Passport;
+use lazy_static::lazy_static;
+use std::collections::HashSet;
 use std::str::FromStr;
+
+lazy_static! {
+    static ref EYE_COLORS: HashSet<&'static str> = {
+        let mut colors = HashSet::new();
+        colors.insert("amb");
+        colors.insert("blu");
+        colors.insert("brn");
+        colors.insert("gry");
+        colors.insert("grn");
+        colors.insert("hzl");
+        colors.insert("oth");
+        colors
+    };
+}
 
 fn validate_in_range<N>(field: &Option<String>, min: N, max: N) -> bool
 where
@@ -67,18 +83,7 @@ impl Passport {
         let eye_color = self
             .eye_color
             .to_owned()
-            .filter(|s| {
-                [
-                    String::from("amb"),
-                    String::from("blu"),
-                    String::from("brn"),
-                    String::from("gry"),
-                    String::from("grn"),
-                    String::from("hzl"),
-                    String::from("oth"),
-                ]
-                .contains(s)
-            })
+            .filter(|s| EYE_COLORS.contains(s.as_str()))
             .is_some();
 
         validate_in_range(&self.birth_year, 1920, 2002)
