@@ -1,28 +1,8 @@
-use std::cmp;
-use std::rc::Rc;
-use std::str::FromStr;
-use util::{AdjacencyList, Graph};
+use std::{rc::Rc, str::FromStr};
+use util::{AdjacencyList, Graph, Route};
 
 pub struct Chart {
     graph: AdjacencyList<String>,
-}
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct Route {
-    order: Vec<String>,
-    cost: u32,
-}
-
-impl cmp::PartialOrd for Route {
-    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        self.cost.partial_cmp(&other.cost)
-    }
-}
-
-impl cmp::Ord for Route {
-    fn cmp(&self, other: &Self) -> cmp::Ordering {
-        self.cost.cmp(&other.cost)
-    }
 }
 
 impl Chart {
@@ -30,7 +10,7 @@ impl Chart {
         println!("{:?}", self.graph);
     }
 
-    pub fn shortest_route(&self) -> Option<Route> {
+    pub fn shortest_route(&self) -> Option<Route<String>> {
         let mut route = None;
         for (start, _) in self.graph.iter() {
             let route_from_start = self.shortest_route_from_start(&start);
@@ -41,7 +21,7 @@ impl Chart {
         route
     }
 
-    fn shortest_route_from_start(&self, _start: &str) -> Option<Route> {
+    fn shortest_route_from_start(&self, _start: &str) -> Option<Route<String>> {
         None
     }
 }
