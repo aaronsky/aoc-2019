@@ -32,13 +32,11 @@ impl Map {
         let mut max = None;
         for asteroid in &self.asteroids {
             let num_visible = self.number_of_visible_asteroids_from_asteroid(*asteroid);
-            if let Some((_, visible)) = max {
-                if num_visible > visible {
-                    max = Some((asteroid, num_visible));
-                }
-            } else {
-                max = Some((asteroid, num_visible));
-            }
+            max = match max {
+                Some((_, visible)) if num_visible > visible => Some((asteroid, num_visible)),
+                Some(_) => max,
+                None => Some((asteroid, num_visible)),
+            };
         }
         max.unwrap()
     }
@@ -58,12 +56,12 @@ impl Map {
         let mut angles: HashMap<FloatDistance, Vec<&Point2>> = Default::default();
         for asteroid in &self.asteroids {
             let angle = FloatDistance((asteroid.polar_angle_to(coord) + TAU).rem_euclid(TAU));
-            if let Some(mut a) = angles.remove(&angle) {
-                a.push(asteroid);
-                angles.insert(angle, a);
-            } else {
-                angles.insert(angle, vec![asteroid]);
-            }
+            match angles.get_mut(&angle) {
+                Some(a) => a.push(asteroid),
+                None => {
+                    angles.insert(angle, vec![asteroid]);
+                }
+            };
         }
         let mut sorted_angles: Vec<FloatDistance> = vec![];
         for (angle, asteroids) in &mut angles {

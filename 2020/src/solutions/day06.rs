@@ -20,9 +20,11 @@ impl Group {
         for respondent in s.lines() {
             num_respondents += 1;
             for answer in respondent.chars() {
-                match map.remove(&answer) {
-                    Some(count) => map.insert(answer, count + 1),
-                    None => map.insert(answer, 1),
+                match map.get_mut(&answer) {
+                    Some(count) => *count += 1,
+                    None => {
+                        map.insert(answer, 1);
+                    }
                 };
             }
         }

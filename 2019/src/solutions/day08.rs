@@ -83,9 +83,11 @@ impl From<RawImage> for Layer {
         for pixel in raw_image.pixels.chars() {
             let p = Pixel::from(pixel);
             pixels_vec.push(p.clone());
-            match pixel_count_map.remove(&p) {
-                Some(count) => pixel_count_map.insert(p, count + 1),
-                None => pixel_count_map.insert(p, 1),
+            match pixel_count_map.get_mut(&p) {
+                Some(count) => *count += 1,
+                None => {
+                    pixel_count_map.insert(p, 1);
+                }
             };
         }
         Layer {
