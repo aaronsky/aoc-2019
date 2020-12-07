@@ -73,10 +73,9 @@ where
             weight,
         };
 
-        match self.0.get_mut(&source) {
-            Some(val) => val.push(edge),
-            _ => {}
-        };
+        if let Some(val) = self.0.get_mut(&source) {
+            val.push(edge);
+        }
     }
 }
 
