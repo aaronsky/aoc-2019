@@ -183,3 +183,40 @@ impl Ord for FloatDistance {
         self.partial_cmp(other).unwrap()
     }
 }
+
+pub struct Digits<N> {
+    n: N,
+    divisor: usize,
+}
+
+impl<N> Digits<N>
+where
+    N: std::cmp::PartialOrd<usize>,
+{
+    pub fn new(n: N) -> Self {
+        let mut divisor = 1;
+        while n >= divisor * 10 {
+            divisor *= 10;
+        }
+
+        Digits { n, divisor }
+    }
+}
+
+impl<N> Iterator for Digits<N>
+where
+    N: Copy + std::ops::Div<usize, Output = N> + std::ops::Rem<usize, Output = N>,
+{
+    type Item = N;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.divisor == 0 {
+            None
+        } else {
+            let v = Some(self.n / self.divisor);
+            self.n = self.n % self.divisor;
+            self.divisor /= 10;
+            v
+        }
+    }
+}
