@@ -1,7 +1,7 @@
 use std::cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd};
 use std::f64;
 use std::hash::{Hash, Hasher};
-use std::ops;
+use std::ops::{Add, AddAssign};
 
 pub fn number_of_digits(num: f64) -> f64 {
     f64::floor(f64::log10(num) + 1.0)
@@ -119,7 +119,7 @@ impl Default for Point3 {
     }
 }
 
-impl ops::Add for Point3 {
+impl Add for Point3 {
     type Output = Point3;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -127,7 +127,7 @@ impl ops::Add for Point3 {
     }
 }
 
-impl ops::AddAssign for Point3 {
+impl AddAssign for Point3 {
     fn add_assign(&mut self, other: Self) {
         self.x += other.x;
         self.y += other.y;
@@ -181,42 +181,5 @@ impl Eq for FloatDistance {}
 impl Ord for FloatDistance {
     fn cmp(&self, other: &Self) -> Ordering {
         self.partial_cmp(other).unwrap()
-    }
-}
-
-pub struct Digits<N> {
-    n: N,
-    divisor: usize,
-}
-
-impl<N> Digits<N>
-where
-    N: std::cmp::PartialOrd<usize>,
-{
-    pub fn new(n: N) -> Self {
-        let mut divisor = 1;
-        while n >= divisor * 10 {
-            divisor *= 10;
-        }
-
-        Digits { n, divisor }
-    }
-}
-
-impl<N> Iterator for Digits<N>
-where
-    N: Copy + std::ops::Div<usize, Output = N> + std::ops::Rem<usize, Output = N>,
-{
-    type Item = N;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.divisor == 0 {
-            None
-        } else {
-            let v = Some(self.n / self.divisor);
-            self.n = self.n % self.divisor;
-            self.divisor /= 10;
-            v
-        }
     }
 }
