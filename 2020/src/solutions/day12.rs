@@ -173,10 +173,8 @@ impl ShipNav {
                     };
                 }
                 Direction::Forward => {
-                    self.position.x =
-                        self.position.x + instruction.value * self.waypoint_position.x;
-                    self.position.y =
-                        self.position.y + instruction.value * self.waypoint_position.y;
+                    self.position.x += instruction.value * self.waypoint_position.x;
+                    self.position.y += instruction.value * self.waypoint_position.y;
                 }
             }
         }

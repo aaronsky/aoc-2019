@@ -1,5 +1,5 @@
+use crate::shared::Direction;
 use std::i64;
-use util::Direction;
 
 fn direction_to_i64(dir: Direction) -> i64 {
     match dir {

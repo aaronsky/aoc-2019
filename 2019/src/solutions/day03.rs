@@ -1,6 +1,7 @@
+use crate::shared::{Direction, PointDirectionMover};
 use std::iter;
 use std::str::FromStr;
-use util::{Direction, Point2};
+use util::Point2;
 
 #[derive(Debug)]
 struct Node {

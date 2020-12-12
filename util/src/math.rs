@@ -1,7 +1,10 @@
+mod point;
+
+pub use point::*;
+
 use std::cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd};
 use std::f64;
 use std::hash::{Hash, Hasher};
-use std::ops::{Add, AddAssign};
 
 pub fn number_of_digits(num: f64) -> f64 {
     f64::floor(f64::log10(num) + 1.0)
@@ -49,98 +52,6 @@ pub fn lcm(num1: i64, num2: i64) -> i64 {
         return 0;
     }
     num1 * (num2 / gcd(num1, num2))
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Point2 {
-    pub x: i32,
-    pub y: i32,
-}
-
-impl Point2 {
-    pub const fn new(x: i32, y: i32) -> Self {
-        Self { x, y }
-    }
-
-    pub const fn zero() -> Self {
-        Self::new(0, 0)
-    }
-
-    pub fn polar_angle_to(self, other: Point2) -> f64 {
-        let x_diff: f64 = (other.x - self.x) as f64;
-        let y_diff: f64 = (other.y - self.y) as f64;
-        f64::atan2(y_diff, x_diff)
-    }
-
-    pub fn manhattan_distance(self, to: Point2) -> i32 {
-        i32::abs(self.x - to.x) + i32::abs(self.y - to.y)
-    }
-
-    pub fn move_in_direction(&mut self, direction: Direction) {
-        self.x += match direction {
-            Direction::Right => 1,
-            Direction::Left => -1,
-            _ => 0,
-        };
-        self.y += match direction {
-            Direction::Up => 1,
-            Direction::Down => -1,
-            _ => 0,
-        }
-    }
-}
-
-impl Default for Point2 {
-    fn default() -> Self {
-        Point2::zero()
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Point3 {
-    pub x: i32,
-    pub y: i32,
-    pub z: i32,
-}
-
-impl Point3 {
-    pub fn new(x: i32, y: i32, z: i32) -> Self {
-        Point3 { x, y, z }
-    }
-
-    pub fn zero() -> Self {
-        Point3::new(0, 0, 0)
-    }
-}
-
-impl Default for Point3 {
-    fn default() -> Self {
-        Point3::zero()
-    }
-}
-
-impl Add for Point3 {
-    type Output = Point3;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        Point3::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
-    }
-}
-
-impl AddAssign for Point3 {
-    fn add_assign(&mut self, other: Self) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-    }
-}
-
-#[derive(Debug, Clone, Copy)]
-pub enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
 }
 
 pub const TAU: f64 = f64::consts::PI * 2.0;

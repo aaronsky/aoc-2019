@@ -1,6 +1,6 @@
-use crate::shared::*;
+use crate::shared::{Direction, Intcode, Interrupt};
 use std::collections::HashMap;
-use util::{Direction, Point2};
+use util::Point2;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Color {
