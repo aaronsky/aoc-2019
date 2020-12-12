@@ -58,12 +58,12 @@ pub struct Point2 {
 }
 
 impl Point2 {
-    pub fn new(x: i32, y: i32) -> Self {
-        Point2 { x, y }
+    pub const fn new(x: i32, y: i32) -> Self {
+        Self { x, y }
     }
 
-    pub fn zero() -> Self {
-        Point2::new(0, 0)
+    pub const fn zero() -> Self {
+        Self::new(0, 0)
     }
 
     pub fn polar_angle_to(self, other: Point2) -> f64 {

@@ -69,9 +69,8 @@ impl<N> Matrix<N> {
     }
 
     pub fn set(&mut self, x: usize, y: usize, value: N) {
-        match self.get_mut(x, y) {
-            Some(x) => *x = value,
-            None => {}
+        if let Some(x) = self.get_mut(x, y) {
+            *x = value
         }
     }
 
@@ -84,14 +83,6 @@ impl<N> Matrix<N> {
         let y = index / self.width;
 
         (x, y)
-    }
-
-    pub fn has(&self, x: usize, y: usize) -> bool {
-        x < self.width && y < self.height && self.index(x, y) < self.elements.len()
-    }
-
-    pub fn has_index(&self, index: usize) -> bool {
-        index < self.elements.len()
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &N> {
@@ -322,7 +313,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "TODO: doesn't work yet"]
     fn test_advent_puzzle_two() {
         let mut seats: Seats = util::Input::new("day11.txt", crate::YEAR)
             .unwrap()
