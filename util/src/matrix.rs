@@ -88,20 +88,13 @@ impl<N> Matrix<N> {
     where
         F: Fn(&N) -> bool,
     {
-        let mut p = Point2::new(x.try_into().unwrap(), y.try_into().unwrap()) + along;
-        if p.is_negative() {
-            return None;
-        }
+        let mut p = Point2::new(x.try_into().ok()?, y.try_into().ok()?) + along;
 
-        while let Some(el) = self.get(p.x.try_into().unwrap(), p.y.try_into().unwrap()) {
+        while let Some(el) = self.get(p.x.try_into().ok()?, p.y.try_into().ok()?) {
             if matches(el) {
                 return Some(el);
             }
-
             p = p + along;
-            if p.is_negative() {
-                return None;
-            }
         }
 
         None
