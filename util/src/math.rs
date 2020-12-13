@@ -6,6 +6,8 @@ use std::cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd};
 use std::f64;
 use std::hash::{Hash, Hasher};
 
+pub const TAU: f64 = f64::consts::PI * 2.0;
+
 pub fn number_of_digits(num: f64) -> f64 {
     f64::floor(f64::log10(num) + 1.0)
 }
@@ -54,7 +56,34 @@ pub fn lcm(num1: i64, num2: i64) -> i64 {
     num1 * (num2 / gcd(num1, num2))
 }
 
-pub const TAU: f64 = f64::consts::PI * 2.0;
+pub fn chinese_remainder(residues: &[i128], modulii: &[i128]) -> Option<i128> {
+    let product = modulii.iter().product::<i128>();
+    let mut sum = 0;
+
+    for (&residue, &modulus) in residues.iter().zip(modulii) {
+        let inv = product / modulus;
+        sum += residue * inverse_mod(inv, modulus)? * inv;
+    }
+
+    Some(sum % product)
+}
+
+fn inverse_mod(x: i128, n: i128) -> Option<i128> {
+    let (g, x, _) = extended_gcd(x, n);
+    if g == 1 {
+        return Some((x % n + n) % n);
+    }
+    None
+}
+
+#[allow(clippy::many_single_char_names)]
+fn extended_gcd(a: i128, b: i128) -> (i128, i128, i128) {
+    if a == 0 {
+        return (b, 0, 1);
+    }
+    let (g, x, y) = extended_gcd(b % a, a);
+    (g, y - (b / a) * x, x)
+}
 
 /// Use at your own risk
 #[derive(Debug, Copy, Clone)]
