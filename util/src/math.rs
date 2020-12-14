@@ -56,8 +56,8 @@ pub fn lcm(num1: i64, num2: i64) -> i64 {
     num1 * (num2 / gcd(num1, num2))
 }
 
-pub fn chinese_remainder(residues: &[i128], modulii: &[i128]) -> Option<i128> {
-    let product = modulii.iter().product::<i128>();
+pub fn chinese_remainder(residues: &[i64], modulii: &[i64]) -> Option<i64> {
+    let product = modulii.iter().product::<i64>();
     let mut sum = 0;
 
     for (&residue, &modulus) in residues.iter().zip(modulii) {
@@ -68,7 +68,7 @@ pub fn chinese_remainder(residues: &[i128], modulii: &[i128]) -> Option<i128> {
     Some(sum % product)
 }
 
-fn inverse_mod(x: i128, n: i128) -> Option<i128> {
+fn inverse_mod(x: i64, n: i64) -> Option<i64> {
     let (g, x, _) = extended_gcd(x, n);
     if g == 1 {
         return Some((x % n + n) % n);
@@ -77,7 +77,7 @@ fn inverse_mod(x: i128, n: i128) -> Option<i128> {
 }
 
 #[allow(clippy::many_single_char_names)]
-fn extended_gcd(a: i128, b: i128) -> (i128, i128, i128) {
+fn extended_gcd(a: i64, b: i64) -> (i64, i64, i64) {
     if a == 0 {
         return (b, 0, 1);
     }

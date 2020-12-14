@@ -1,12 +1,12 @@
 use std::{num::ParseIntError, str::FromStr};
 
 struct BusRoute {
-    id: i128,
+    id: i64,
     in_service: bool,
 }
 
 impl BusRoute {
-    fn time_to_next_bus(&self, from: i128) -> i128 {
+    fn time_to_next_bus(&self, from: i64) -> i64 {
         self.id - (from % self.id)
     }
 }
@@ -21,7 +21,7 @@ impl FromStr for BusRoute {
                 in_service: false,
             },
             id => Self {
-                id: i128::from_str(id)?,
+                id: i64::from_str(id)?,
                 in_service: true,
             },
         };
@@ -30,12 +30,12 @@ impl FromStr for BusRoute {
 }
 
 pub struct BusSchedule {
-    depart_time: i128,
+    depart_time: i64,
     routes: Vec<BusRoute>,
 }
 
 impl BusSchedule {
-    pub fn soonest_bus_wait(&self) -> (i128, i128) {
+    pub fn soonest_bus_wait(&self) -> (i64, i64) {
         let (i, wait) = self
             .routes
             .iter()
@@ -47,16 +47,16 @@ impl BusSchedule {
         (self.routes[i].id, wait)
     }
 
-    pub fn soonest_timestamp_constrained(&self) -> Option<i128> {
+    pub fn soonest_timestamp_constrained(&self) -> Option<i64> {
         let (residues, modulii) = self
             .routes
             .iter()
             .enumerate()
             .filter(|(_, route)| route.in_service)
-            .map(|(i, route)| (i as i128, route.id))
+            .map(|(i, route)| (i as i64, route.id))
             .unzip::<_, _, Vec<_>, Vec<_>>();
 
-        Some(modulii.iter().product::<i128>() - util::chinese_remainder(&residues, &modulii)?)
+        Some(modulii.iter().product::<i64>() - util::chinese_remainder(&residues, &modulii)?)
     }
 }
 
