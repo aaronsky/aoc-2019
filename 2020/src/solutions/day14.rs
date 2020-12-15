@@ -23,14 +23,14 @@ impl FromStr for Instruction {
             .ok_or(Self::Err::InvalidInput)?;
         if head.starts_with("mask") {
             Ok(Self::Mask(val_raw.to_string()))
-        } else if head.starts_with("mem[") && head.ends_with("]") {
+        } else if head.starts_with("mem[") && head.ends_with(']') {
             let addr_raw = head
                 .strip_prefix("mem[")
                 .ok_or(Self::Err::InvalidInput)?
                 .strip_suffix("]")
                 .ok_or(Self::Err::InvalidInput)?;
-            let addr = u64::from_str(addr_raw).map_err(|e| Self::Err::ParseIntError(e))?;
-            let value = u64::from_str(val_raw).map_err(|e| Self::Err::ParseIntError(e))?;
+            let addr = u64::from_str(addr_raw).map_err(Self::Err::ParseIntError)?;
+            let value = u64::from_str(val_raw).map_err(Self::Err::ParseIntError)?;
             Ok(Instruction::Mem { addr, value })
         } else {
             Err(Self::Err::InvalidInput)
