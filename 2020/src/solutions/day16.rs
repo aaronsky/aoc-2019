@@ -1,5 +1,6 @@
 use itertools::Itertools;
 use std::{
+    cmp::Ordering,
     collections::{HashMap, HashSet},
     num::ParseIntError,
     ops::RangeInclusive,
@@ -107,19 +108,23 @@ impl Tickets {
 
         while remove_from_others.len() < identified.len() {
             for names in identified.iter_mut() {
-                if names.len() == 1 {
-                    if let Some(value) = names.iter().nth(0).map(ToOwned::to_owned) {
-                        remove_from_others.insert(value.clone());
-                        let mut new_names = HashSet::new();
-                        new_names.insert(value);
-                        *names = new_names;
+                match names.len().cmp(&1) {
+                    Ordering::Equal => {
+                        if let Some(value) = names.iter().next().map(ToOwned::to_owned) {
+                            remove_from_others.insert(value.clone());
+                            let mut new_names = HashSet::new();
+                            new_names.insert(value);
+                            *names = new_names;
+                        }
                     }
-                } else if names.len() > 1 {
-                    *names = names
-                        .difference(&remove_from_others)
-                        .map(ToOwned::to_owned)
-                        .collect();
-                }
+                    Ordering::Greater => {
+                        *names = names
+                            .difference(&remove_from_others)
+                            .map(ToOwned::to_owned)
+                            .collect()
+                    }
+                    _ => {}
+                };
             }
         }
 
@@ -163,12 +168,10 @@ impl FromStr for Tickets {
 
         let yours = yours_raw
             .lines()
-            .skip(1)
-            .take(1)
-            .map(Ticket::from_str)
-            .filter_map(Result::ok)
-            .nth(0)
-            .unwrap();
+            .nth(1)
+            .map(|s| Ticket::from_str(s))
+            .ok_or(())?
+            .map_err(|_| ())?;
 
         let nearby = nearby_raw
             .lines()
