@@ -18,7 +18,7 @@ pub fn encryption_key_matching(key1: u64, key2: u64) -> u64 {
         }
     }
 
-    return transform(key1, loop2.unwrap());
+    transform(key1, loop2.unwrap())
 }
 
 pub fn transform(subject: u64, loop_count: u64) -> u64 {

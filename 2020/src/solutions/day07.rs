@@ -92,7 +92,7 @@ impl Rules {
             }
 
             sizes.insert(color.to_owned(), count);
-        };
+        }
 
         let mut visited = HashSet::with_capacity(self.rules.len());
         let mut sizes = HashMap::with_capacity(self.rules.len());
