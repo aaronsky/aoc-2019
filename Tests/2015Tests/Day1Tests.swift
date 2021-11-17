@@ -13,7 +13,7 @@ class Day1Tests: XCTestCase {
     func testProblems() throws {
         let input = try Year2015().input(for: 1)
         let day = try Day1(input)
-        XCTAssertEqual(day.floorNumber(), 232)
-        XCTAssertEqual(day.floorNumberIndex(target: -1), 1783)
+        XCTAssertEqual(Int(day.partOne()), 232)
+        XCTAssertEqual(Int(day.partTwo()), 1783)
     }
 }

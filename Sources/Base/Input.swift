@@ -52,6 +52,12 @@ public protocol InputStringDecodable {
     init?(_ str: String)
 }
 
+extension String: InputStringDecodable {
+    public init?(_ str: String) {
+        self = str
+    }
+}
+
 extension Int: InputStringDecodable {}
 extension Int8: InputStringDecodable {}
 extension Int16: InputStringDecodable {}

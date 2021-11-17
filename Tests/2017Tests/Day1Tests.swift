@@ -7,11 +7,11 @@
 
 import Foundation
 import XCTest
-@testable import Advent2021
+@testable import Advent2017
 
 class Day1Tests: XCTestCase {
     func testProblems() throws {
-        let input = try Year2021().input(for: 1)
-        let day = try Day1(input)
+        let input = try Year2017().input(for: 1)
+        let _ = try Day1(input)
     }
 }

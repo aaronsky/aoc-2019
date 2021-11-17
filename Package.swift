@@ -40,6 +40,9 @@ func adventTarget(year: Int) -> [Target] {
 
 let package = Package(
     name: "advent-of-code",
+    platforms: [
+        .macOS(.v10_15)
+    ],
     products: [
         .executable(
             name: "aoc",
