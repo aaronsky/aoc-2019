@@ -10,8 +10,8 @@ import XCTest
 @testable import Advent2019
 
 class Day1Tests: XCTestCase {
-    func testProblems() throws {
-        let input = try Year2019().input(for: 1)
+    func testProblems() async throws {
+        let input = try await Year2019().input(for: 1)
         let _ = try Day1(input)
     }
 }

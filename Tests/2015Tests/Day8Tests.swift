@@ -10,10 +10,12 @@ import XCTest
 @testable import Advent2015
 
 class Day8Tests: XCTestCase {
-    func testProblems() throws {
-        let input = try Year2015().input(for: 8)
+    func testProblems() async throws {
+        let input = try await Year2015().input(for: 8)
         let day = try Day8(input)
-        XCTAssertEqual(Int(day.partOne()), 1333)
-        XCTAssertEqual(Int(day.partTwo()), 2046)
+        let partOne = await day.partOne()
+        XCTAssertEqual(Int(partOne), 1333)
+        let partTwo = await day.partTwo()
+        XCTAssertEqual(Int(partTwo), 2046)
     }
 }

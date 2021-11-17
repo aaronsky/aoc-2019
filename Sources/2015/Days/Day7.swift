@@ -14,14 +14,14 @@ struct Day7: Day {
         instructions = try input.decodeMany(separatedBy: "\n")
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
         var circuit = Circuit()
         circuit.evaluate(instructions)
 
         return "\(circuit["a"] ?? -1)"
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         var instructions = self.instructions
         instructions[89] = Instruction(expression: "956",
                                        output: "b",
@@ -33,10 +33,14 @@ struct Day7: Day {
         return "\(circuit["a"] ?? -1)"
     }
 
-    struct Instruction: InputStringDecodable {
+    struct Instruction: RawRepresentable {
         var expression: String
         var output: String
         var executed: Bool
+
+        var rawValue: String {
+            "\(expression) -> \(output)"
+        }
 
         init(expression: String, output: String, executed: Bool) {
             self.expression = expression
@@ -44,8 +48,8 @@ struct Day7: Day {
             self.executed = executed
         }
 
-        init?(_ str: String) {
-            let components = str.components(separatedBy: " -> ")
+        init?(rawValue: String) {
+            let components = rawValue.components(separatedBy: " -> ")
             let (expression, output) = (components[0], components[1])
             self.init(expression: expression, output: output, executed: false)
         }

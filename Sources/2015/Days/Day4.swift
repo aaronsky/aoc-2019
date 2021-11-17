@@ -15,12 +15,12 @@ struct Day4: Day {
         key = input.raw
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
 //        "\(lowestNumberInHash("00000") ?? -1)"
         ""
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
 //        "\(lowestNumberInHash("000000") ?? -1)"
         ""
     }

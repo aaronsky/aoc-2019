@@ -18,7 +18,7 @@ struct Day8: Day {
             }
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
         let one = strings.map {
             $0.count - lengthInMemory($0)
         }.reduce(0, +)
@@ -26,7 +26,7 @@ struct Day8: Day {
         return "\(one)"
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         let two = strings.map {
             encodeString($0).count - $0.count
         }.reduce(0, +)

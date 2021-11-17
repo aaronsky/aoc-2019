@@ -10,27 +10,21 @@ import Foundation
 public protocol Year {
     static var year: Int { get }
     var days: [Int: Day.Type] { get }
-    func input(for day: Int) throws -> Input
+    func input(for day: Int) async throws -> Input
 }
 
-public protocol Day: CustomDebugStringConvertible {
+public protocol Day {
     init(_ input: Input) throws
-    func partOne() -> String
-    func partTwo() -> String
+    func partOne() async -> String
+    func partTwo() async -> String
 }
 
 public extension Day {
-    var debugDescription: String {
-        "(\(partOne()), \(partTwo()))"
-    }
-}
-
-public extension Day {
-    func partOne() -> String {
+    func partOne() async -> String {
         fatalError("unimplemented \(#function)")
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         fatalError("unimplemented \(#function)")
     }
 }

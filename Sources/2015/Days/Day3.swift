@@ -14,11 +14,11 @@ struct Day3: Day {
         instructions = input.raw.map(Direction.init)
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
         "\(uniqueHousesReceivingPresents())"
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         "\(uniqueHousesReceivingPresentsTwoWorkers())"
     }
 

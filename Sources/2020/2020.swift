@@ -41,7 +41,7 @@ public struct Year2020: Year {
 
     public init() {}
 
-    public func input(for day: Int) throws -> Input {
-        try Input(day: day, in: Bundle.module)
+    public func input(for day: Int) async throws -> Input {
+        try await Input(day: day, in: Bundle.module)
     }
 }

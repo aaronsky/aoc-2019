@@ -35,7 +35,7 @@ public struct AOC: ParsableCommand {
     var year: Int
 
     @Argument(help: "Day in the year to run the problem for.")
-    var day: Int?
+    var days: [Int] = []
 
     public init() {}
 
@@ -44,20 +44,33 @@ public struct AOC: ParsableCommand {
             throw Error.unknownYear(self.year)
         }
 
-        if let dayNum = self.day {
-            guard let dayType = year.days[dayNum] else {
-                throw Error.unknownDayInYear(day: dayNum, year: self.year)
-            }
-            try runDay(dayType, dayNum, year: year)
+        let daysToRun: [Int: Day.Type]
+        if days.isEmpty {
+            daysToRun = year.days
         } else {
-            for (dayNum, dayType) in year.days {
-                try runDay(dayType, dayNum, year: year)
+            daysToRun = try Dictionary(uniqueKeysWithValues: days.map {
+                guard let dayType = year.days[$0] else {
+                    throw Error.unknownDayInYear(day: $0, year: self.year)
+                }
+                return ($0, dayType)
+            })
+        }
+
+        Task { // this isn't working right
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                for (dayNum, dayType) in daysToRun {
+                    group.addTask {
+                        return try await runDay(dayType, dayNum, year: year)
+                    }
+                }
+
+                try await group.waitForAll()
             }
         }
     }
 
-    private func runDay(_ dayType: Day.Type, _ dayNumber: Int, year: Year) throws {
-        let input = try year.input(for: dayNumber)
+    private func runDay(_ dayType: Day.Type, _ dayNumber: Int, year: Year) async throws {
+        let input = try await year.input(for: dayNumber)
         let day = try dayType.init(input)
         print("Day \(dayNumber) \(type(of: year).year):", day)
     }

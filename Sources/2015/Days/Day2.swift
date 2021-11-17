@@ -14,18 +14,22 @@ struct Day2: Day {
         presents = try input.decodeMany(separatedBy: "\n")
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
         "\(presents.map { $0.surfaceArea }.reduce(0, +))"
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         "\(presents.map { $0.ribbonLength }.reduce(0, +))"
     }
 
-    struct Present: InputStringDecodable {
+    struct Present: RawRepresentable {
         var width: Int
         var height: Int
         var length: Int
+
+        var rawValue: String {
+            "\(length)x\(width)x\(height)"
+        }
 
         var surfaceArea: Int {
             let lw = length * width
@@ -53,8 +57,8 @@ struct Day2: Day {
             self.length = length
         }
 
-        init?(_ str: String) {
-            let dimensions = str
+        init?(rawValue: String) {
+            let dimensions = rawValue
                 .components(separatedBy: "x")
                 .prefix(3)
                 .compactMap(Int.init)

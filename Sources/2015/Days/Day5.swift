@@ -12,11 +12,11 @@ struct Day5: Day {
 
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
         ""
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         ""
     }
 }

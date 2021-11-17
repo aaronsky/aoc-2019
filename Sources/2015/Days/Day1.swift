@@ -15,11 +15,11 @@ struct Day1: Day {
         pattern = input.raw
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
         "\(floorNumber())"
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         "\(floorNumberIndex(target: -1))"
     }
 

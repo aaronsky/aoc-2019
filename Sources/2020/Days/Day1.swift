@@ -15,11 +15,11 @@ struct Day1: Day {
         nums = try input.decodeMany(separatedBy: "\n")
     }
 
-    func partOne() -> String {
+    func partOne() async -> String {
         "\(fixExpenseReportDoubles())"
     }
 
-    func partTwo() -> String {
+    func partTwo() async -> String {
         "\(fixExpenseReportTriples())"
     }
 
@@ -29,9 +29,9 @@ struct Day1: Day {
         var num2 = 0
 
         for c in nums.combinations(ofCount: 2) {
-            if c[0] + c[1] == 2020 {
-                num1 = c[0]
-                num2 = c[1]
+            let (one, two) = (c[0], c[1])
+            if one + two == 2020 {
+                (num1, num2) = (one, two)
             }
         }
 
@@ -45,10 +45,9 @@ struct Day1: Day {
         var num3 = 0
 
         for c in nums.combinations(ofCount: 3) {
-            if c[0] + c[1] + c[2] == 2020 {
-                num1 = c[0]
-                num2 = c[1]
-                num3 = c[2]
+            let (one, two, three) = (c[0], c[1], c[2])
+            if one + two + three == 2020 {
+                (num1, num2, num3) = (one, two, three)
             }
         }
 

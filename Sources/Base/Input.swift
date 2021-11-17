@@ -18,17 +18,17 @@ public struct Input {
         contents
     }
 
-    public init(day: Int, in bundle: Bundle) throws {
+    public init(day: Int, in bundle: Bundle) async throws {
         guard let url = bundle.url(forResource: Input.fileName(for: day),
                                    withExtension: "txt",
                                    subdirectory: "Inputs") else {
             throw Error.fileNotFound("\(Input.fileName(for: day)).txt")
         }
 
-        try self.init(contentsOf: url)
+        try await self.init(contentsOf: url)
     }
 
-    init(contentsOf url: URL) throws {
+    init(contentsOf url: URL) async throws {
         contents = try String(contentsOf: url)
     }
 
@@ -36,11 +36,11 @@ public struct Input {
         "day\(String(format: "%02d", day))"
     }
 
-    public func decode<T: InputStringDecodable>() -> T? {
-        T(contents)
+    public func decode<T: RawRepresentable>() -> T? where T.RawValue == String {
+        T(rawValue: contents)
     }
 
-    public func decodeMany<T: InputStringDecodable>(separatedBy separator: String) throws -> [T] {
+    public func decodeMany<T: RawRepresentable>(separatedBy separator: String) throws -> [T] where T.RawValue == String {
         contents
             .components(separatedBy: separator)
             .filter { !$0.isEmpty } // skip empty lines
@@ -48,30 +48,144 @@ public struct Input {
     }
 }
 
-public protocol InputStringDecodable {
-    init?(_ str: String)
-}
+// MARK: - Swift types are now RawRepresentable
 
-extension String: InputStringDecodable {
-    public init?(_ str: String) {
-        self = str
+extension String: RawRepresentable {
+    public var rawValue: Self {
+        self
+    }
+
+    public init?(rawValue: Self) {
+        self = rawValue
     }
 }
 
-extension Int: InputStringDecodable {}
-extension Int8: InputStringDecodable {}
-extension Int16: InputStringDecodable {}
-extension Int32: InputStringDecodable {}
-extension Int64: InputStringDecodable {}
-extension UInt: InputStringDecodable {}
-extension UInt8: InputStringDecodable {}
-extension UInt16: InputStringDecodable {}
-extension UInt32: InputStringDecodable {}
-extension UInt64: InputStringDecodable {}
+extension Int: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
 
-extension Float: InputStringDecodable {}
-extension Double: InputStringDecodable {}
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
 
-extension Bool: InputStringDecodable {}
+extension Int8: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
 
-extension RawRepresentable where Self: InputStringDecodable, RawValue: InputStringDecodable {}
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension Int16: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension Int32: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension Int64: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension UInt: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension UInt8: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension UInt16: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension UInt32: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension UInt64: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension Float: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension Double: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
+
+extension Bool: RawRepresentable {
+    public var rawValue: String {
+        "\(self)"
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}
