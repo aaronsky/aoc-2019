@@ -16,6 +16,28 @@ func adventTargetName(_ year: Int) -> String {
     "Advent\(year)"
 }
 
+func adventTarget(year: Int) -> [Target] {
+    [
+        .target(
+            name: adventTargetName(year),
+            dependencies: [
+                "Base",
+                .product(name: "Algorithms", package: "swift-algorithms"),
+                .product(name: "Collections", package: "swift-collections")
+            ],
+            path: "Sources/\(year)",
+            resources: [
+                .copy("Inputs")
+            ]),
+        .testTarget(
+            name: "\(adventTargetName(year))Tests",
+            dependencies: [
+                .target(name: adventTargetName(year))
+            ],
+            path: "Tests/\(year)Tests"),
+    ]
+}
+
 let package = Package(
     name: "advent-of-code",
     products: [
@@ -45,25 +67,3 @@ let package = Package(
             dependencies: ["Base"]),
     ] + allYears.flatMap(adventTarget)
 )
-
-func adventTarget(year: Int) -> [Target] {
-    [
-        .target(
-            name: adventTargetName(year),
-            dependencies: [
-                "Base",
-                .product(name: "Algorithms", package: "swift-algorithms"),
-                .product(name: "Collections", package: "swift-collections")
-            ],
-            path: "Sources/\(year)",
-            resources: [
-                .copy("Inputs")
-            ]),
-        .testTarget(
-            name: "\(adventTargetName(year))Tests",
-            dependencies: [
-                .target(name: adventTargetName(year))
-            ],
-            path: "Tests/\(year)Tests"),
-    ]
-}
