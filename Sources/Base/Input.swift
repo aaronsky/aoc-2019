@@ -36,156 +36,26 @@ public struct Input {
         "day\(String(format: "%02d", day))"
     }
 
-    public func decode<T: RawRepresentable>() -> T? where T.RawValue == String {
-        T(rawValue: contents)
+    public func components<S: StringProtocol>(separatedBy separator: S) -> [String] {
+        decodeMany(separatedBy: separator, transform: String.init)
     }
 
-    public func decodeMany<T: RawRepresentable>(separatedBy separator: String) throws -> [T] where T.RawValue == String {
+    public func decode<T: RawRepresentable>() -> T? where T.RawValue == String {
+        decode(T.init)
+    }
+
+    public func decode<T>(_ transform: @escaping (String) -> T?) -> T? {
+        transform(contents)
+    }
+
+    public func decodeMany<T: RawRepresentable, S: StringProtocol>(separatedBy separator: S) -> [T] where T.RawValue == String {
+        decodeMany(separatedBy: separator, transform: T.init)
+    }
+
+    public func decodeMany<T, S: StringProtocol>(separatedBy separator: S, transform: @escaping (String) -> T?) -> [T] {
         contents
             .components(separatedBy: separator)
             .filter { !$0.isEmpty } // skip empty lines
-            .compactMap(T.init)
-    }
-}
-
-// MARK: - Swift types are now RawRepresentable
-
-extension String: RawRepresentable {
-    public var rawValue: Self {
-        self
-    }
-
-    public init?(rawValue: Self) {
-        self = rawValue
-    }
-}
-
-extension Int: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension Int8: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension Int16: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension Int32: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension Int64: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension UInt: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension UInt8: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension UInt16: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension UInt32: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension UInt64: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension Float: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension Double: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
-    }
-}
-
-extension Bool: RawRepresentable {
-    public var rawValue: String {
-        "\(self)"
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
+            .compactMap(transform)
     }
 }

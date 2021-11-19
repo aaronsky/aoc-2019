@@ -11,11 +11,9 @@ struct Day8: Day {
     var strings: [String]
 
     init(_ input: Input) throws {
-        strings = try input
-            .decodeMany(separatedBy: "\n")
-            .map { (s: String) in
-                s.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
+        strings = input
+            .components(separatedBy: "\n")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 
     func partOne() async -> String {

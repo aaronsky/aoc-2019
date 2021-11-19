@@ -13,7 +13,7 @@ public struct Year2019: Year {
 
     public let days: [Int: Day.Type] = [
         1: Day1.self,
-//        2: Day2.self,
+        2: Day2.self,
 //        3: Day3.self,
 //        4: Day4.self,
 //        5: Day5.self,
@@ -41,7 +41,11 @@ public struct Year2019: Year {
 
     public init() {}
 
-    public func input(for day: Int) async throws -> Input {
-        try await Input(day: day, in: Bundle.module)
+    public func day(for number: Int) async throws -> Day {
+        let input = try await Input(day: number, in: Bundle.module)
+        guard let dayType = days[number] else {
+            throw DayNotFoundError(day: number, year: Self.year)
+        }
+        return try dayType.init(input)
     }
 }

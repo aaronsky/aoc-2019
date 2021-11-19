@@ -7,6 +7,7 @@
 
 import ArgumentParser
 import Base
+import Foundation
 import Advent2015
 import Advent2016
 import Advent2017
@@ -15,8 +16,34 @@ import Advent2019
 import Advent2020
 import Advent2021
 
+/// This is necessary while swift-argument-parser does not support async out of the box
+protocol AsyncParsableCommand: ParsableCommand {
+    mutating func run() async throws
+}
+
+extension AsyncParsableCommand {
+    static func main(_ arguments: [String]?) async {
+        do {
+            var command = try parseAsRoot(arguments)
+            if var asyncCommand = command as? AsyncParsableCommand {
+                try await asyncCommand.run()
+            } else {
+                try command.run()
+            }
+        } catch {
+            exit(withError: error)
+        }
+    }
+}
+
 @main
-public struct AOC: ParsableCommand {
+struct Application {
+    static func main() async {
+        await AOC.main(nil)
+    }
+}
+
+struct AOC: AsyncParsableCommand {
     enum Error: Swift.Error {
         case unknownYear(Int)
         case unknownDayInYear(day: Int, year: Int)
@@ -37,41 +64,33 @@ public struct AOC: ParsableCommand {
     @Argument(help: "Day in the year to run the problem for.")
     var days: [Int] = []
 
-    public init() {}
-
-    public func run() throws {
+    func run() async throws {
         guard let year = AOC.allYears[self.year] else {
             throw Error.unknownYear(self.year)
         }
 
-        let daysToRun: [Int: Day.Type]
-        if days.isEmpty {
-            daysToRun = year.days
+        let days: [Int]
+        if self.days.isEmpty {
+            days = Array(year.days.keys)
         } else {
-            daysToRun = try Dictionary(uniqueKeysWithValues: days.map {
-                guard let dayType = year.days[$0] else {
-                    throw Error.unknownDayInYear(day: $0, year: self.year)
-                }
-                return ($0, dayType)
-            })
+            days = self.days
         }
 
-        Task { // this isn't working right
-            try await withThrowingTaskGroup(of: Void.self) { group in
-                for (dayNum, dayType) in daysToRun {
-                    group.addTask {
-                        return try await runDay(dayType, dayNum, year: year)
-                    }
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for day in days {
+                group.addTask {
+                    let dayType = try await year.day(for: day)
+                    let (partOne, partTwo) = await (dayType.partOne(), dayType.partTwo())
+                    print("""
+----------
+Day \(day) \(type(of: year).year)
+Part One: \(partOne)\(partTwo.isEmpty ? "" : "\nPart Two: \(partTwo)")
+""")
                 }
-
-                try await group.waitForAll()
             }
-        }
-    }
 
-    private func runDay(_ dayType: Day.Type, _ dayNumber: Int, year: Year) async throws {
-        let input = try await year.input(for: dayNumber)
-        let day = try dayType.init(input)
-        print("Day \(dayNumber) \(type(of: year).year):", day)
+            try await group.waitForAll()
+            print("----------")
+        }
     }
 }

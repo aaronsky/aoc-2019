@@ -10,7 +10,7 @@ import Foundation
 public protocol Year {
     static var year: Int { get }
     var days: [Int: Day.Type] { get }
-    func input(for day: Int) async throws -> Input
+    func day(for number: Int) async throws -> Day
 }
 
 public protocol Day {
@@ -26,5 +26,15 @@ public extension Day {
 
     func partTwo() async -> String {
         fatalError("unimplemented \(#function)")
+    }
+}
+
+public struct DayNotFoundError: Error {
+    public var day: Int
+    public var year: Int
+
+    public init(day: Int, year: Int) {
+        self.day = day
+        self.year = year
     }
 }

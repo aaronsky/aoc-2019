@@ -41,7 +41,11 @@ public struct Year2020: Year {
 
     public init() {}
 
-    public func input(for day: Int) async throws -> Input {
-        try await Input(day: day, in: Bundle.module)
+    public func day(for number: Int) async throws -> Day {
+        let input = try await Input(day: number, in: Bundle.module)
+        guard let dayType = days[number] else {
+            throw DayNotFoundError(day: number, year: Self.year)
+        }
+        return try dayType.init(input)
     }
 }
