@@ -71,26 +71,45 @@ struct AOC: AsyncParsableCommand {
 
         let days: [Int]
         if self.days.isEmpty {
-            days = Array(year.days.keys)
+            days = year.days.keys.sorted()
         } else {
             days = self.days
         }
 
+        @Sendable func printProblemOutput(year: Int, day: Int, problemNumber: Int, answer: String, elapsedTime: TimeInterval) {
+            print("\(year) / \(day) - #\(problemNumber):", answer, "(\(String(format: "%.2f", elapsedTime))s)")
+        }
+
         try await withThrowingTaskGroup(of: Void.self) { group in
-            for day in days {
+            for dayNumber in days {
+                let day = try await year.day(for: dayNumber)
+
                 group.addTask {
-                    let dayType = try await year.day(for: day)
-                    let (partOne, partTwo) = await (dayType.partOne(), dayType.partTwo())
-                    print("""
-----------
-Day \(day) \(type(of: year).year)
-Part One: \(partOne)\(partTwo.isEmpty ? "" : "\nPart Two: \(partTwo)")
-""")
+                    let start = CFAbsoluteTimeGetCurrent()
+                    let answer = await day.partOne()
+                    guard !answer.isEmpty else {
+                        return
+                    }
+                    printProblemOutput(year: self.year,
+                                       day: dayNumber,
+                                       problemNumber: 1,
+                                       answer: answer,
+                                       elapsedTime: CFAbsoluteTimeGetCurrent() - start)
+                }
+
+                group.addTask {
+                    let start = CFAbsoluteTimeGetCurrent()
+                    let answer = await day.partTwo()
+                    guard !answer.isEmpty else {
+                        return
+                    }
+                    printProblemOutput(year: self.year,
+                                       day: dayNumber,
+                                       problemNumber: 2,
+                                       answer: answer,
+                                       elapsedTime: CFAbsoluteTimeGetCurrent() - start)
                 }
             }
-
-            try await group.waitForAll()
-            print("----------")
         }
     }
 }

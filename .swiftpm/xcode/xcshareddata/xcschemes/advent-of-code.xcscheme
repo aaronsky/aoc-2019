@@ -319,6 +319,11 @@
                BlueprintName = "Advent2019Tests"
                ReferencedContainer = "container:">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "Day3Tests/testProblems()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
