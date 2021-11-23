@@ -43,3 +43,17 @@ public struct Point2: Equatable, Hashable {
         .init(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
 }
+
+public struct Size: Equatable, Hashable, Comparable {
+    public var width: Int
+    public var height: Int
+
+    public init(width: Int, height: Int) {
+        self.width = width
+        self.height = height
+    }
+
+    public static func < (lhs: Size, rhs: Size) -> Bool {
+        lhs.width < rhs.width && lhs.height < rhs.height
+    }
+}

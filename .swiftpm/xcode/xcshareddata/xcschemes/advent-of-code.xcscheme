@@ -323,6 +323,12 @@
                <Test
                   Identifier = "Day3Tests/testProblems()">
                </Test>
+               <Test
+                  Identifier = "Day6Tests/testProblems()">
+               </Test>
+               <Test
+                  Identifier = "Day6Tests/testSimpleProgram2()">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

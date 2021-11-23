@@ -20,6 +20,7 @@ struct Intcode: CustomDebugStringConvertible {
         memory = Memory(program: program)
     }
 
+    @discardableResult
     mutating func run() -> Interrupt {
         while true {
             let call: ProgramCounter

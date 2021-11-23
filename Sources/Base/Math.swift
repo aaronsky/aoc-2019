@@ -37,3 +37,7 @@ public struct Digits<I: BinaryInteger>: Sequence {
         .makeIterator()
     }
 }
+
+extension Double {
+    public static let tau = .pi * 2.0
+}

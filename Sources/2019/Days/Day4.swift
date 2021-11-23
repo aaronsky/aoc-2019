@@ -11,7 +11,7 @@ struct Day4: Day {
     var range: PasswordRange
 
     init(_ input: Input) throws {
-        range = input.decode(PasswordRange.init)!
+        range = input.decode()!
     }
 
     func partOne() async -> String {
