@@ -48,6 +48,7 @@ struct AOC: AsyncParsableCommand {
         case unknownYear(Int)
         case unknownDayInYear(day: Int, year: Int)
     }
+
     static let allYears: [Int: Year] = [
         Year2015.year: Year2015(),
         Year2016.year: Year2016(),
