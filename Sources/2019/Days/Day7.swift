@@ -10,11 +10,11 @@ import Base
 
 struct Day7: Day {
     var rom: [Int]
-    
+
     init(_ input: Input) throws {
         rom = input.decodeMany(separatedBy: ",", transform: Int.init)
     }
-    
+
     func partOne() async -> String {
         let possibleNumbers: Set<Int> = [0, 1, 2, 3, 4]
         let maxOutput = possibleNumbers
@@ -23,7 +23,7 @@ struct Day7: Day {
             .max()
         return "\(maxOutput ?? -1)"
     }
-    
+
     func partTwo() async -> String {
         let possibleNumbers: Set<Int> = [5, 6, 7, 8, 9]
         let maxOutput = possibleNumbers
@@ -32,7 +32,7 @@ struct Day7: Day {
             .max()
         return "\(maxOutput ?? -1)"
     }
-    
+
     static func output(forAmplifierSequence sequence: [Int], rom: [Int]) -> Int {
         var programs: [Intcode] = Array(repeating: Intcode(program: rom),
                                         count: sequence.count)
@@ -41,9 +41,9 @@ struct Day7: Day {
             programs[i].set(input: sequence[i])
             programs[i].run()
         }
-        
+
         var output = 0
-        
+
         while true {
             var halted = false
             for i in programs.indices {
@@ -61,7 +61,7 @@ struct Day7: Day {
                 break
             }
         }
-        
+
         return output
     }
 }

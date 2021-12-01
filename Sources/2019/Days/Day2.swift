@@ -18,7 +18,7 @@ struct Day2: Day {
         var program = Intcode(program: rom)
 
         _ = program.run()
-        
+
         return program.debugDescription
     }
 

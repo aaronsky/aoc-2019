@@ -229,7 +229,7 @@ struct Intcode: CustomDebugStringConvertible {
                 switch arg {
                 case .position(let addr):
                     ram[addr] = newValue
-                case .immediate(_):
+                case .immediate:
                     fatalError("writes with immediate arguments are not supported")
                 case .relative(let addr):
                     ram[relativeBase + addr] = newValue

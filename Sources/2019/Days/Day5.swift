@@ -9,13 +9,13 @@ import Base
 
 struct Day5: Day {
     var rom: [Int]
-    
+
     init(_ input: Input) throws {
         rom = input.decodeMany(separatedBy: ",", transform: Int.init)
     }
 
     func partOne() async -> String {
-        var output: Int? = nil
+        var output: Int?
         var program = Intcode(program: rom)
 
     loop: while true {

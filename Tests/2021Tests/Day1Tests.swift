@@ -11,6 +11,6 @@ import XCTest
 
 class Day1Tests: XCTestCase {
     func testProblems() async throws {
-        let _ = try await Year2021().day(for: 1)
+        _ = try await Year2021().day(for: 1)
     }
 }

@@ -29,7 +29,6 @@ struct Day5: Day {
             .count
     }
 
-
     /// A nice string is one with all of the following properties:
     func isNiceOne(_ str: String) -> Bool {
         var previousChar: Character = "\0"

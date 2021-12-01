@@ -68,21 +68,21 @@ struct Day10: Day {
                     width = max(rows.count, width)
                     return rows
                 }
-            
+
             self.init(asteroids: asteroids, width: width, height: height)
         }
 
         typealias VisibleAsteroid = (coord: Point2, countVisible: Int)
 
         func asteroidWithMostOtherAsteroidsVisible() -> VisibleAsteroid {
-            var max: VisibleAsteroid? = nil
+            var max: VisibleAsteroid?
 
             for asteroid in asteroids {
                 let countVisible = numberOfVisibleAsteroids(from: asteroid)
                 switch max {
                 case .some((_, let visible)) where countVisible > visible:
                     max = (asteroid, countVisible)
-                case .some(_):
+                case .some:
                     break
                 case .none:
                     max = (asteroid, countVisible)

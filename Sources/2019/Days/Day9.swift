@@ -17,7 +17,7 @@ struct Day9: Day {
     func partOne() async -> String {
         var program = Intcode(program: rom)
 
-        var output: Int? = nil
+        var output: Int?
 
     loop:
         while true {
@@ -37,7 +37,7 @@ struct Day9: Day {
     func partTwo() async -> String {
         var program = Intcode(program: rom)
 
-        var output: Int? = nil
+        var output: Int?
 
     loop:
         while true {

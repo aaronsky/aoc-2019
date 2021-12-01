@@ -11,7 +11,7 @@ import XCTest
 
 class Day5Tests: XCTestCase {
     func testProblems() async throws {
-        let day = try await Year2015().day(for:  5)
+        let day = try await Year2015().day(for: 5)
         let partOne = await day.partOne()
         XCTAssertEqual(Int(partOne), 255)
         let partTwo = await day.partTwo()

@@ -26,7 +26,7 @@ class Day9Tests: XCTestCase {
     }
 
     func testSimpleProgram2() {
-        var output: Int? = nil
+        var output: Int?
         var program = Intcode(program: [1102, 34915192, 34915192, 7, 4, 7, 99, 0])
     loop:
         while true {
@@ -43,7 +43,7 @@ class Day9Tests: XCTestCase {
     }
 
     func testSimpleProgram3() {
-        var output: Int? = nil
+        var output: Int?
         var program = Intcode(program: [104, 1125899906842624, 99])
     loop:
         while true {
