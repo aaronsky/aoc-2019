@@ -18,8 +18,13 @@ if [ -z "${YEAR:-}" ]; then
     exit 1
 fi
 
+DAYS=( "${@:2}" )
+if [ ${#DAYS[@]} -eq 0 ]; then
+    DAYS=( {1..25} )
+fi
+
 downloaded=0
-for day in {1..25}; do
+for day in "${DAYS[@]}"; do
     path="$(path_to_input "$day")"
     if [ -f "$path" ]; then
         continue
