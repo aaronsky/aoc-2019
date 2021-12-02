@@ -69,4 +69,15 @@ extension Sequence {
         }
         return count
     }
+
+    @inlinable
+    public func print() -> Self {
+        Swift.print(self)
+        return self
+    }
+
+    @inlinable
+    public func zip<OtherSequence: Sequence>(_ other: OtherSequence) -> Zip2Sequence<Self, OtherSequence> {
+        Swift.zip(self, other)
+    }
 }

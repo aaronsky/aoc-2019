@@ -90,12 +90,6 @@ struct Day3: Day {
     }
 }
 
-extension Sequence {
-    func zip<OtherSequence: Sequence>(_ other: OtherSequence) -> Zip2Sequence<Self, OtherSequence> {
-        Swift.zip(self, other)
-    }
-}
-
 extension Direction: RawRepresentable {
     var rawValue: String {
         switch self {
