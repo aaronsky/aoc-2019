@@ -33,9 +33,7 @@ public struct AdjacencyList<T: Hashable> {
     private var inner: [T: [Edge<T>]] = [:]
 
     public var count: Int {
-        inner
-            .map { $0.value.count }
-            .reduce(0, +)
+        inner.sum(of: \.value.count)
     }
 
     public var isEmpty: Bool {

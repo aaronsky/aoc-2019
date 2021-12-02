@@ -15,11 +15,17 @@ struct Day2: Day {
     }
 
     func partOne() async -> String {
-        "\(presents.map { $0.surfaceArea }.reduce(0, +))"
+        let surfaceArea = presents
+            .sum(of: \.surfaceArea)
+
+        return "\(surfaceArea)"
     }
 
     func partTwo() async -> String {
-        "\(presents.map { $0.ribbonLength }.reduce(0, +))"
+        let ribbonLength = presents
+            .sum(of: \.ribbonLength)
+
+        return "\(ribbonLength)"
     }
 
     struct Present: RawRepresentable {

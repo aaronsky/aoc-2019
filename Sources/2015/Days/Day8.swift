@@ -17,17 +17,13 @@ struct Day8: Day {
     }
 
     func partOne() async -> String {
-        let one = strings.map {
-            $0.count - lengthInMemory($0)
-        }.reduce(0, +)
+        let one = strings.sum { $0.count - lengthInMemory($0) }
 
         return "\(one)"
     }
 
     func partTwo() async -> String {
-        let two = strings.map {
-            encodeString($0).count - $0.count
-        }.reduce(0, +)
+        let two = strings.sum { encodeString($0).count - $0.count }
 
         return "\(two)"
     }

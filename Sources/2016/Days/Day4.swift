@@ -17,9 +17,9 @@ struct Day4: Day {
 
     func partOne() async -> String {
         let realRooms = rooms
-            .filter { $0.isReal }
-            .map { $0.sectorID }
-            .reduce(0, +)
+            .filter(\.isReal)
+            .sum(of: \.sectorID)
+
         return "\(realRooms)"
     }
 
@@ -44,7 +44,7 @@ struct Day4: Day {
             let topChars = name
                 .max(count: 5) { $0.value > $1.value }
             print(topChars)
-            for (c, count) in topChars {
+            for (c, _) in topChars {
                 guard c == checksum.first! else {
                     return false
                 }

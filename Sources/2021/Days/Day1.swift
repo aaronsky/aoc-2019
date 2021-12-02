@@ -16,30 +16,19 @@ struct Day1: Day {
     }
 
     func partOne() async -> String {
-        var lastDepth: Int?
-        var increases: Int = 0
-
-        for depth in depths {
-            if let last = lastDepth, depth > last {
-                increases += 1
-            }
-            lastDepth = depth
-        }
+        let increases = depths
+            .windows(ofCount: 2)
+            .count(where: { ($0.last ?? -1) > ($0.first ?? 0) })
 
         return "\(increases)"
     }
 
     func partTwo() async -> String {
-        var lastSum: Int? = nil
-        var increases: Int = 0
-
-        for window in depths.windows(ofCount: 3) {
-            let sum = window.reduce(0, +)
-            if let lastSum = lastSum, sum > lastSum {
-                increases += 1
-            }
-            lastSum = sum
-        }
+        let increases = depths
+            .windows(ofCount: 3)
+            .map(\.sum)
+            .windows(ofCount: 2)
+            .count(where: { ($0.last ?? -1) > ($0.first ?? 0) })
 
         return "\(increases)"
     }

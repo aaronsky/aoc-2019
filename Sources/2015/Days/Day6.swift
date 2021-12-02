@@ -37,12 +37,11 @@ struct Day6: Day {
         var totalOn: Int {
             lights
                 .lazy
-                .filter { $0 > 0 }
-                .count
+                .count(where: { $0 > 0 })
         }
 
         var totalBrightness: Int {
-            lights.reduce(0, +)
+            lights.sum
         }
 
         subscript(x: Array<Int>.Index, y: Array<Int>.Index) -> Array<Int>.Index {

@@ -25,8 +25,7 @@ struct Day5: Day {
     func countNiceStrings(isNice: @escaping (String) -> Bool) -> Int {
         strings
             .lazy
-            .filter(isNice)
-            .count
+            .count(where: isNice)
     }
 
     /// A nice string is one with all of the following properties:
