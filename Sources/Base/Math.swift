@@ -38,6 +38,12 @@ public struct Digits<I: BinaryInteger>: Sequence {
     }
 }
 
+extension Int {
+    public init<S: Sequence>(bits: S) where S.Element == Bool {
+        self = bits.reduce(0, { $0 * 2 + ($1 ? 1 : 0) })
+    }
+}
+
 extension Double {
     public static let tau = .pi * 2.0
 }
