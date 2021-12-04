@@ -56,14 +56,23 @@ struct Day4: Day {
 
         mutating func playUntilLastWinner() -> (Board, Int)? {
             var lastWinner: (Board, Int)? = nil
-            var winningBoards: Set<Array<Board>.Index> = []
+            var boardsToCheck = Set(boards.indices)
 
             for draw in draws {
-                for i in boards.indices {
-                    if boards[i].markIfNeeded(draw) && !winningBoards.contains(i) {
-                        lastWinner = (boards[i], draw)
-                        winningBoards.insert(i)
+                var winners: Set<Range<Array<Board>.Index>.Element> = []
+
+                for i in boardsToCheck {
+                    guard !winners.contains(i),
+                          boards[i].markIfNeeded(draw) else {
+                        continue
                     }
+
+                    lastWinner = (boards[i], draw)
+                    winners.insert(i)
+                }
+
+                for i in winners {
+                    boardsToCheck.remove(i)
                 }
             }
 
