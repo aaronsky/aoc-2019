@@ -18,7 +18,7 @@ public struct Year2021: Year {
         4: Day4.self,
         5: Day5.self,
         6: Day6.self,
-//        7: Day7.self,
+        7: Day7.self,
 //        8: Day8.self,
 //        9: Day9.self,
 //        10: Day10.self,

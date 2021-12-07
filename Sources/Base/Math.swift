@@ -15,6 +15,10 @@ extension BinaryInteger {
     public var countDigits: Int {
         String(describing: self).count
     }
+
+    public var triangularSum: Self {
+        (self * (self + 1)) / 2
+    }
 }
 
 public struct Digits<I: BinaryInteger>: Sequence {
