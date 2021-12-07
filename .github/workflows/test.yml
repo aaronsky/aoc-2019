@@ -17,4 +17,8 @@ jobs:
       - name: Build
         run: swift build
       - name: Run tests
-        run: swift test
+        run: |- 
+          swift test \
+            --skip "Advent2019Tests.Day3Tests/testProblems()" \
+            --skip "Advent2019Tests.Day6Tests/testProblems()" \
+            --skip "Advent2019Tests.Day6Tests/testSimpleProgram2()"
