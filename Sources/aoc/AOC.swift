@@ -17,7 +17,13 @@ import Advent2020
 import Advent2021
 
 @main
-struct AOC: ParsableCommand {
+struct Application {
+    static func main() async {
+        await AOC.main(nil)
+    }
+}
+
+struct AOC: AsyncParsableCommand {
     enum Error: Swift.Error {
         case unknownYear(Int)
         case unknownDayInYear(day: Int, year: Int)
@@ -39,7 +45,7 @@ struct AOC: ParsableCommand {
     @Argument(help: "Day in the year to run the problem for.")
     var days: [Int] = []
 
-    func run() throws {
+    func run() async throws {
         guard let year = AOC.allYears[self.year] else {
             throw Error.unknownYear(self.year)
         }
@@ -51,19 +57,11 @@ struct AOC: ParsableCommand {
             days = self.days
         }
 
-        let semaphore = DispatchSemaphore(value: 0)
-
-        Task {
-            try await withThrowingTaskGroup(of: Void.self) { group in
-                for dayNumber in days {
-                    try await runDay(dayNumber, year: year, group: &group)
-                }
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for dayNumber in days {
+                try await runDay(dayNumber, year: year, group: &group)
             }
-
-            semaphore.signal()
         }
-
-        semaphore.wait()
     }
 
     func runDay<E: Swift.Error>(_ dayNumber: Int, year: Year, group: inout ThrowingTaskGroup<Void, E>) async throws {
