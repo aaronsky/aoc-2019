@@ -16,34 +16,8 @@ import Advent2019
 import Advent2020
 import Advent2021
 
-/// This is necessary while swift-argument-parser does not support async out of the box
-protocol AsyncParsableCommand: ParsableCommand {
-    mutating func run() async throws
-}
-
-extension AsyncParsableCommand {
-    static func main(_ arguments: [String]?) async {
-        do {
-            var command = try parseAsRoot(arguments)
-            if var asyncCommand = command as? AsyncParsableCommand {
-                try await asyncCommand.run()
-            } else {
-                try command.run()
-            }
-        } catch {
-            exit(withError: error)
-        }
-    }
-}
-
 @main
-struct Application {
-    static func main() async {
-        await AOC.main(nil)
-    }
-}
-
-struct AOC: AsyncParsableCommand {
+struct AOC: ParsableCommand {
     enum Error: Swift.Error {
         case unknownYear(Int)
         case unknownDayInYear(day: Int, year: Int)
@@ -65,7 +39,7 @@ struct AOC: AsyncParsableCommand {
     @Argument(help: "Day in the year to run the problem for.")
     var days: [Int] = []
 
-    func run() async throws {
+    func run() throws {
         guard let year = AOC.allYears[self.year] else {
             throw Error.unknownYear(self.year)
         }
@@ -77,40 +51,60 @@ struct AOC: AsyncParsableCommand {
             days = self.days
         }
 
-        @Sendable func printProblemOutput(year: Int, day: Int, problemNumber: Int, answer: String, elapsedTime: TimeInterval) {
-            print("\(year) / \(day) - #\(problemNumber):", answer, "(\(String(format: "%.2f", elapsedTime))s)")
-        }
+        let semaphore = DispatchSemaphore(value: 0)
 
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for dayNumber in days {
-                let day = try await year.day(for: dayNumber)
-
-                group.addTask {
-                    let start = CFAbsoluteTimeGetCurrent()
-                    let answer = await day.partOne()
-                    guard !answer.isEmpty else {
-                        return
-                    }
-                    printProblemOutput(year: self.year,
-                                       day: dayNumber,
-                                       problemNumber: 1,
-                                       answer: answer,
-                                       elapsedTime: CFAbsoluteTimeGetCurrent() - start)
-                }
-
-                group.addTask {
-                    let start = CFAbsoluteTimeGetCurrent()
-                    let answer = await day.partTwo()
-                    guard !answer.isEmpty else {
-                        return
-                    }
-                    printProblemOutput(year: self.year,
-                                       day: dayNumber,
-                                       problemNumber: 2,
-                                       answer: answer,
-                                       elapsedTime: CFAbsoluteTimeGetCurrent() - start)
+        Task {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                for dayNumber in days {
+                    try await runDay(dayNumber, year: year, group: &group)
                 }
             }
+
+            semaphore.signal()
         }
+
+        semaphore.wait()
+    }
+
+    func runDay<E: Swift.Error>(_ dayNumber: Int, year: Year, group: inout ThrowingTaskGroup<Void, E>) async throws {
+        let day = try await year.day(for: dayNumber)
+
+        group.addTask {
+            await runDayProblem(1, day: day, dayNumber: dayNumber)
+        }
+
+        group.addTask {
+            await runDayProblem(2, day: day, dayNumber: dayNumber)
+        }
+    }
+
+    func runDayProblem(_ problemNumber: Int, day: Day, dayNumber: Int) async {
+        let start = CFAbsoluteTimeGetCurrent()
+
+        let problem: () async -> String
+        switch problemNumber {
+        case 1:
+            problem = day.partOne
+        case 2:
+            problem = day.partTwo
+        default:
+            fatalError("Days like \(dayNumber) don't have any other problem numbers than 1 or 2")
+        }
+
+        let answer = await problem()
+
+        guard !answer.isEmpty else {
+            return
+        }
+
+        printProblemOutput(year: self.year,
+                           day: dayNumber,
+                           problemNumber: 1,
+                           answer: answer,
+                           elapsedTime: CFAbsoluteTimeGetCurrent() - start)
+    }
+
+    func printProblemOutput(year: Int, day: Int, problemNumber: Int, answer: String, elapsedTime: TimeInterval) {
+        print("\(year) / \(day) - #\(problemNumber):", answer, "(\(String(format: "%.2f", elapsedTime))s)")
     }
 }
