@@ -46,6 +46,10 @@ extension Int {
     public init<S: Sequence>(bits: S) where S.Element == Bool {
         self = bits.reduce(0, { $0 * 2 + ($1 ? 1 : 0) })
     }
+
+    public init<S: Sequence>(digits: S) where S.Element == Self {
+        self = digits.reduce(0, { $0 * 10 + $1 })
+    }
 }
 
 extension Double {
