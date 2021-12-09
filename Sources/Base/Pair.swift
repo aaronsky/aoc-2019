@@ -14,4 +14,8 @@ public struct Pair<T1, T2>: Equatable, Hashable where T1: Equatable & Hashable, 
         self.one = one
         self.two = two
     }
+
+    public init(_ tuple: (T1, T2)) {
+        self.init(tuple.0, tuple.1)
+    }
 }

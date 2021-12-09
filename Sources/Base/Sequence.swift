@@ -13,7 +13,7 @@ extension Sequence where Element: Numeric {
     }
 
     public var product: Element {
-        reduce(0, *)
+        reduce(1, *)
     }
 }
 
@@ -27,7 +27,7 @@ extension Sequence {
     }
 
     public func product(of transform: (Element) throws -> Int) rethrows -> Int {
-        var product = 0
+        var product = 1
         for e in self {
             product *= try transform(e)
         }
