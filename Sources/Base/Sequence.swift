@@ -81,3 +81,35 @@ extension Sequence {
         Swift.zip(self, other)
     }
 }
+
+extension Collection where Element: BinaryInteger {
+    var average: Double {
+        guard !isEmpty else {
+            return .nan
+        }
+
+        return Double(sum) / Double(count)
+    }
+}
+
+public enum RoundingMedian {
+    case high
+    case low
+}
+
+extension Collection {
+    public func median(rounding: RoundingMedian = .low) -> Element {
+        let span = Double(distance(from: startIndex, to: endIndex))
+        let halfSpan = span / 2
+
+        let medianDistance: Int
+        switch rounding {
+        case .high:
+            medianDistance = Int(ceil(halfSpan))
+        case .low:
+            medianDistance = Int(floor(halfSpan))
+        }
+
+        return self[index(startIndex, offsetBy: medianDistance)]
+    }
+}
