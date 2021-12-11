@@ -31,14 +31,14 @@ class Day11Tests: XCTestCase {
         4846848554
         5283751526
         """
-        var matrix = try XCTUnwrap(Day11.Matrix(rawValue: input))
+        var octopuses = try XCTUnwrap(Day11.Octopuses(rawValue: input))
         var flashes = 0
-        for _ in 0..<10 {
-            flashes += matrix.step()
+        for _ in 1...10 {
+            flashes += octopuses.step()
         }
         XCTAssertEqual(flashes, 204)
-        for _ in 10..<100 {
-            flashes += matrix.step()
+        for _ in 11...100 {
+            flashes += octopuses.step()
         }
         XCTAssertEqual(flashes, 1656)
     }

@@ -18,7 +18,7 @@ struct Day9: Day {
     func partOne() async -> String {
         let lowPoints = heightMap.findLowPoints()
         let riskLevel = lowPoints.sum { p in
-            heightMap[p]! + 1
+            heightMap.heights[p] + 1
         }
 
         return "\(riskLevel)"
@@ -33,13 +33,10 @@ struct Day9: Day {
             var next = [lowPoint]
             while let (x, y) = next.popLast() {
                 visited.insert(Pair(x, y))
-                let adjacents = heightMap.positionsSurrounding(position: (x, y))
+                let adjacents = heightMap.heights.positionsSurrounding(position: (x, y))
                 for adjacent in adjacents {
-                    guard
-                        let height = heightMap[adjacent],
-                        height < 9,
-                        !visited.contains(Pair(adjacent))
-                    else {
+                    let height = heightMap.heights[adjacent]
+                    guard height < 9 && !visited.contains(Pair(adjacent)) else {
                         continue
                     }
 
@@ -54,14 +51,12 @@ struct Day9: Day {
     }
 
     struct HeightMap: RawRepresentable {
-        var heights: [Int]
-        var rows: Int // height
-        var columns: Int // width
+        var heights: Matrix<Int>
 
         var rawValue: String {
             heights
-                .chunks(ofCount: columns)
-                .prefix(rows)
+                .chunks(ofCount: heights.rowWidth)
+                .prefix(heights.rows)
                 .map { row in
                     row
                         .map(String.init)
@@ -72,86 +67,24 @@ struct Day9: Day {
 
         init?(rawValue: String) {
             let rows = rawValue.components(separatedBy: "\n")
-            self.rows = rows.count
-            self.columns = rows.first!.count
-            self.heights = rows
-                .flatMap {
-                    $0.map { Int(String($0))! }
-                }
-        }
-
-        subscript(_ index: Array<Int>.Index) -> Int {
-            heights[index]
-        }
-
-        subscript(x: Int, y: Int) -> Int? {
-            self[(x, y)]
-        }
-
-        subscript(position: (x: Int, y: Int)) -> Int? {
-            guard position.x >= 0 &&
-                    position.x < columns &&
-                    position.y >= 0 &&
-                    position.y < rows
-            else {
-                return nil
-            }
-
-            return self[index(of: position)]
-        }
-
-        func position(of index: Array<Int>.Index) -> (x: Int, y: Int) {
-            (x: index % columns, y: index / columns)
-        }
-
-        func index(of position: (x: Int, y: Int)) -> Array<Int>.Index {
-            columns * position.y + position.x
+            self.heights = Matrix(rows.flatMap { $0.map { Int(String($0))! } },
+                                  rowWidth: rows.first!.count,
+                                  rows: rows.count)
         }
 
         func findLowPoints() -> [(Int, Int)] {
             var lowPoints: [(Int, Int)] = []
             for (i, height) in heights.enumerated() {
-                let (x, y) = position(of: i)
+                let (x, y) = heights.position(of: i)
 
-                let isLow = indicesSurrounding(position: (x, y))
-                    .allSatisfy { self[$0] > height }
+                let isLow = heights.indicesSurrounding(position: (x, y))
+                    .allSatisfy { heights[$0] > height }
 
                 if isLow {
                     lowPoints.append((x, y))
                 }
             }
             return lowPoints
-        }
-
-        func indicesSurrounding(index: Array<Int>.Index) -> [Array<Int>.Index] {
-            indicesSurrounding(position: position(of: index))
-        }
-
-        func indicesSurrounding(position: (x: Int, y: Int)) -> [Array<Int>.Index] {
-            positionsSurrounding(position: position)
-                .map(index(of:))
-        }
-
-        func positionsSurrounding(index: Array<Int>.Index) -> [(x: Int, y: Int)] {
-            positionsSurrounding(position: position(of: index))
-        }
-
-        func positionsSurrounding(position: (x: Int, y: Int)) -> [(x: Int, y: Int)] {
-            let (x, y) = position
-            let adjacents = [
-                (x, y - 1), // north
-                (x, y + 1), // south
-                (x - 1, y), // west
-                (x + 1, y), // east
-            ]
-
-            return adjacents
-                .filter { p in
-                    p.0 >= 0 &&
-                    p.0 < columns &&
-                    p.1 >= 0 &&
-                    p.1 < rows
-                }
         }
     }
 }

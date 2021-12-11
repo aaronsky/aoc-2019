@@ -30,7 +30,7 @@ class Day9Tests: XCTestCase {
         let lowPoints = heightMap.findLowPoints()
         XCTAssertEqual(lowPoints.count, 4)
         let riskLevel = try lowPoints.sum {
-            (try XCTUnwrap(heightMap[$0.0, $0.1])) + 1
+            (try XCTUnwrap(heightMap.heights[$0.0, $0.1])) + 1
         }
         XCTAssertEqual(riskLevel, 15)
     }

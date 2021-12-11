@@ -64,7 +64,10 @@ let package = Package(
             }),
         .target(
             name: "Base",
-            dependencies: []),
+            dependencies: [
+                .product(name: "Algorithms", package: "swift-algorithms"),
+                .product(name: "Collections", package: "swift-collections")
+            ]),
         .testTarget(
             name: "BaseTests",
             dependencies: ["Base"]),
