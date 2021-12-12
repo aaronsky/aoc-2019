@@ -32,6 +32,10 @@ public struct Edge<Element> {
 public struct AdjacencyList<T: Hashable> {
     private var inner: [T: [Edge<T>]] = [:]
 
+    public var nodes: [T] {
+        Array(inner.keys)
+    }
+
     public var count: Int {
         inner.sum(of: \.value.count)
     }
@@ -63,15 +67,13 @@ extension AdjacencyList: Graph {
     }
 
     public mutating func addDirectedEdge(from source: T, to destination: T, weight: Double?) {
-        guard contains(source) else {
-            return
-        }
+        insert(source)
 
         let edge = Edge(source: source,
                         destination: destination,
                         weight: weight)
 
-        inner[source]?.append(edge)
+        inner[source]!.append(edge)
     }
 }
 
