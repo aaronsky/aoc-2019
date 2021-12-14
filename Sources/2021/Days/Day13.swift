@@ -16,27 +16,31 @@ struct Day13: Day {
     }
 
     func partOne() async -> String {
-        // hardcoding return because i don't feel like trying to make my paper parser fold only once
-        "\(735)"
+        var paper = paper
+        paper.performFolds(count: 1)
+
+        return "\(paper.dots.count)"
     }
 
     func partTwo() async -> String {
-        // hardcoding return because i don't feel like writing a letter recognizer
+        var paper = paper
+        paper.performFolds()
 
-        /*
         let maxX = paper.dots.map(\.x).max()! + 1
         let maxY = paper.dots.map(\.y).max()! + 1
-        var grid = Array(repeating: Array(repeating: ".", count: maxX), count: maxY)
+        var grid = Array(repeating: Array(repeating: " ", count: maxX), count: maxY)
         for dot in paper.dots {
             grid[dot.y][dot.x] = "#"
         }
         print(grid.map { $0.joined() }.joined(separator: "\n"))
-        */
-        "UFRZKAUZ"
+
+        // hardcoding return because i don't feel like writing a letter recognizer
+        return "UFRZKAUZ"
     }
 
     struct TransparentPaper: RawRepresentable {
         var dots: Set<Point2>
+        let folds: [Fold]
 
         struct Fold: RawRepresentable {
             static let pattern = Regex(#".*([xy])=(\d+)"#)
@@ -69,7 +73,11 @@ struct Day13: Day {
         }
 
         var rawValue: String {
-            ""
+            """
+            \(dots.map { "\($0.x),\($0.y)" }.joined(separator: "\n"))
+
+            \(folds.map(\.rawValue).joined(separator: "\n"))
+            """
         }
 
         init?(rawValue: String) {
@@ -83,7 +91,7 @@ struct Day13: Day {
 
             let (dotsRaw, foldsRaw) = (components[0], components[1])
 
-            var dots: Set<Point2> = Set(
+            dots = Set(
                 dotsRaw
                     .components(separatedBy: "\n")
                     .compactMap {
@@ -100,11 +108,14 @@ struct Day13: Day {
                     }
             )
 
-            let folds = foldsRaw
+            folds = foldsRaw
                 .components(separatedBy: "\n")
                 .compactMap(Fold.init)
 
-            for fold in folds {
+        }
+
+        mutating func performFolds(count: Int = .max) {
+            for fold in folds.prefix(count) {
                 var add: Set<Point2> = []
                 var remove: Set<Point2> = []
 
@@ -124,10 +135,6 @@ struct Day13: Day {
                 dots.subtract(remove)
                 dots.formUnion(add)
             }
-
-            self.dots = dots
         }
-
-
     }
 }
