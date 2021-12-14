@@ -6,7 +6,7 @@
 //
 
 public struct CountedSet<Element: Hashable>: Sequence, ExpressibleByArrayLiteral {
-    public typealias Iterator = Dictionary<Element, Int>.Keys.Iterator
+    public typealias Iterator = Dictionary<Element, Int>.Iterator
 
     private var inner: [Element: Int] = [:]
 
@@ -54,6 +54,6 @@ public struct CountedSet<Element: Hashable>: Sequence, ExpressibleByArrayLiteral
     }
 
     public func makeIterator() -> Iterator {
-        inner.keys.makeIterator()
+        inner.makeIterator()
     }
 }
