@@ -113,3 +113,13 @@ extension Collection {
         return self[index(startIndex, offsetBy: medianDistance)]
     }
 }
+
+extension ArraySlice {
+    public mutating func popFirst() -> Element {
+        removeFirst()
+    }
+
+    public mutating func popFirst(_ k: Int) -> [Element] {
+        (0..<k).map { _ in popFirst() }
+    }
+}

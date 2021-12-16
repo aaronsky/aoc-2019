@@ -19,6 +19,14 @@ extension BinaryInteger {
     public var triangularSum: Self {
         (self * (self + 1)) / 2
     }
+
+    public var bits: [Bool] {
+        (0..<bitWidth)
+            .reduce(into: []) { acc, offset in
+                acc.append((self & (1 << offset)) > 0)
+            }
+            .reversed()
+    }
 }
 
 public struct Digits<I: BinaryInteger>: Sequence {
