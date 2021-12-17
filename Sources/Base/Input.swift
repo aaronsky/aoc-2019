@@ -59,3 +59,13 @@ public struct Input {
             .compactMap(transform)
     }
 }
+
+extension Int: RawRepresentable {
+    public var rawValue: String {
+        description
+    }
+
+    public init?(rawValue: String) {
+        self.init(rawValue)
+    }
+}

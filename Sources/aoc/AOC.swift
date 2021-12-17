@@ -97,7 +97,7 @@ struct AOC: AsyncParsableCommand {
 
         printProblemOutput(year: self.year,
                            day: dayNumber,
-                           problemNumber: 1,
+                           problemNumber: problemNumber,
                            answer: answer,
                            elapsedTime: CFAbsoluteTimeGetCurrent() - start)
     }

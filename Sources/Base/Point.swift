@@ -19,11 +19,7 @@ public struct Point2: Equatable, Hashable {
         x < 0 || y < 0
     }
 
-    public init() {
-        self.init(x: 0, y: 0)
-    }
-
-    public init(x: Int, y: Int) {
+    public init(x: Int = 0, y: Int = 0) {
         self.x = x
         self.y = y
     }
@@ -41,6 +37,37 @@ public struct Point2: Equatable, Hashable {
 
     public static func +(_ lhs: Self, _ rhs: Self) -> Self {
         .init(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+
+    public static func +=(_ lhs: inout Self, _ rhs: Self) {
+        lhs.x += rhs.x
+        lhs.y += rhs.y
+    }
+}
+
+public struct Point3 {
+    public var x: Int
+    public var y: Int
+    public var z: Int
+
+    public static var zero: Self {
+        .init()
+    }
+
+    public init(x: Int = 0, y: Int = 0, z: Int = 0) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+
+    public static func +(_ lhs: Self, _ rhs: Self) -> Self {
+        .init(x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
+    }
+
+    public static func +=(_ lhs: inout Self, _ rhs: Self) {
+        lhs.x += rhs.x
+        lhs.y += rhs.y
+        lhs.z += rhs.z
     }
 }
 

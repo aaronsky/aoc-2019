@@ -318,6 +318,25 @@ extension Regex {
             self.result = LazyResult(string, result)
         }
 
+        public func capture(withName name: String) -> String? {
+            let string = result.string
+            let nsRange = matchResult.range(withName: name)
+            guard nsRange.location != NSNotFound,
+                  let range = Range(nsRange, in: string) else {
+                      return nil
+                  }
+
+            return String(string[range])
+        }
+
+        public func capture<T: RawRepresentable>(withName name: String) -> T? where T.RawValue == String {
+            guard let capture = capture(withName: name),
+                  let value = T(rawValue: capture) else {
+                      return nil
+                  }
+            return value
+        }
+
         private final class LazyResult {
             let string: String
             let result: NSTextCheckingResult
