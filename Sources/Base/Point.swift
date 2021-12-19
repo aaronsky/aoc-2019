@@ -36,7 +36,7 @@ public struct Point2: Equatable, Hashable {
     }
 
     public static func +(_ lhs: Self, _ rhs: Self) -> Self {
-        .init(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+        Self(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
 
     public static func +=(_ lhs: inout Self, _ rhs: Self) {
@@ -45,7 +45,7 @@ public struct Point2: Equatable, Hashable {
     }
 }
 
-public struct Point3 {
+public struct Point3: Equatable, Hashable {
     public var x: Int
     public var y: Int
     public var z: Int
@@ -60,14 +60,28 @@ public struct Point3 {
         self.z = z
     }
 
+    public func manhattanDistance(to other: Self) -> Int {
+        abs(self.x - other.x) + abs(self.y - other.y) + abs(self.z - other.z)
+    }
+
     public static func +(_ lhs: Self, _ rhs: Self) -> Self {
-        .init(x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
+        Self(x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
     }
 
     public static func +=(_ lhs: inout Self, _ rhs: Self) {
         lhs.x += rhs.x
         lhs.y += rhs.y
         lhs.z += rhs.z
+    }
+
+    public static func -(_ lhs: Self, _ rhs: Self) -> Self {
+        Self(x: lhs.x - rhs.x, y: lhs.y - rhs.y, z: lhs.z - rhs.z)
+    }
+
+    public static func -=(_ lhs: inout Self, _ rhs: Self) {
+        lhs.x -= rhs.x
+        lhs.y -= rhs.y
+        lhs.z -= rhs.z
     }
 }
 

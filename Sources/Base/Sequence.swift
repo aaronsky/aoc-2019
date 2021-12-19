@@ -123,3 +123,12 @@ extension ArraySlice {
         (0..<k).map { _ in popFirst() }
     }
 }
+
+extension SetAlgebra {
+    @discardableResult
+    public mutating func insert<S: Sequence>(contentsOf newElements: S) -> [(inserted: Bool, memberAfterInsert: Self.Element)] where S.Element == Element {
+        newElements.map {
+            insert($0)
+        }
+    }
+}

@@ -9,107 +9,146 @@ import Algorithms
 import Base
 
 struct Day18: Day {
-    var snailfish: [Snailfish]
+    var fish: [Snailfish]
 
     init(_ input: Input) throws {
-        // snailfish = input.decodeMany(separatedBy: "\n")
-        snailfish = []
+        fish = input.decodeMany(separatedBy: "\n")
     }
-
+    
     func partOne() async -> String {
-        guard let first = snailfish.first else {
-            return ""
+        let first = fish.first!
+        let result = fish.dropFirst().reduce(first) { acc, fish in
+            acc + fish
         }
-
-        let result = snailfish
-            .dropFirst()
-            .reduce(into: first) { acc, next in
-            acc += next
-        }
-
+        
         return "\(result.magnitude)"
     }
-
+    
     func partTwo() async -> String {
-        ""
+        return "\(fish.permutations(ofCount: 2).map { ($0[0] + $0[1]).magnitude }.max()!)"
     }
 
-    enum Snailfish: CustomStringConvertible, RawRepresentable {
-        case number(Int)
-        indirect case pair(Snailfish, Snailfish)
+    struct Snailfish: RawRepresentable {
+        enum Element {
+            case open
+            case close
+            case value(Int)
 
-        var magnitude: Int {
-            switch self {
-            case .number(let number):
+            var value: Int? {
+                guard case .value(let number) = self else {
+                    return nil
+                }
+
                 return number
-            case .pair(let one, let two):
-                return 3 * one.magnitude + 2 * two.magnitude
+            }
+
+            init?(_ c: Character) {
+                switch c {
+                case "[":
+                    self = .open
+                case "]":
+                    self = .close
+                default:
+                    guard let number = Int(String(c)) else {
+                        return nil
+                    }
+                    self = .value(number)
+                }
             }
         }
 
-        var description: String {
-            rawValue
+        var elements: [Element]
+
+        var magnitude: Int {
+
+            func rec(_ index: inout Int) -> Int {
+                if let value = elements[index].value {
+                    index += 1
+                    return value
+                } else {
+                    index += 1 // .open
+                    let left = rec(&index)
+                    let right = rec(&index)
+                    index += 1 // .close
+                    return 3 * left + 2 * right
+                }
+            }
+
+            var index = 0
+            return rec(&index)
         }
 
         var rawValue: String {
-            switch self {
-            case .number(let number):
-                return "\(number)"
-            case .pair(let one, let two):
-                return "[\(one.rawValue), \(two.rawValue)]"
-            }
+            ""
+        }
+
+        init(elements: [Element]) {
+            self.elements = elements
         }
 
         init?(rawValue: String) {
-            guard !rawValue.isEmpty else {
-                return nil
-            }
-
-            var rawValue = rawValue
-            self.init(rawValue: &rawValue)
+            self.init(elements: rawValue.compactMap(Element.init))
         }
 
-        private init?(rawValue: inout String) {
-            let c = rawValue.removeFirst()
-            switch c {
-            case "[":
-                guard let one = Self(rawValue: &rawValue),
-                      rawValue.removeFirst() == ",",
-                      let two = Self(rawValue: &rawValue),
-                      rawValue.removeFirst() == "]" else {
-                          return nil
-                      }
-                self = .pair(one, two)
-            default:
-                guard let number = Int(String(c)) else {
-                    return nil
+        mutating func reduce() {
+            while reduceExplode() || reduceSplit() {}
+        }
+
+        /// Returns `true` if the reduction was successful.
+        mutating func reduceExplode() -> Bool {
+            var level = 0
+
+            for (index, element) in elements.enumerated() {
+                switch element {
+                case .open:
+                    level += 1
+                case .close:
+                    level -= 1
+                case .value:
+                    break
                 }
-                self = .number(number)
+
+                if level == 5 {
+                    if let prev = elements[..<index].lastIndex(where: { $0.value != nil }) {
+                        elements[prev] = .value(elements[prev].value! + elements[index + 1].value!)
+                    }
+
+                    if let next = elements[(index + 4)...].firstIndex(where: { $0.value != nil }) {
+                        elements[next] = .value(elements[next].value! + elements[index + 2].value!)
+                    }
+
+                    elements.replaceSubrange(index..<(index + 4), with: [.value(0)])
+                    return true
+                }
             }
+
+            return false
         }
 
-        static func +(_ lhs: Self, _ rhs: Self) -> Self {
-            var added: Snailfish = .pair(lhs, rhs)
-            added.reduce()
-            return added
-        }
+        /// Returns `true` if the reduction was successful.
+        mutating func reduceSplit() -> Bool {
+            for (index, element) in elements.enumerated() {
+                guard let value = element.value, value >= 10 else {
+                    continue
+                }
 
-        static func +=(_ lhs: inout Self, _ rhs: Self) {
-            lhs = lhs + rhs
-        }
+                elements.replaceSubrange(
+                    index..<(index + 1),
+                    with: [.open, .value(value / 2), .value((value + 1) / 2), .close])
 
-        @discardableResult
-        mutating func reduce(depth: Int = 1) -> Bool {
-            switch self {
-            case .number(let int):
-                return false
-            case .pair(let one, let two) where depth >= 4:
-
-                self = .number(0)
                 return true
-            case .pair(var one, var two):
-                return one.reduce(depth: depth + 1) || two.reduce(depth: depth + 1)
             }
+
+            return false
         }
+
+        static func + (lhs: Self, rhs: Self) -> Self {
+            var new = Self(elements: [.open] + lhs.elements + rhs.elements + [.close])
+
+            new.reduce()
+
+            return new
+        }
+
     }
 }
