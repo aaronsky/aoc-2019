@@ -82,6 +82,13 @@ extension Sequence {
     }
 }
 
+extension Sequence where Element: Equatable {
+    @inlinable
+    public func count(of element: Element) -> Int {
+        count(where: { $0 == element })
+    }
+}
+
 extension Collection where Element: BinaryInteger {
     var average: Double {
         guard !isEmpty else {

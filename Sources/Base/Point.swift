@@ -5,7 +5,7 @@
 //  Created by Aaron Sky on 11/16/21.
 //
 
-import Darwin
+import Foundation
 
 public struct Point2: Equatable, Hashable {
     public var x: Int
@@ -33,6 +33,20 @@ public struct Point2: Equatable, Hashable {
 
     public func manhattanDistance(to other: Self) -> Int {
         abs(self.x - other.x) + abs(self.y - other.y)
+    }
+
+    public func window() -> [Self] {
+        [
+            Self(x: x - 1, y: y - 1),
+            Self(x: x,     y: y - 1),
+            Self(x: x + 1, y: y - 1),
+            Self(x: x - 1, y: y),
+            self,
+            Self(x: x + 1, y: y),
+            Self(x: x - 1, y: y + 1),
+            Self(x: x,     y: y + 1),
+            Self(x: x + 1, y: y + 1),
+        ]
     }
 
     public static func +(_ lhs: Self, _ rhs: Self) -> Self {

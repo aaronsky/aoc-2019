@@ -50,6 +50,10 @@ public struct Matrix<Element>: Collection, CustomStringConvertible, ExpressibleB
         self.init(elements.flatMap { $0 }, rowWidth: elements.first?.count ?? 0, rows: elements.count)
     }
 
+    public init(repeating: Element, rowWidth: Int, rows: Int) {
+        self.init(Array(repeating: repeating, count: rowWidth * rows), rowWidth: rowWidth, rows: rows)
+    }
+
     public init(arrayLiteral elements: Element...) {
         self.init(elements, rowWidth: elements.count, rows: 1)
     }
