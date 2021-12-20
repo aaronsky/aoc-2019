@@ -11,10 +11,11 @@ import XCTest
 
 class Day24Tests: XCTestCase {
     func testProblems() async throws {
+        XCTExpectFailure("Day has not yet occurred")
         let day = try await Year2021().day(for: 24)
         let partOne = await day.partOne()
-        XCTAssertEqual(Int(partOne), nil)
+        XCTAssertEqual(Int(partOne), 0)
         let partTwo = await day.partTwo()
-        XCTAssertEqual(Int(partTwo), nil)
+        XCTAssertEqual(Int(partTwo), 0)
     }
 }

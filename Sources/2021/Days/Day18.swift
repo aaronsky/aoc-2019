@@ -16,16 +16,22 @@ struct Day18: Day {
     }
     
     func partOne() async -> String {
-        let first = fish.first!
-        let result = fish.dropFirst().reduce(first) { acc, fish in
-            acc + fish
+        guard let result = fish.reduce(+) else {
+            return ""
         }
         
         return "\(result.magnitude)"
     }
     
     func partTwo() async -> String {
-        return "\(fish.permutations(ofCount: 2).map { ($0[0] + $0[1]).magnitude }.max()!)"
+        let result = fish
+            .permutations(ofCount: 2)
+            .map {
+                ($0[0] + $0[1]).magnitude
+            }
+            .max()!
+
+        return "\(result)"
     }
 
     struct Snailfish: RawRepresentable {
@@ -60,7 +66,6 @@ struct Day18: Day {
         var elements: [Element]
 
         var magnitude: Int {
-
             func rec(_ index: inout Int) -> Int {
                 if let value = elements[index].value {
                     index += 1
@@ -112,7 +117,6 @@ struct Day18: Day {
                     if let prev = elements[..<index].lastIndex(where: { $0.value != nil }) {
                         elements[prev] = .value(elements[prev].value! + elements[index + 1].value!)
                     }
-
                     if let next = elements[(index + 4)...].firstIndex(where: { $0.value != nil }) {
                         elements[next] = .value(elements[next].value! + elements[index + 2].value!)
                     }
@@ -131,7 +135,6 @@ struct Day18: Day {
                 guard let value = element.value, value >= 10 else {
                     continue
                 }
-
                 elements.replaceSubrange(
                     index..<(index + 1),
                     with: [.open, .value(value / 2), .value((value + 1) / 2), .close])
@@ -144,9 +147,7 @@ struct Day18: Day {
 
         static func + (lhs: Self, rhs: Self) -> Self {
             var new = Self(elements: [.open] + lhs.elements + rhs.elements + [.close])
-
             new.reduce()
-
             return new
         }
 

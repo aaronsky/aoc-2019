@@ -112,6 +112,22 @@ extension Collection {
 
         return self[index(startIndex, offsetBy: medianDistance)]
     }
+
+    public func reduce(_ nextPartialResult: (Element, Element) throws -> Element) rethrows -> Element? {
+        guard let first = first else {
+            return nil
+        }
+
+        return try dropFirst().reduce(first, nextPartialResult)
+    }
+
+    public func reduce(_ updateAccumulatingResult: (inout Element, Element) throws -> Void) rethrows -> Element? {
+        guard let first = first else {
+            return nil
+        }
+
+        return try dropFirst().reduce(into: first, updateAccumulatingResult)
+    }
 }
 
 extension ArraySlice {

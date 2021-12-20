@@ -22,4 +22,5 @@ jobs:
             --skip "Advent2016Tests.Day4Tests" \
             --skip "Advent2019Tests.Day3Tests/testProblems()" \
             --skip "Advent2019Tests.Day6Tests/testProblems()" \
-            --skip "Advent2019Tests.Day6Tests/testSimpleProgram2()"
+            --skip "Advent2019Tests.Day6Tests/testSimpleProgram2()" \
+            --skip "Advent2021Tests.Day15Tests/testProblems()"
