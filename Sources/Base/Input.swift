@@ -40,12 +40,20 @@ public struct Input {
         decodeMany(separatedBy: separator, transform: String.init)
     }
 
+    public func decode<T: LosslessStringConvertible>() -> T? {
+        decode(T.init)
+    }
+
     public func decode<T: RawRepresentable>() -> T? where T.RawValue == String {
         decode(T.init)
     }
 
     public func decode<T>(_ transform: @escaping (String) -> T?) -> T? {
         transform(contents)
+    }
+
+    public func decodeMany<T: LosslessStringConvertible, S: StringProtocol>(separatedBy separator: S) -> [T] {
+        decodeMany(separatedBy: separator, transform: T.init)
     }
 
     public func decodeMany<T: RawRepresentable, S: StringProtocol>(separatedBy separator: S) -> [T] where T.RawValue == String {
@@ -57,15 +65,5 @@ public struct Input {
             .components(separatedBy: separator)
             .filter { !$0.isEmpty } // skip empty lines
             .compactMap(transform)
-    }
-}
-
-extension Int: RawRepresentable {
-    public var rawValue: String {
-        description
-    }
-
-    public init?(rawValue: String) {
-        self.init(rawValue)
     }
 }

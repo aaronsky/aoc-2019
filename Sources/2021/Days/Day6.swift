@@ -11,7 +11,7 @@ struct Day6: Day {
     var fish: [Int]
 
     init(_ input: Input) throws {
-        self.init(fish: input.decodeMany(separatedBy: ",", transform: Int.init))
+        self.init(fish: input.decodeMany(separatedBy: ","))
     }
 
     init(fish: [Int]) {

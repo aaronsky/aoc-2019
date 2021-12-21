@@ -329,6 +329,14 @@ extension Regex {
             return String(string[range])
         }
 
+        public func capture<T: LosslessStringConvertible>(withName name: String) -> T? {
+            guard let capture = capture(withName: name),
+                  let value = T(capture) else {
+                      return nil
+                  }
+            return value
+        }
+
         public func capture<T: RawRepresentable>(withName name: String) -> T? where T.RawValue == String {
             guard let capture = capture(withName: name),
                   let value = T(rawValue: capture) else {

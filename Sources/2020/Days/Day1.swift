@@ -12,7 +12,7 @@ struct Day1: Day {
     var nums: [Int]
 
     init(_ input: Input) throws {
-        nums = input.decodeMany(separatedBy: "\n", transform: Int.init)
+        nums = input.decodeMany(separatedBy: "\n")
     }
 
     func partOne() async -> String {

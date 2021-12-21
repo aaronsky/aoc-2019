@@ -11,7 +11,7 @@ struct Day2: Day {
     var rom: [Int]
 
     init(_ input: Input) throws {
-        rom = input.decodeMany(separatedBy: ",", transform: Int.init)
+        rom = input.decodeMany(separatedBy: ",")
     }
 
     func partOne() async -> String {
