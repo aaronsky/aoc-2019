@@ -259,6 +259,14 @@
                BlueprintName = "Advent2021Tests"
                ReferencedContainer = "container:">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "Day15Tests">
+               </Test>
+               <Test
+                  Identifier = "Day24Tests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO"
@@ -288,30 +296,6 @@
                   Identifier = "Day4Tests">
                </Test>
             </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "YES"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Advent2017Tests"
-               BuildableName = "Advent2017Tests"
-               BlueprintName = "Advent2017Tests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "YES"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Advent2018Tests"
-               BuildableName = "Advent2018Tests"
-               BlueprintName = "Advent2018Tests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
          </TestableReference>
          <TestableReference
             skipped = "NO"

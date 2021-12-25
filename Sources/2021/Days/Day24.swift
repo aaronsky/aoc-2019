@@ -10,73 +10,81 @@ import Base
 import Foundation
 
 struct Day24: Day {
-    var instructions: [Instruction]
+    var answers: [Int: (Int, Int)] = [0: (0, 0)]
 
     init(_ input: Input) throws {
-        instructions = input.decodeMany(separatedBy: "\n")
+        func check(_ params: (Int, Int, Int), _ z: Int, _ w: Int) -> Int {
+            if (z % 26) + params.1 != w {
+                return z / params.0 * 26 + w + params.2
+            } else {
+                return z / params.0
+            }
+        }
+
+        let instructions: [Instruction] = input.decodeMany(separatedBy: "\n")
+        let params: [(Int, Int, Int)] = stride(from: 0, to: 18 * 14, by: 18)
+            .map {
+                guard let oneString = instructions[$0 + 4].params.1,
+                      let one = Int(oneString),
+                      let twoString = instructions[$0 + 5].params.1,
+                      let two = Int(twoString),
+                      let threeString = instructions[$0 + 15].params.1,
+                      let three = Int(threeString) else {
+                          preconditionFailure()
+                      }
+
+                return (one, two, three)
+            }
+
+        for param in params {
+            answers = answers.reduce(into: [:]) { partialResult, storedAnswer in
+                let (z, input) = storedAnswer
+                for i in 1...9 {
+                    let answer = check(param, z, i)
+                    if param.0 == 1 || (param.0 == 26 && answer < z) {
+                        let defaultValue = (input.0 * 10 + i, input.1 * 10 + i)
+                        partialResult[answer] = (
+                            min(partialResult[answer, default: defaultValue].0, defaultValue.0),
+                            max(partialResult[answer, default: defaultValue].1, defaultValue.1)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     func partOne() async -> String {
-        if solve(monad: 79997391969649) {
-            return "79997391969649"
-        } else {
-            return "0"
-        }
+        return "\(answers[0]!.1)"
     }
 
     func partTwo() async -> String {
-        if solve(monad: 16931171414113, forSmallest: true) {
-            return "16931171414113"
-        } else {
-            return "0"
-        }
-    }
-
-    func solve(monad: Int, forSmallest: Bool = false) -> Bool {
-        var registers: [String: Int] = [
-            "w": 0,
-            "x": 0,
-            "y": 0,
-            "z": 0,
-        ]
-        
-        var digits = monad.digits.makeIterator()
-
-        for instruction in instructions {
-            do {
-                let result = try instruction.execute(&registers)
-                if let reg = result.registerAwaitingInput,
-                   let digit = digits.next(),
-                   digit != 0 {
-                    registers[reg] = digit
-                }
-            } catch {
-                return false
-            }
-        }
-
-        return registers["z"] == 0
+        return "\(answers[0]!.0)"
     }
 
     enum Instruction: RawRepresentable {
-        struct ExecutionResult {
-            var registerAwaitingInput: String?
-
-            var needsInput: Bool {
-                registerAwaitingInput != nil
-            }
-        }
-
-        enum Error: Swift.Error {
-            case invalid
-        }
-
         case input(String)
         case add(String, String)
         case multiply(String, String)
         case divide(String, String)
         case modulo(String, String)
         case equals(String, String)
+
+        var params: (String, String?) {
+            switch self {
+            case .input(let a):
+                return (a, nil)
+            case .add(let a, let b):
+                return (a, b)
+            case .multiply(let a, let b):
+                return (a, b)
+            case .divide(let a, let b):
+                return (a, b)
+            case .modulo(let a, let b):
+                return (a, b)
+            case .equals(let a, let b):
+                return (a, b)
+            }
+        }
 
         var rawValue: String {
             switch self {
@@ -147,41 +155,6 @@ struct Day24: Day {
             default:
                 return nil
             }
-        }
-
-        func execute(_ registers: inout [String: Int]) throws -> ExecutionResult {
-            func op(a: String, b: String, _ op: (Int, Int) -> Int) throws {
-                guard let aVal = registers[a] else {
-                    throw Error.invalid
-                }
-
-                if let bVal = registers[b] {
-                    registers[a] = op(aVal, bVal)
-                } else if let bInt = Int(b) {
-                    registers[a] = op(aVal, bInt)
-                } else {
-                    throw Error.invalid
-                }
-            }
-
-            switch self {
-            case .input(let reg):
-                return ExecutionResult(registerAwaitingInput: reg)
-            case .add(let a, let b):
-                try op(a: a, b: b, +)
-            case .multiply(let a, let b):
-                try op(a: a, b: b, *)
-            case .divide(let a, let b):
-                try op(a: a, b: b, /)
-            case .modulo(let a, let b):
-                try op(a: a, b: b, %)
-            case .equals(let a, let b):
-                try op(a: a, b: b) { aVal, bVal in
-                    aVal == bVal ? 1 : 0
-                }
-            }
-
-            return ExecutionResult()
         }
     }
 }
