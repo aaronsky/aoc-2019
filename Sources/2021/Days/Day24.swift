@@ -1,10 +1,3 @@
-//
-//  Day24.swift
-//
-//
-//  Created by Aaron Sky on 12/24/21.
-//
-
 import Algorithms
 import Base
 import Foundation

@@ -1,10 +1,3 @@
-//
-//  Day15.swift
-//
-//
-//  Created by Aaron Sky on 12/15/21.
-//
-
 import Algorithms
 import Base
 import GameplayKit

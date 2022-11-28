@@ -1,10 +1,3 @@
-//
-//  Intcode.swift
-//  
-//
-//  Created by Aaron Sky on 11/18/21.
-//
-
 import Foundation
 
 struct Intcode: CustomDebugStringConvertible {

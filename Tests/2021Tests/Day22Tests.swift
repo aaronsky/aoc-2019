@@ -1,12 +1,6 @@
-//
-//  Day22Tests.swift
-//
-//
-//  Created by Aaron Sky on 12/22/21.
-//
-
 import Foundation
 import XCTest
+
 @testable import Advent2021
 
 class Day22Tests: XCTestCase {

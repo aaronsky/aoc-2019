@@ -1,11 +1,5 @@
-//
-//  Day5.swift
-//  
-//
-//  Created by Aaron Sky on 12/4/21.
-//
-
 import Base
+import RegexBuilder
 
 struct Day5: Day {
     var vents: [Vent]
@@ -38,8 +32,6 @@ struct Day5: Day {
     }
 
     struct Vent: RawRepresentable {
-        private static let pattern = Regex(#"(\d+),(\d+) -> (\d+),(\d+)"#)
-        
         var start: Point2
         var end: Point2
 
@@ -84,19 +76,39 @@ struct Day5: Day {
         }
 
         init?(rawValue: String) {
-            guard let match = Self.pattern.firstMatch(in: rawValue),
-                  match.captures.count == 4,
-                  let startXString = match.captures[0],
-                  let startX = Int(startXString),
-                  let startYString = match.captures[1],
-                  let startY = Int(startYString),
-                  let endXString = match.captures[2],
-                  let endX = Int(endXString),
-                  let endYString = match.captures[3],
-                  let endY = Int(endYString) else {
-                      return nil
-                  }
-            self.init(startX: startX, startY: startY, endX: endX, endY: endY)
+            let pattern = Regex {
+                TryCapture {
+                    OneOrMore(.digit)
+                } transform: {
+                    Int($0)
+                }
+                ","
+                TryCapture {
+                    OneOrMore(.digit)
+                } transform: {
+                    Int($0)
+                }
+
+                " -> "
+
+                TryCapture {
+                    OneOrMore(.digit)
+                } transform: {
+                    Int($0)
+                }
+                ","
+                TryCapture {
+                    OneOrMore(.digit)
+                } transform: {
+                    Int($0)
+                }
+            }
+
+            guard let match = try? pattern.firstMatch(in: rawValue) else {
+                return nil
+            }
+
+            self.init(startX: match.1, startY: match.2, endX: match.3, endY: match.4)
         }
     }
 }

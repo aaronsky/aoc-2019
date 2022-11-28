@@ -1,10 +1,3 @@
-//
-//  AOC.swift
-//  
-//
-//  Created by Aaron Sky on 11/16/21.
-//
-
 import ArgumentParser
 import Base
 import Foundation
@@ -15,14 +8,9 @@ import Advent2018
 import Advent2019
 import Advent2020
 import Advent2021
+import Advent2022
 
 @main
-struct Application {
-    static func main() async {
-        await AOC.main(nil)
-    }
-}
-
 struct AOC: AsyncParsableCommand {
     enum Error: Swift.Error {
         case unknownYear(Int)
@@ -37,6 +25,7 @@ struct AOC: AsyncParsableCommand {
         Year2019.year: Year2019(),
         Year2020.year: Year2020(),
         Year2021.year: Year2021(),
+        Year2022.year: Year2022(),
     ]
 
     @Argument(help: "Year to run the problem for.")

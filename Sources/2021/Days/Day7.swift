@@ -1,10 +1,3 @@
-//
-//  Day7.swift
-//
-//
-//  Created by Aaron Sky on 12/6/21.
-//
-
 import Algorithms
 import Base
 

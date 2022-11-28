@@ -1,10 +1,3 @@
-//
-//  Pair.swift
-//  
-//
-//  Created by Aaron Sky on 11/18/21.
-//
-
 /// Why aren't tuples Hashable
 public struct Pair<T1, T2>: Equatable, Hashable where T1: Equatable & Hashable, T2: Equatable & Hashable {
     public var one: T1

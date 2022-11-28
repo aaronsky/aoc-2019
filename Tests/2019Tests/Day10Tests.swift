@@ -1,12 +1,6 @@
-//
-//  Day10Tests.swift
-//
-//
-//  Created by Aaron Sky on 11/20/21.
-//
-
 import Foundation
 import XCTest
+
 @testable import Advent2019
 
 class Day10Tests: XCTestCase {

@@ -1,10 +1,3 @@
-//
-//  CountedSet.swift
-//  
-//
-//  Created by Aaron Sky on 12/12/21.
-//
-
 public struct CountedSet<Element: Hashable>: Sequence, ExpressibleByArrayLiteral {
     public typealias Iterator = Dictionary<Element, Int>.Iterator
 

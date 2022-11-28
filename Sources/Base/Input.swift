@@ -1,10 +1,3 @@
-//
-//  Input.swift
-//  
-//
-//  Created by Aaron Sky on 11/16/21.
-//
-
 import Foundation
 
 public struct Input {
@@ -37,7 +30,7 @@ public struct Input {
     }
 
     public func components<S: StringProtocol>(separatedBy separator: S) -> [String] {
-        decodeMany(separatedBy: separator, transform: String.init)
+        decodeMany(separatedBy: separator, transform: { String($0) })
     }
 
     public func decode<T: LosslessStringConvertible>() -> T? {

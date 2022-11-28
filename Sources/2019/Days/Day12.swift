@@ -1,11 +1,5 @@
-//
-//  Day12.swift
-//
-//
-//  Created by Aaron Sky on 12/16/21.
-//
-
 import Base
+import RegexBuilder
 
 struct Day12: Day {
     var system: LunarSystem
@@ -30,8 +24,6 @@ struct Day12: Day {
 
     struct LunarSystem: RawRepresentable {
         struct Moon: RawRepresentable {
-            static let pattern = Regex(#"<x=(?<x>-?\d+), y=(?<y>-?\d+), z=(?<z>-?\d+)>"#)
-
             var position: Point3
             var velocity: Point3 = .zero
 
@@ -56,14 +48,36 @@ struct Day12: Day {
             }
 
             init?(rawValue: String) {
-                guard let match = Self.pattern.firstMatch(in: rawValue),
-                      let x: Int = match.capture(withName: "x"),
-                      let y: Int = match.capture(withName: "y"),
-                      let z: Int = match.capture(withName: "z") else {
-                          return nil
-                      }
+                let pattern = Regex {
+                    "<x="
+                    TryCapture {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ", y="
+                    TryCapture {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ", z="
+                    TryCapture {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ">"
+                }
 
-                self.init(position: .init(x: x, y: y, z: z))
+                guard let match = try? pattern.firstMatch(in: rawValue) else {
+                    return nil
+                }
+
+                self.init(position: .init(x: match.1, y: match.2, z: match.3))
             }
 
             mutating func applyGravity(_ other: Moon) {

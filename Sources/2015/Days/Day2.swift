@@ -1,10 +1,3 @@
-//
-//  Day2.swift
-//  
-//
-//  Created by Aaron Sky on 11/17/21.
-//
-
 import Base
 
 struct Day2: Day {

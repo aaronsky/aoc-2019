@@ -1,10 +1,3 @@
-//
-//  Day8.swift
-//
-//
-//  Created by Aaron Sky on 11/20/21.
-//
-
 import Base
 
 struct Day8: Day {

@@ -1,10 +1,3 @@
-//
-//  Day10.swift
-//
-//
-//  Created by Aaron Sky on 12/9/21.
-//
-
 import Algorithms
 import Base
 

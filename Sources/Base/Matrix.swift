@@ -1,10 +1,3 @@
-//
-//  Matrix.swift
-//
-//
-//  Created by Aaron Sky on 12/11/21.
-//
-
 import Algorithms
 
 public struct Matrix<Element>: Collection, CustomStringConvertible, ExpressibleByArrayLiteral {

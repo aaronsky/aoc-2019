@@ -1,12 +1,6 @@
-//
-//  Day22.swift
-//
-//
-//  Created by Aaron Sky on 12/22/21.
-//
-
 import Algorithms
 import Base
+import RegexBuilder
 
 struct Day22: Day {
     var reactor: Reactor
@@ -30,8 +24,6 @@ struct Day22: Day {
                 case on
             }
 
-            static let pattern = Regex(#"(?<state>(on|off)) x=(?<x>-?\d+\.{2}-?\d+),y=(?<y>-?\d+\.{2}-?\d+),z=(?<z>-?\d+\.{2}-?\d+)"#)
-
             var state: State
             var cube: Cube
 
@@ -49,23 +41,72 @@ struct Day22: Day {
             }
 
             init?(rawValue: String) {
+                let stateRef = Reference<Substring>()
+                let minXRef = Reference<Int>()
+                let maxXRef = Reference<Int>()
+                let minYRef = Reference<Int>()
+                let maxYRef = Reference<Int>()
+                let minZRef = Reference<Int>()
+                let maxZRef = Reference<Int>()
+                let pattern = Regex {
+                    Capture(as: stateRef) {
+                        ChoiceOf {
+                            "on"
+                            "off"
+                        }
+                    }
+                    " x="
+                    TryCapture(as: minXRef) {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ".."
+                    TryCapture(as: maxXRef) {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ",y="
+                    TryCapture(as: minYRef) {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ".."
+                    TryCapture(as: maxYRef) {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ",z="
+                    TryCapture(as: minZRef) {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                    ".."
+                    TryCapture(as: maxZRef) {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                }
                 guard
-                    let match = Self.pattern.firstMatch(in: rawValue),
-                    let stateString = match.capture(withName: "state"),
-                    let state = State(rawValue: stateString),
-                    let x = match.capture(withName: "x")?.components(separatedBy: "..").compactMap(Int.init),
-                    x.count == 2,
-                    let y = match.capture(withName: "y")?.components(separatedBy: "..").compactMap(Int.init),
-                    y.count == 2,
-                    let z = match.capture(withName: "z")?.components(separatedBy: "..").compactMap(Int.init),
-                    z.count == 2
-                else {
+                    let match = try? pattern.firstMatch(in: rawValue),
+                    let state = State(rawValue: String(match[stateRef])) else {
                     return nil
                 }
 
-                let (xMin, xMax) = (x[0], x[1])
-                let (yMin, yMax) = (y[0], y[1])
-                let (zMin, zMax) = (z[0], z[1])
+                let (xMin, xMax) = (match[minXRef], match[maxXRef])
+                let (yMin, yMax) = (match[minYRef], match[maxYRef])
+                let (zMin, zMax) = (match[minZRef], match[maxZRef])
 
                 self.init(state: state, x: xMin...xMax, y: yMin...yMax, z: zMin...zMax)
             }

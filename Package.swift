@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.7
 
 import PackageDescription
 
@@ -10,6 +10,7 @@ let allYears = [
     2019,
     2020,
     2021,
+    2022,
 ]
 
 func adventTargetName(_ year: Int) -> String {
@@ -23,7 +24,8 @@ func adventTarget(year: Int) -> [Target] {
             dependencies: [
                 "Base",
                 .product(name: "Algorithms", package: "swift-algorithms"),
-                .product(name: "Collections", package: "swift-collections")
+                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+                .product(name: "Collections", package: "swift-collections"),
             ],
             path: "Sources/\(year)",
             resources: [
@@ -41,7 +43,7 @@ func adventTarget(year: Int) -> [Target] {
 let package = Package(
     name: "advent-of-code",
     platforms: [
-        .macOS(.v10_15)
+        .macOS(.v13)
     ],
     products: [
         .executable(
@@ -52,24 +54,28 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/apple/swift-algorithms.git", .upToNextMajor(from: "1.0.0")),
+        .package(url: "https://github.com/apple/swift-async-algorithms.git", .upToNextMajor(from: "0.0.1")),
     ],
     targets: [
         .executableTarget(
             name: "aoc",
             dependencies: [
                 "Base",
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ] + allYears.map {
                 .target(name: adventTargetName($0))
-            }),
+            }
+        ),
         .target(
             name: "Base",
             dependencies: [
                 .product(name: "Algorithms", package: "swift-algorithms"),
-                .product(name: "Collections", package: "swift-collections")
-            ]),
+                .product(name: "Collections", package: "swift-collections"),
+            ]
+        ),
         .testTarget(
             name: "BaseTests",
-            dependencies: ["Base"]),
+            dependencies: ["Base"]
+        ),
     ] + allYears.flatMap(adventTarget)
 )

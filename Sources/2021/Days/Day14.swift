@@ -1,10 +1,3 @@
-//
-//  Day14.swift
-//
-//
-//  Created by Aaron Sky on 12/14/21.
-//
-
 import Algorithms
 import Base
 

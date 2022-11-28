@@ -1,10 +1,3 @@
-//
-//  Math.swift
-//
-//
-//  Created by Aaron Sky on 11/20/21.
-//
-
 import Foundation
 
 extension BinaryInteger {

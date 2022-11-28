@@ -1,13 +1,7 @@
-//
-//  Day9Tests.swift
-//
-//
-//  Created by Aaron Sky on 11/20/21.
-//
-
-import Foundation
 import Base
+import Foundation
 import XCTest
+
 @testable import Advent2019
 
 class Day9Tests: XCTestCase {

@@ -1,12 +1,6 @@
-//
-//  Day13.swift
-//
-//
-//  Created by Aaron Sky on 12/13/21.
-//
-
 import Algorithms
 import Base
+import RegexBuilder
 
 struct Day13: Day {
     var paper: TransparentPaper
@@ -43,8 +37,6 @@ struct Day13: Day {
         let folds: [Fold]
 
         struct Fold: RawRepresentable {
-            static let pattern = Regex(#".*([xy])=(\d+)"#)
-
             var position: Int
             var axis: Axis
 
@@ -57,17 +49,29 @@ struct Day13: Day {
             }
 
             init?(rawValue: String) {
-                guard let match = Self.pattern.firstMatch(in: rawValue),
-                      match.captures.count == 2,
-                      let axisStr = match.captures[0],
-                      let axis = Axis(rawValue: axisStr),
-                      let positionStr = match.captures[1],
-                      let position = Int(positionStr)
+                let pattern = Regex {
+                    ZeroOrMore(.any)
+                    Capture {
+                        ChoiceOf {
+                            "x"
+                            "y"
+                        }
+                    }
+                    "="
+                    TryCapture {
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
+                }
+
+                guard let match = try? pattern.firstMatch(in: rawValue),
+                      let axis = Axis(rawValue: String(match.1))
                 else {
                     return nil
                 }
 
-                self.position = position
+                self.position = match.2
                 self.axis = axis
             }
         }

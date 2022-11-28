@@ -1,10 +1,3 @@
-//
-//  Day9.swift
-//
-//
-//  Created by Aaron Sky on 12/8/21.
-//
-
 import Algorithms
 import Base
 

@@ -1,10 +1,3 @@
-//
-//  Day12.swift
-//
-//
-//  Created by Aaron Sky on 12/11/21.
-//
-
 import Algorithms
 import Base
 import Collections

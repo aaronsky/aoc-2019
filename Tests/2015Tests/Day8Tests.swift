@@ -1,12 +1,6 @@
-//
-//  Day8Tests.swift
-//
-//
-//  Created by Aaron Sky on 11/16/21.
-//
-
 import Foundation
 import XCTest
+
 @testable import Advent2015
 
 class Day8Tests: XCTestCase {

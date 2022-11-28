@@ -1,10 +1,3 @@
-//
-//  Day4.swift
-//
-//
-//  Created by Aaron Sky on 12/3/21.
-//
-
 import Base
 import OrderedCollections
 

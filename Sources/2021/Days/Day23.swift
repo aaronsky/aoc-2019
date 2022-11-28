@@ -1,10 +1,3 @@
-//
-//  Day23.swift
-//
-//
-//  Created by Aaron Sky on 12/23/21.
-//
-
 import Algorithms
 import Base
 import GameplayKit

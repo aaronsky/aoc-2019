@@ -1,12 +1,6 @@
-//
-//  Day21.swift
-//
-//
-//  Created by Aaron Sky on 12/21/21.
-//
-
 import Algorithms
 import Base
+import RegexBuilder
 
 struct Day21: Day {
     var game: DiceGame
@@ -26,19 +20,30 @@ struct Day21: Day {
 
     struct DiceGame: Hashable {
         struct Player: Hashable {
-            static let pattern = Regex(#"Player (?<player>\d+) starting position: (?<position>\d+)"#)
+            static let pattern = Regex {
+                "Player "
+                TryCapture {
+                    OneOrMore(.digit)
+                } transform: {
+                    Int($0)
+                }
+                " starting position: "
+                TryCapture {
+                    OneOrMore(.digit)
+                } transform: {
+                    Int($0)
+                }
+            }
 
             var space: Int
             var score: Int
 
             init?(_ rawValue: String) {
-                guard let match = Self.pattern.firstMatch(in: rawValue),
-                      let positionString = match.capture(withName: "position"),
-                      let position = Int(positionString) else {
-                          return nil
-                      }
+                guard let match = try? Self.pattern.firstMatch(in: rawValue) else {
+                    return nil
+                }
 
-                self.init(startingFrom: position)
+                self.init(startingFrom: match.2)
             }
 
             init(startingFrom space: Int, score: Int = 0) {
@@ -65,13 +70,11 @@ struct Day21: Day {
             let players: [(Int, Player)] = rawValue
                 .components(separatedBy: "\n")
                 .compactMap {
-                    guard let match = Player.pattern.firstMatch(in: $0),
-                          let number: Int = match.capture(withName: "player"),
-                          let position: Int = match.capture(withName: "position") else {
-                              return nil
-                          }
+                    guard let match = try? Player.pattern.firstMatch(in: $0) else {
+                        return nil
+                    }
 
-                    return (number, Player(startingFrom: position))
+                    return (match.1, Player(startingFrom: match.2))
                 }
 
             guard players.count == 2,

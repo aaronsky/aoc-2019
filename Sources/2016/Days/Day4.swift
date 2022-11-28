@@ -1,12 +1,6 @@
-//
-//  Day4.swift
-//  
-//
-//  Created by Aaron Sky on 11/24/21.
-//
-
 import Algorithms
 import Base
+import RegexBuilder
 
 struct Day4: Day {
     var rooms: [Room]
@@ -28,8 +22,6 @@ struct Day4: Day {
     }
 
     struct Room: RawRepresentable {
-        static let pattern = Regex(#"([a-z-]*)-(\d*)\[([a-z]*)\]"#)
-
         var name: String
         var sectorID: Int
         var checksum: String
@@ -69,21 +61,35 @@ struct Day4: Day {
         }
 
         init?(rawValue: String) {
-            guard let match = Room.pattern.firstMatch(in: rawValue) else {
+            let pattern = Regex {
+                Capture {
+                    ZeroOrMore {
+                        ChoiceOf {
+                            .word
+                            "-"
+                        }
+                    }
+                }
+                "-"
+                TryCapture {
+                    ZeroOrMore(.digit)
+                } transform: {
+                    Int($0)
+                }
+                "["
+                Capture(ZeroOrMore(.word))
+                "]"
+            }
+
+            guard let match = try? pattern.firstMatch(in: rawValue) else {
                 return nil
             }
 
-            let captures = match.captures.prefix(3)
-            precondition(captures.count == 3)
-
-            guard let name = captures[0]?.replacingOccurrences(of: "-", with: ""),
-                  let sectorIDString = captures[1],
-                  let sectorID = Int(sectorIDString),
-                  let checksum = captures[2] else {
-                      return nil
-                  }
-
-            self.init(name: name, sectorID: sectorID, checksum: checksum)
+            self.init(
+                name: match.1.replacingOccurrences(of: "-", with: ""),
+                sectorID: match.2,
+                checksum: String(match.3)
+            )
         }
     }
 }

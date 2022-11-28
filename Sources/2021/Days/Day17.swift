@@ -1,29 +1,51 @@
-//
-//  Day17.swift
-//
-//
-//  Created by Aaron Sky on 12/17/21.
-//
-
 import Algorithms
 import Base
+import RegexBuilder
 
 struct Day17: Day {
-    static let pattern = Regex(#"target area: x=(?<minX>-?\d+)..(?<maxX>-?\d+), y=(?<minY>-?\d+)..(?<maxY>-?\d+)"#)
-
     var targetX: ClosedRange<Int>
     var targetY: ClosedRange<Int>
 
     init(_ input: Input) throws {
+        let minXRef = Reference<Int>()
+        let maxXRef = Reference<Int>()
+        let minYRef = Reference<Int>()
+        let maxYRef = Reference<Int>()
+        let pattern = Regex {
+            "target area: x="
+            TryCapture(as: minXRef) {
+                Optionally("-")
+                OneOrMore(.digit)
+            } transform: {
+                Int($0)
+            }
+            ".."
+            TryCapture(as: maxXRef) {
+                Optionally("-")
+                OneOrMore(.digit)
+            } transform: {
+                Int($0)
+            }
+            ", y="
+            TryCapture(as: minYRef) {
+                Optionally("-")
+                OneOrMore(.digit)
+            } transform: {
+                Int($0)
+            }
+            ".."
+            TryCapture(as: maxYRef) {
+                Optionally("-")
+                OneOrMore(.digit)
+            } transform: {
+                Int($0)
+            }
+        }
         let (targetX, targetY): (ClosedRange<Int>, ClosedRange<Int>) = input.decode {
-            guard let match = Self.pattern.firstMatch(in: $0),
-                  let minX: Int = match.capture(withName: "minX"),
-                  let maxX: Int = match.capture(withName: "maxX"),
-                  let minY: Int = match.capture(withName: "minY"),
-                  let maxY: Int = match.capture(withName: "maxY") else {
-                      return nil
-                  }
-            return (minX...maxX, minY...maxY)
+            guard let match = try? pattern.firstMatch(in: $0) else {
+                return nil
+            }
+            return (match[minXRef]...match[maxXRef], match[minYRef]...match[maxYRef])
         }!
 
         self.targetX = targetX

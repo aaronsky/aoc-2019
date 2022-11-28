@@ -1,10 +1,3 @@
-//
-//  Day19.swift
-//
-//
-//  Created by Aaron Sky on 12/19/21.
-//
-
 import Algorithms
 import Base
 

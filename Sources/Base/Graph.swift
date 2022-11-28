@@ -1,10 +1,3 @@
-//
-//  Graph.swift
-//
-//
-//  Created by Aaron Sky on 11/16/21.
-//
-
 public protocol Graph {
     associatedtype Element
 
