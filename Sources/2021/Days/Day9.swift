@@ -4,7 +4,9 @@ import Base
 struct Day9: Day {
     var heightMap: HeightMap
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         heightMap = input.decode()!
     }
 
@@ -58,11 +60,15 @@ struct Day9: Day {
                 .joined(separator: "\n")
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let rows = rawValue.components(separatedBy: "\n")
-            self.heights = Matrix(rows.flatMap { $0.map { Int(String($0))! } },
-                                  rowWidth: rows.first!.count,
-                                  rows: rows.count)
+            self.heights = Matrix(
+                rows.flatMap { $0.map { Int(String($0))! } },
+                rowWidth: rows.first!.count,
+                rows: rows.count
+            )
         }
 
         func findLowPoints() -> [(Int, Int)] {

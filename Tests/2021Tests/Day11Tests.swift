@@ -14,17 +14,17 @@ class Day11Tests: XCTestCase {
 
     func testSimpleProblem1() throws {
         let input = """
-        5483143223
-        2745854711
-        5264556173
-        6141336146
-        6357385478
-        4167524645
-        2176841721
-        6882881134
-        4846848554
-        5283751526
-        """
+            5483143223
+            2745854711
+            5264556173
+            6141336146
+            6357385478
+            4167524645
+            2176841721
+            6882881134
+            4846848554
+            5283751526
+            """
         var octopuses = try XCTUnwrap(Day11.Octopuses(rawValue: input))
         var flashes = 0
         for _ in 1...10 {

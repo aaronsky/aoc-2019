@@ -3,10 +3,19 @@ import Base
 struct Day8: Day {
     var layers: [Layer]
 
-    init(_ input: Input) throws {
-        layers = input.decode { Array<Layer>(rawImage: RawImage(pixels: $0,
-                                                                width: 25,
-                                                                height: 6)) } ?? []
+    init(
+        _ input: Input
+    ) throws {
+        layers =
+            input.decode {
+                [Layer](
+                    rawImage: RawImage(
+                        pixels: $0,
+                        width: 25,
+                        height: 6
+                    )
+                )
+            } ?? []
     }
 
     func partOne() async -> String {
@@ -35,21 +44,33 @@ struct Day8: Day {
             pixelCounts[pixel] ?? 0
         }
 
-        init(pixels: [Pixel], pixelCounts: [Pixel: Int], width: Int, height: Int) {
+        init(
+            pixels: [Pixel],
+            pixelCounts: [Pixel: Int],
+            width: Int,
+            height: Int
+        ) {
             self.pixels = pixels
             self.pixelCounts = pixelCounts
             self.width = width
             self.height = height
         }
 
-        init(width: Int, height: Int) {
-            self.init(pixels: Array(repeating: .transparent, count: width * height),
-                      pixelCounts: [:],
-                      width: width,
-                      height: height)
+        init(
+            width: Int,
+            height: Int
+        ) {
+            self.init(
+                pixels: Array(repeating: .transparent, count: width * height),
+                pixelCounts: [:],
+                width: width,
+                height: height
+            )
         }
 
-        init(rawImage: RawImage) {
+        init(
+            rawImage: RawImage
+        ) {
             var pixels: [Pixel] = []
             var pixelCounts: [Pixel: Int] = [:]
             for pixel in rawImage.pixels {
@@ -59,13 +80,17 @@ struct Day8: Day {
                 pixels.append(p)
                 pixelCounts[p, default: 0] += 1
             }
-            self.init(pixels: pixels,
-                      pixelCounts: pixelCounts,
-                      width: rawImage.width,
-                      height: rawImage.height)
+            self.init(
+                pixels: pixels,
+                pixelCounts: pixelCounts,
+                width: rawImage.width,
+                height: rawImage.height
+            )
         }
 
-        init(combining layers: [Layer]) {
+        init(
+            combining layers: [Layer]
+        ) {
             let widthsAndHeights = layers.map {
                 Size(width: $0.width, height: $0.height)
             }
@@ -108,7 +133,9 @@ struct Day8: Day {
             }
         }
 
-        init?(input: Character) {
+        init?(
+            input: Character
+        ) {
             switch input {
             case "0":
                 self = .black
@@ -124,7 +151,9 @@ struct Day8: Day {
 }
 
 extension Array where Element == Day8.Layer {
-    init(rawImage: Day8.RawImage) {
+    init(
+        rawImage: Day8.RawImage
+    ) {
         precondition(rawImage.pixels.count % (rawImage.width * rawImage.height) == 0)
         let layerCount = rawImage.pixels.count / (rawImage.width * rawImage.height)
         var layers: [Day8.Layer] = []
@@ -137,9 +166,13 @@ extension Array where Element == Day8.Layer {
             let highBound = rawImage.pixels.index(rawImage.pixels.startIndex, offsetBy: highBoundValue)
 
             layers.append(
-                Day8.Layer(rawImage: Day8.RawImage(pixels: String(rawImage.pixels[lowBound..<highBound]),
-                                         width: rawImage.width,
-                                         height: rawImage.height))
+                Day8.Layer(
+                    rawImage: Day8.RawImage(
+                        pixels: String(rawImage.pixels[lowBound..<highBound]),
+                        width: rawImage.width,
+                        height: rawImage.height
+                    )
+                )
             )
         }
         self = layers

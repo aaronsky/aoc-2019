@@ -3,8 +3,11 @@ import Base
 struct Day2: Day {
     var combination: [[Instruction]]
 
-    init(_ input: Input) throws {
-        combination = input
+    init(
+        _ input: Input
+    ) throws {
+        combination =
+            input
             .components(separatedBy: "\n")
             .map { line in
                 line.map { dir in
@@ -40,7 +43,9 @@ struct Day2: Day {
 
         var problem: Problem
 
-        init(problem: Problem) {
+        init(
+            problem: Problem
+        ) {
             self.problem = problem
         }
 

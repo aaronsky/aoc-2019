@@ -5,7 +5,9 @@ import GameplayKit
 struct Day15: Day {
     var input: Input
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         self.input = input
     }
 
@@ -24,7 +26,10 @@ struct Day15: Day {
     struct Path {
         var graph: GKGridGraph<Node>
 
-        init?(rawValue: String, repeatFactor: Int = 1) {
+        init?(
+            rawValue: String,
+            repeatFactor: Int = 1
+        ) {
             guard repeatFactor > 0 else {
                 return nil
             }
@@ -36,11 +41,13 @@ struct Day15: Day {
             }
             let height = rows.count
 
-            graph = GKGridGraph(fromGridStartingAt: .zero,
-                                width: Int32(width * repeatFactor),
-                                height: Int32(height * repeatFactor),
-                                diagonalsAllowed: false,
-                                nodeClass: Node.self)
+            graph = GKGridGraph(
+                fromGridStartingAt: .zero,
+                width: Int32(width * repeatFactor),
+                height: Int32(height * repeatFactor),
+                diagonalsAllowed: false,
+                nodeClass: Node.self
+            )
 
             for (y, row) in rows.enumerated() {
                 for (x, element) in row.enumerated() {
@@ -78,10 +85,11 @@ struct Day15: Day {
 
         func findLeastRiskyPath() -> Int {
             guard let source = graph.node(atGridPosition: .zero),
-                  let target = graph.node(atGridPosition: vector_int2(x: graph.gridWidth - 1, y: graph.gridHeight - 1)),
-                  let path = graph.findPath(from: source, to: target) as? [Node] else {
-                      return 0
-                  }
+                let target = graph.node(atGridPosition: vector_int2(x: graph.gridWidth - 1, y: graph.gridHeight - 1)),
+                let path = graph.findPath(from: source, to: target) as? [Node]
+            else {
+                return 0
+            }
 
             return path.dropFirst().sum(of: \.cost)
         }
@@ -89,17 +97,24 @@ struct Day15: Day {
         class Node: GKGridGraphNode {
             var cost: Int
 
-            convenience init(gridPosition: vector_int2, cost: Int = 0) {
+            convenience init(
+                gridPosition: vector_int2,
+                cost: Int = 0
+            ) {
                 self.init(gridPosition: gridPosition)
                 self.cost = cost
             }
 
-            override init(gridPosition: vector_int2) {
+            override init(
+                gridPosition: vector_int2
+            ) {
                 cost = 0
                 super.init(gridPosition: gridPosition)
             }
 
-            required init?(coder: NSCoder) {
+            required init?(
+                coder: NSCoder
+            ) {
                 fatalError("init(coder:) has not been implemented")
             }
 
@@ -111,7 +126,10 @@ struct Day15: Day {
 }
 
 extension vector_int2 {
-    init(x: Int, y: Int) {
+    init(
+        x: Int,
+        y: Int
+    ) {
         self.init(x: Int32(x), y: Int32(y))
     }
 }

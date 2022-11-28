@@ -5,7 +5,9 @@ import OrderedCollections
 struct Day1: Day {
     var directives: [Directive]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         directives = input.decodeMany(separatedBy: ", ")
     }
 
@@ -46,7 +48,9 @@ struct Day1: Day {
             "\(turn.rawValue)\(spaces)"
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             var rawValue = rawValue
 
             let direction = rawValue.removeFirst()
@@ -62,7 +66,10 @@ struct Day1: Day {
             self.init(turn: turn, spaces: spaces)
         }
 
-        init(turn: TurnDirection, spaces: Int) {
+        init(
+            turn: TurnDirection,
+            spaces: Int
+        ) {
             self.turn = turn
             self.spaces = spaces
         }

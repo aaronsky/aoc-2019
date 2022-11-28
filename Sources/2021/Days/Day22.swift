@@ -5,7 +5,9 @@ import RegexBuilder
 struct Day22: Day {
     var reactor: Reactor
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         reactor = input.decode()!
     }
 
@@ -31,16 +33,26 @@ struct Day22: Day {
                 "\(state.rawValue) x=\(cube.x.lowerBound)..\(cube.x.upperBound),y=\(cube.y.lowerBound)..\(cube.y.upperBound),z=\(cube.z.lowerBound)..\(cube.z.upperBound)"
             }
 
-            init(state: State, cube: Cube) {
+            init(
+                state: State,
+                cube: Cube
+            ) {
                 self.state = state
                 self.cube = cube
             }
 
-            init(state: State, x: ClosedRange<Int>, y: ClosedRange<Int>, z: ClosedRange<Int>) {
+            init(
+                state: State,
+                x: ClosedRange<Int>,
+                y: ClosedRange<Int>,
+                z: ClosedRange<Int>
+            ) {
                 self.init(state: state, cube: Cube(x: x, y: y, z: z))
             }
 
-            init?(rawValue: String) {
+            init?(
+                rawValue: String
+            ) {
                 let stateRef = Reference<Substring>()
                 let minXRef = Reference<Int>()
                 let maxXRef = Reference<Int>()
@@ -100,7 +112,8 @@ struct Day22: Day {
                 }
                 guard
                     let match = try? pattern.firstMatch(in: rawValue),
-                    let state = State(rawValue: String(match[stateRef])) else {
+                    let state = State(rawValue: String(match[stateRef]))
+                else {
                     return nil
                 }
 
@@ -121,7 +134,11 @@ struct Day22: Day {
                 x.count * y.count * z.count
             }
 
-            init(x: ClosedRange<Int>, y: ClosedRange<Int>, z: ClosedRange<Int>) {
+            init(
+                x: ClosedRange<Int>,
+                y: ClosedRange<Int>,
+                z: ClosedRange<Int>
+            ) {
                 self.x = x
                 self.y = y
                 self.z = z
@@ -136,12 +153,17 @@ struct Day22: Day {
                 .joined(separator: "\n")
         }
 
-        init(steps: [RebootStep]) {
+        init(
+            steps: [RebootStep]
+        ) {
             self.steps = steps
         }
 
-        init?(rawValue: String) {
-            steps = rawValue
+        init?(
+            rawValue: String
+        ) {
+            steps =
+                rawValue
                 .components(separatedBy: "\n")
                 .compactMap(RebootStep.init)
         }
@@ -151,27 +173,17 @@ struct Day22: Day {
 
             var cubes: CountedSet<Cube> = []
 
-            for step in steps {
-                guard
-                    !initializationAreaOnly ||
-                        (
-                            initializationAreaOnly &&
-                            (
-                                initializationArea.contains(step.cube.x.lowerBound) &&
-                                initializationArea.contains(step.cube.x.upperBound)
-                            ) &&
-                            (
-                                initializationArea.contains(step.cube.y.lowerBound) &&
-                                initializationArea.contains(step.cube.y.upperBound)
-                            ) &&
-                            (
-                                initializationArea.contains(step.cube.z.lowerBound) &&
-                                initializationArea.contains(step.cube.z.upperBound)
-                            )
-                        )
-                else {
-                    continue
-                }
+            for step in steps
+            where
+                !initializationAreaOnly
+                || (initializationAreaOnly
+                    && (initializationArea.contains(step.cube.x.lowerBound)
+                        && initializationArea.contains(step.cube.x.upperBound))
+                    && (initializationArea.contains(step.cube.y.lowerBound)
+                        && initializationArea.contains(step.cube.y.upperBound))
+                    && (initializationArea.contains(step.cube.z.lowerBound)
+                        && initializationArea.contains(step.cube.z.upperBound)))
+            {
 
                 var updates: CountedSet<Cube> = []
 

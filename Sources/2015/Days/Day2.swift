@@ -3,19 +3,23 @@ import Base
 struct Day2: Day {
     var presents: [Present]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         presents = input.decodeMany(separatedBy: "\n")
     }
 
     func partOne() async -> String {
-        let surfaceArea = presents
+        let surfaceArea =
+            presents
             .sum(of: \.surfaceArea)
 
         return "\(surfaceArea)"
     }
 
     func partTwo() async -> String {
-        let ribbonLength = presents
+        let ribbonLength =
+            presents
             .sum(of: \.ribbonLength)
 
         return "\(ribbonLength)"
@@ -50,14 +54,21 @@ struct Day2: Day {
             return smallestSide + volume
         }
 
-        init(width: Int, height: Int, length: Int) {
+        init(
+            width: Int,
+            height: Int,
+            length: Int
+        ) {
             self.width = width
             self.height = height
             self.length = length
         }
 
-        init?(rawValue: String) {
-            let dimensions = rawValue
+        init?(
+            rawValue: String
+        ) {
+            let dimensions =
+                rawValue
                 .components(separatedBy: "x")
                 .prefix(3)
                 .compactMap(Int.init)

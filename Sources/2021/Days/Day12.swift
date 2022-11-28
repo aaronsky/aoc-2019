@@ -5,21 +5,27 @@ import Collections
 struct Day12: Day {
     var caveSystem: CaveSystem
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         caveSystem = input.decode()!
     }
 
     func partOne() async -> String {
-        let paths = caveSystem.findingPaths(from: "start",
-                                            to: "end",
-                                            smallCaveVisitCount: 1)
+        let paths = caveSystem.findingPaths(
+            from: "start",
+            to: "end",
+            smallCaveVisitCount: 1
+        )
         return "\(paths.count)"
     }
 
     func partTwo() async -> String {
-        let paths = caveSystem.findingPaths(from: "start",
-                                            to: "end",
-                                            smallCaveVisitCount: 2)
+        let paths = caveSystem.findingPaths(
+            from: "start",
+            to: "end",
+            smallCaveVisitCount: 2
+        )
         let uniquePaths = Set(paths)
         return "\(uniquePaths.count)"
     }
@@ -41,9 +47,12 @@ struct Day12: Day {
                 .joined(separator: "\n")
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             graph = AdjacencyList()
-            let edges = rawValue
+            let edges =
+                rawValue
                 .components(separatedBy: "\n")
                 .map {
                     $0.components(separatedBy: "-")
@@ -72,26 +81,28 @@ struct Day12: Day {
                 counts[cave] = .max
             }
 
-            if smallCaveVisitCount > 1 {
-                return caves
-                    .lazy
-                    .filter(isSmallCave)
-                    .flatMap { (cave: Cave) -> [Path] in
-                        // i love side effects
-                        counts[cave] = smallCaveVisitCount
-                        let p = countPaths(from: start,
-                                           to: end,
-                                           visitableCaves: counts)
-                        counts[cave] = 1
-                        return p
-                    }
-            } else {
+            guard smallCaveVisitCount > 1 else {
                 return countPaths(from: start, to: end, visitableCaves: counts)
             }
+            return caves
+                .lazy
+                .filter(isSmallCave)
+                .flatMap { (cave: Cave) -> [Path] in
+                    // i love side effects
+                    counts[cave] = smallCaveVisitCount
+                    let p = countPaths(
+                        from: start,
+                        to: end,
+                        visitableCaves: counts
+                    )
+                    counts[cave] = 1
+                    return p
+                }
         }
 
         private func countPaths(from start: Cave, to end: Cave, visitableCaves: CountedSet<Cave>) -> [Path] {
-            let edges = graph
+            let edges =
+                graph
                 .edges(from: start)
                 .lazy
                 .filter {
@@ -106,10 +117,12 @@ struct Day12: Day {
                     return [[start, end]]
                 }
 
-                return countPaths(from: edge.destination,
-                                  to: end,
-                                  visitableCaves: remainingVisitable)
-                    .map { [start] + $0 }
+                return countPaths(
+                    from: edge.destination,
+                    to: end,
+                    visitableCaves: remainingVisitable
+                )
+                .map { [start] + $0 }
             }
         }
     }

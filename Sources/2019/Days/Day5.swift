@@ -3,7 +3,9 @@ import Base
 struct Day5: Day {
     var rom: [Int]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         rom = input.decodeMany(separatedBy: ",")
     }
 
@@ -11,7 +13,7 @@ struct Day5: Day {
         var output: Int?
         var program = Intcode(program: rom)
 
-    loop: while true {
+        loop: while true {
             switch program.run() {
             case .waitingForInput:
                 program.set(input: 5)

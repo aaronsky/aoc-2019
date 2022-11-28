@@ -9,30 +9,30 @@ class Day14Tests: XCTestCase {
         let partOne = await day.partOne()
         XCTAssertEqual(Int(partOne), 3230)
         let partTwo = await day.partTwo()
-        XCTAssertEqual(Int(partTwo), 3542388214529)
+        XCTAssertEqual(Int(partTwo), 3_542_388_214_529)
     }
 
     func testSimpleProblem1() throws {
         let input = """
-        NNCB
+            NNCB
 
-        CH -> B
-        HH -> N
-        CB -> H
-        NH -> C
-        HB -> C
-        HC -> B
-        HN -> C
-        NN -> C
-        BH -> H
-        NC -> B
-        NB -> B
-        BN -> B
-        BB -> N
-        BC -> B
-        CC -> N
-        CN -> C
-        """
+            CH -> B
+            HH -> N
+            CB -> H
+            NH -> C
+            HB -> C
+            HC -> B
+            HN -> C
+            NN -> C
+            BH -> H
+            NC -> B
+            NB -> B
+            BN -> B
+            BB -> N
+            BC -> B
+            CC -> N
+            CN -> C
+            """
 
         let formula = try XCTUnwrap(Day14.PolymerFormula(rawValue: input))
         let difference = formula.polymerize(count: 10)

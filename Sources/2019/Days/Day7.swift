@@ -4,13 +4,16 @@ import Base
 struct Day7: Day {
     var rom: [Int]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         rom = input.decodeMany(separatedBy: ",")
     }
 
     func partOne() async -> String {
         let possibleNumbers: Set<Int> = [0, 1, 2, 3, 4]
-        let maxOutput = possibleNumbers
+        let maxOutput =
+            possibleNumbers
             .permutations()
             .map { Self.output(forAmplifierSequence: $0, rom: rom) }
             .max()
@@ -19,7 +22,8 @@ struct Day7: Day {
 
     func partTwo() async -> String {
         let possibleNumbers: Set<Int> = [5, 6, 7, 8, 9]
-        let maxOutput = possibleNumbers
+        let maxOutput =
+            possibleNumbers
             .permutations()
             .map { Self.output(forAmplifierSequence: $0, rom: rom) }
             .max()
@@ -27,8 +31,10 @@ struct Day7: Day {
     }
 
     static func output(forAmplifierSequence sequence: [Int], rom: [Int]) -> Int {
-        var programs: [Intcode] = Array(repeating: Intcode(program: rom),
-                                        count: sequence.count)
+        var programs: [Intcode] = Array(
+            repeating: Intcode(program: rom),
+            count: sequence.count
+        )
         for i in programs.indices {
             programs[i].run()
             programs[i].set(input: sequence[i])

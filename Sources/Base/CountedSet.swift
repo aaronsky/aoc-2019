@@ -5,7 +5,9 @@ public struct CountedSet<Element: Hashable>: Sequence, ExpressibleByArrayLiteral
 
     public init() {}
 
-    public init<S: Sequence>(_ sequence: S) where S.Element == Element {
+    public init<S: Sequence>(
+        _ sequence: S
+    ) where S.Element == Element {
         self.init()
 
         for element in sequence {
@@ -13,7 +15,9 @@ public struct CountedSet<Element: Hashable>: Sequence, ExpressibleByArrayLiteral
         }
     }
 
-    public init(arrayLiteral elements: Element...) {
+    public init(
+        arrayLiteral elements: Element...
+    ) {
         self.init(elements)
     }
 

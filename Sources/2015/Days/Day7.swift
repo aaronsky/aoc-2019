@@ -3,7 +3,9 @@ import Base
 struct Day7: Day {
     var instructions: [Instruction]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         instructions = input.decodeMany(separatedBy: "\n")
     }
 
@@ -16,9 +18,11 @@ struct Day7: Day {
 
     func partTwo() async -> String {
         var instructions = self.instructions
-        instructions[89] = Instruction(expression: "956",
-                                       output: "b",
-                                       executed: false)
+        instructions[89] = Instruction(
+            expression: "956",
+            output: "b",
+            executed: false
+        )
 
         var circuit = Circuit()
         circuit.evaluate(instructions)
@@ -35,13 +39,19 @@ struct Day7: Day {
             "\(expression) -> \(output)"
         }
 
-        init(expression: String, output: String, executed: Bool) {
+        init(
+            expression: String,
+            output: String,
+            executed: Bool
+        ) {
             self.expression = expression
             self.output = output
             self.executed = executed
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let components = rawValue.components(separatedBy: " -> ")
             let (expression, output) = (components[0], components[1])
             self.init(expression: expression, output: output, executed: false)
@@ -77,7 +87,8 @@ struct Day7: Day {
         }
 
         private func parseExpression(_ expression: String) -> Int? {
-            let input = expression
+            let input =
+                expression
                 .trimmingCharacters(in: .whitespaces)
                 .components(separatedBy: " ")
 
@@ -89,9 +100,10 @@ struct Day7: Day {
 
             let (lhs, op, rhs) = (input[0], input[1], input[2])
             guard let lhsValue = self[lhs],
-                  let rhsValue = self[rhs] else {
-                      return nil
-                  }
+                let rhsValue = self[rhs]
+            else {
+                return nil
+            }
 
             switch op {
             case "AND":

@@ -5,26 +5,28 @@ import Foundation
 struct Day24: Day {
     var answers: [Int: (Int, Int)] = [0: (0, 0)]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         func check(_ params: (Int, Int, Int), _ z: Int, _ w: Int) -> Int {
-            if (z % 26) + params.1 != w {
-                return z / params.0 * 26 + w + params.2
-            } else {
+            guard (z % 26) + params.1 != w else {
                 return z / params.0
             }
+            return z / params.0 * 26 + w + params.2
         }
 
         let instructions: [Instruction] = input.decodeMany(separatedBy: "\n")
         let params: [(Int, Int, Int)] = stride(from: 0, to: 18 * 14, by: 18)
             .map {
                 guard let oneString = instructions[$0 + 4].params.1,
-                      let one = Int(oneString),
-                      let twoString = instructions[$0 + 5].params.1,
-                      let two = Int(twoString),
-                      let threeString = instructions[$0 + 15].params.1,
-                      let three = Int(threeString) else {
-                          preconditionFailure()
-                      }
+                    let one = Int(oneString),
+                    let twoString = instructions[$0 + 5].params.1,
+                    let two = Int(twoString),
+                    let threeString = instructions[$0 + 15].params.1,
+                    let three = Int(threeString)
+                else {
+                    preconditionFailure()
+                }
 
                 return (one, two, three)
             }
@@ -96,7 +98,9 @@ struct Day24: Day {
             }
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             var components = rawValue.components(separatedBy: " ")[...]
 
             guard components.count > 1 else {
@@ -106,44 +110,50 @@ struct Day24: Day {
             switch components.popFirst() {
             case "inp":
                 guard let reg = components.popFirst(),
-                      components.isEmpty else {
-                          return nil
-                      }
+                    components.isEmpty
+                else {
+                    return nil
+                }
                 self = .input(reg)
             case "add":
                 guard let regA = components.popFirst(),
-                      let regB = components.popFirst(),
-                      components.isEmpty else {
-                          return nil
-                      }
+                    let regB = components.popFirst(),
+                    components.isEmpty
+                else {
+                    return nil
+                }
                 self = .add(regA, regB)
             case "mul":
                 guard let regA = components.popFirst(),
-                      let regB = components.popFirst(),
-                      components.isEmpty else {
-                          return nil
-                      }
+                    let regB = components.popFirst(),
+                    components.isEmpty
+                else {
+                    return nil
+                }
                 self = .multiply(regA, regB)
             case "div":
                 guard let regA = components.popFirst(),
-                      let regB = components.popFirst(),
-                      components.isEmpty else {
-                          return nil
-                      }
+                    let regB = components.popFirst(),
+                    components.isEmpty
+                else {
+                    return nil
+                }
                 self = .divide(regA, regB)
             case "mod":
                 guard let regA = components.popFirst(),
-                      let regB = components.popFirst(),
-                      components.isEmpty else {
-                          return nil
-                      }
+                    let regB = components.popFirst(),
+                    components.isEmpty
+                else {
+                    return nil
+                }
                 self = .modulo(regA, regB)
             case "eql":
                 guard let regA = components.popFirst(),
-                      let regB = components.popFirst(),
-                      components.isEmpty else {
-                          return nil
-                      }
+                    let regB = components.popFirst(),
+                    components.isEmpty
+                else {
+                    return nil
+                }
                 self = .equals(regA, regB)
             default:
                 return nil

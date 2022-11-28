@@ -4,20 +4,23 @@ import Base
 struct Day18: Day {
     var fish: [Snailfish]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         fish = input.decodeMany(separatedBy: "\n")
     }
-    
+
     func partOne() async -> String {
         guard let result = fish.reduce(+) else {
             return ""
         }
-        
+
         return "\(result.magnitude)"
     }
-    
+
     func partTwo() async -> String {
-        let result = fish
+        let result =
+            fish
             .permutations(ofCount: 2)
             .map {
                 ($0[0] + $0[1]).magnitude
@@ -41,7 +44,9 @@ struct Day18: Day {
                 return number
             }
 
-            init?(_ c: Character) {
+            init?(
+                _ c: Character
+            ) {
                 switch c {
                 case "[":
                     self = .open
@@ -60,16 +65,15 @@ struct Day18: Day {
 
         var magnitude: Int {
             func rec(_ index: inout Int) -> Int {
-                if let value = elements[index].value {
-                    index += 1
-                    return value
-                } else {
-                    index += 1 // .open
+                guard let value = elements[index].value else {
+                    index += 1  // .open
                     let left = rec(&index)
                     let right = rec(&index)
-                    index += 1 // .close
+                    index += 1  // .close
                     return 3 * left + 2 * right
                 }
+                index += 1
+                return value
             }
 
             var index = 0
@@ -80,11 +84,15 @@ struct Day18: Day {
             ""
         }
 
-        init(elements: [Element]) {
+        init(
+            elements: [Element]
+        ) {
             self.elements = elements
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             self.init(elements: rawValue.compactMap(Element.init))
         }
 
@@ -130,7 +138,8 @@ struct Day18: Day {
                 }
                 elements.replaceSubrange(
                     index..<(index + 1),
-                    with: [.open, .value(value / 2), .value((value + 1) / 2), .close])
+                    with: [.open, .value(value / 2), .value((value + 1) / 2), .close]
+                )
 
                 return true
             }

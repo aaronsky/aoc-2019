@@ -9,6 +9,6 @@ class Day1Tests: XCTestCase {
         let partOne = await day.partOne()
         XCTAssertEqual(Int(partOne), 32064)
         let partTwo = await day.partTwo()
-        XCTAssertEqual(Int(partTwo), 193598720)
+        XCTAssertEqual(Int(partTwo), 193_598_720)
     }
 }

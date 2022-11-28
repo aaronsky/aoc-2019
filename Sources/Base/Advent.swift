@@ -12,12 +12,12 @@ public protocol Day {
     func partTwo() async -> String
 }
 
-public extension Day {
-    func partOne() async -> String {
+extension Day {
+    public func partOne() async -> String {
         fatalError("unimplemented \(#function)")
     }
 
-    func partTwo() async -> String {
+    public func partTwo() async -> String {
         fatalError("unimplemented \(#function)")
     }
 }
@@ -26,7 +26,10 @@ public struct DayNotFoundError: Error {
     public var day: Int
     public var year: Int
 
-    public init(day: Int, year: Int) {
+    public init(
+        day: Int,
+        year: Int
+    ) {
         self.day = day
         self.year = year
     }

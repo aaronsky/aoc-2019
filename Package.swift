@@ -30,13 +30,15 @@ func adventTarget(year: Int) -> [Target] {
             path: "Sources/\(year)",
             resources: [
                 .copy("Inputs")
-            ]),
+            ]
+        ),
         .testTarget(
             name: "\(adventTargetName(year))Tests",
             dependencies: [
                 .target(name: adventTargetName(year))
             ],
-            path: "Tests/\(year)Tests"),
+            path: "Tests/\(year)Tests"
+        ),
     ]
 }
 
@@ -48,7 +50,8 @@ let package = Package(
     products: [
         .executable(
             name: "aoc",
-            targets: ["aoc"]),
+            targets: ["aoc"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "1.0.0")),
@@ -62,9 +65,10 @@ let package = Package(
             dependencies: [
                 "Base",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-            ] + allYears.map {
-                .target(name: adventTargetName($0))
-            }
+            ]
+                + allYears.map {
+                    .target(name: adventTargetName($0))
+                }
         ),
         .target(
             name: "Base",

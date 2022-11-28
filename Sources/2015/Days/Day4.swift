@@ -2,7 +2,9 @@ import Base
 import CryptoKit
 
 struct Day4: Day {
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
     }
 
     func partOne() async -> String {

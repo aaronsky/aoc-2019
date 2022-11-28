@@ -3,7 +3,9 @@ import Base
 struct Day6: Day {
     var map: OrbitMap
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         map = input.decode()!
     }
 
@@ -31,20 +33,25 @@ struct Day6: Day {
                 var current = object
                 while let next = reverseLookup[current] {
                     current = next
-                    pathMap.addDirectedEdge(from: object,
-                                            to: current,
-                                            weight: nil)
+                    pathMap.addDirectedEdge(
+                        from: object,
+                        to: current,
+                        weight: nil
+                    )
                 }
             }
 
             return pathMap
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             var allObjects: Set<OrbitalObject> = []
             var reverseLookup: [OrbitalObject: OrbitalObject] = [:]
             for line in rawValue.components(separatedBy: "\n") {
-                let adjacency = line
+                let adjacency =
+                    line
                     .components(separatedBy: ")")
                     .prefix(2)
                     .map { $0.trimmingCharacters(in: .whitespaces) }
@@ -69,10 +76,12 @@ struct Day6: Day {
             let map = self.map
             precondition(map.contains(source))
             precondition(map.contains(destination))
-            let sourceOrbits = map
+            let sourceOrbits =
+                map
                 .edges(from: source)
                 .map { $0.destination }
-            let destinationOrbits = map
+            let destinationOrbits =
+                map
                 .edges(from: destination)
                 .map { $0.destination }
             var lastMatchingSourceIndex = sourceOrbits.index(before: sourceOrbits.endIndex)
@@ -82,10 +91,14 @@ struct Day6: Day {
                     break
                 }
                 lastMatchingSourceIndex = sourceOrbits.index(sourceOrbits.endIndex, offsetBy: -1 - reverseIndex)
-                lastMatchingDestinationIndex = destinationOrbits.index(destinationOrbits.endIndex, offsetBy: -1 - reverseIndex)
+                lastMatchingDestinationIndex = destinationOrbits.index(
+                    destinationOrbits.endIndex,
+                    offsetBy: -1 - reverseIndex
+                )
             }
 
-            let path = sourceOrbits[..<lastMatchingSourceIndex] + destinationOrbits[...lastMatchingDestinationIndex].reversed()
+            let path =
+                sourceOrbits[..<lastMatchingSourceIndex] + destinationOrbits[...lastMatchingDestinationIndex].reversed()
 
             return path.index(before: path.endIndex)
         }
@@ -107,7 +120,9 @@ struct Day6: Day {
             }
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             switch rawValue {
             case "YOU":
                 self = .you

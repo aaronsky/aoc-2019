@@ -9,9 +9,9 @@ class Day22Tests: XCTestCase {
         let partOne = await day.partOne()
         XCTAssertEqual(Int(partOne), 648023)
         let partTwo = await day.partTwo()
-        XCTAssertEqual(Int(partTwo), 1285677377848549)
+        XCTAssertEqual(Int(partTwo), 1_285_677_377_848_549)
     }
-    
+
     func testSimpleProblem1() throws {
         let reactor = Day22.Reactor(steps: [
             .init(state: .on, x: 10...12, y: 10...12, z: 10...12),
@@ -22,13 +22,13 @@ class Day22Tests: XCTestCase {
         let onCubes = reactor.reboot(initializationAreaOnly: true)
         XCTAssertEqual(onCubes, 39)
     }
-    
+
     func testSimpleProblem2() throws {
         let reactor = Day22.Reactor(steps: [
             .init(state: .on, x: -20...26, y: -36...17, z: -47...7),
             .init(state: .on, x: -20...33, y: -21...23, z: -26...28),
             .init(state: .on, x: -22...28, y: -29...23, z: -38...16),
-            .init(state: .on, x: -46...7, y: -6...46, z: -50 ...  -1),
+            .init(state: .on, x: -46...7, y: -6...46, z: -50 ... -1),
             .init(state: .on, x: -49...1, y: -3...46, z: -24...28),
             .init(state: .on, x: 2...47, y: -22...22, z: -23...27),
             .init(state: .on, x: -27...23, y: -28...26, z: -21...29),

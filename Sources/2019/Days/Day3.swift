@@ -5,8 +5,11 @@ struct Day3: Day {
     var wireOne: Wire
     var wireTwo: Wire
 
-    init(_ input: Input) throws {
-        let wires = input
+    init(
+        _ input: Input
+    ) throws {
+        let wires =
+            input
             .components(separatedBy: "\n")
             .prefix(2)
             .compactMap(Wire.init)
@@ -15,9 +18,12 @@ struct Day3: Day {
     }
 
     func partOne() async -> String {
-        let wireOnePath = Dictionary(wireOne.zip(1...),
-                                     uniquingKeysWith: { (_, last) in last })
-        let distance = wireTwo
+        let wireOnePath = Dictionary(
+            wireOne.zip(1...),
+            uniquingKeysWith: { (_, last) in last }
+        )
+        let distance =
+            wireTwo
             .zip(1...)
             .compactMap { (cursor, idx) in
                 wireOnePath[cursor].map { idx + $0 }
@@ -44,8 +50,11 @@ struct Day3: Day {
                 .joined(separator: ",")
         }
 
-        init?(rawValue: String) {
-            nodes = rawValue
+        init?(
+            rawValue: String
+        ) {
+            nodes =
+                rawValue
                 .components(separatedBy: ",")
                 .compactMap(Node.init)
         }
@@ -55,7 +64,8 @@ struct Day3: Day {
                 .flatMap { repeatElement($0.direction, count: $0.length) }
                 .reductions(into: Point2.zero) { cursor, direction in
                     cursor.move(direction: direction)
-                }.makeIterator()
+                }
+                .makeIterator()
         }
 
         struct Node: RawRepresentable {
@@ -66,7 +76,9 @@ struct Day3: Day {
                 "\(direction.rawValue)\(length)"
             }
 
-            init?(rawValue: String) {
+            init?(
+                rawValue: String
+            ) {
                 let (dirID, len) = (rawValue.prefix(1), rawValue.dropFirst())
 
                 guard let direction = Direction(rawValue: String(dirID)) else {
@@ -97,7 +109,9 @@ extension Direction: RawRepresentable {
         }
     }
 
-    init?(rawValue: String) {
+    init?(
+        rawValue: String
+    ) {
         switch rawValue {
         case "U":
             self = .up

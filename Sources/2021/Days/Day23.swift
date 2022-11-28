@@ -5,7 +5,9 @@ import GameplayKit
 struct Day23: Day {
     var burrow: [Burrow]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         burrow = input.decodeMany(separatedBy: "\n\n")
     }
 
@@ -45,17 +47,24 @@ struct Day23: Day {
                 }
             }
 
-            convenience init(gridPosition: vector_int2, kind: Kind? = nil) {
+            convenience init(
+                gridPosition: vector_int2,
+                kind: Kind? = nil
+            ) {
                 self.init(gridPosition: gridPosition)
                 self.kind = kind
             }
 
-            override init(gridPosition: vector_int2) {
+            override init(
+                gridPosition: vector_int2
+            ) {
                 kind = nil
                 super.init(gridPosition: gridPosition)
             }
 
-            required init?(coder: NSCoder) {
+            required init?(
+                coder: NSCoder
+            ) {
                 fatalError("init(coder:) has not been implemented")
             }
 
@@ -71,7 +80,9 @@ struct Day23: Day {
             graph.description
         }
 
-        required init?(rawValue: String) {
+        required init?(
+            rawValue: String
+        ) {
             enum Token: Character {
                 case wall = "#"
                 case outside = " "
@@ -86,21 +97,26 @@ struct Day23: Day {
             let width = lines.first!.count
             let height = lines.count
 
-            self.graph = GKGridGraph(fromGridStartingAt: .zero,
-                                     width: Int32(width),
-                                     height: Int32(height),
-                                     diagonalsAllowed: false,
-                                     nodeClass: Amphipod.self)
+            self.graph = GKGridGraph(
+                fromGridStartingAt: .zero,
+                width: Int32(width),
+                height: Int32(height),
+                diagonalsAllowed: false,
+                nodeClass: Amphipod.self
+            )
 
             var nodesToRemove: [GKGridGraphNode] = []
             var amphipods: [Amphipod] = []
 
             for (y, line) in lines.enumerated() {
-                for (x, token) in line
-                        .padding(toLength: width, withPad: " ", startingAt: 0)
-                        .enumerated() {
+                for (x, token)
+                    in line
+                    .padding(toLength: width, withPad: " ", startingAt: 0)
+                    .enumerated()
+                {
                     guard let token = Token(rawValue: token),
-                        let node = graph.node(atGridPosition: vector_int2(x: x, y: y)) else {
+                        let node = graph.node(atGridPosition: vector_int2(x: x, y: y))
+                    else {
                         preconditionFailure()
                     }
 

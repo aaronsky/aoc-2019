@@ -1,6 +1,3 @@
-import ArgumentParser
-import Base
-import Foundation
 import Advent2015
 import Advent2016
 import Advent2017
@@ -9,6 +6,9 @@ import Advent2019
 import Advent2020
 import Advent2021
 import Advent2022
+import ArgumentParser
+import Base
+import Foundation
 
 @main
 struct AOC: AsyncParsableCommand {
@@ -84,11 +84,13 @@ struct AOC: AsyncParsableCommand {
             return
         }
 
-        printProblemOutput(year: self.year,
-                           day: dayNumber,
-                           problemNumber: problemNumber,
-                           answer: answer,
-                           elapsedTime: CFAbsoluteTimeGetCurrent() - start)
+        printProblemOutput(
+            year: self.year,
+            day: dayNumber,
+            problemNumber: problemNumber,
+            answer: answer,
+            elapsedTime: CFAbsoluteTimeGetCurrent() - start
+        )
     }
 
     func printProblemOutput(year: Int, day: Int, problemNumber: Int, answer: String, elapsedTime: TimeInterval) {

@@ -4,17 +4,19 @@ import Base
 struct Day8: Day {
     var entries: [Entry]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         entries = input.decodeMany(separatedBy: "\n")
     }
 
     func partOne() async -> String {
         let totalUniqueNumbers = entries.sum { entry in
             entry.output.count(where: {
-                $0.count == 2 || // 1
-                $0.count == 4 || // 4
-                $0.count == 3 || // 7
-                $0.count == 7    // 8
+                $0.count == 2  // 1
+                    || $0.count == 4  // 4
+                    || $0.count == 3  // 7
+                    || $0.count == 7  // 8
             })
         }
 
@@ -31,16 +33,16 @@ struct Day8: Day {
 
     struct Entry: RawRepresentable {
         static let patterns = [
-            0b1110111, // 0 -> abcefg
-            0b0100100, // 1 -> cf
-            0b1011101, // 2 -> acdeg
-            0b1101101, // 3 -> acdfg
-            0b0101110, // 4 -> bcdf
-            0b1101011, // 5 -> abdfg
-            0b1111011, // 6 -> abdefg
-            0b0100101, // 7 -> acf
-            0b1111111, // 8 -> abcdefg
-            0b1101111, // 9 -> abcdfg
+            0b1110111,  // 0 -> abcefg
+            0b0100100,  // 1 -> cf
+            0b1011101,  // 2 -> acdeg
+            0b1101101,  // 3 -> acdfg
+            0b0101110,  // 4 -> bcdf
+            0b1101011,  // 5 -> abdfg
+            0b1111011,  // 6 -> abdefg
+            0b0100101,  // 7 -> acf
+            0b1111111,  // 8 -> abcdefg
+            0b1101111,  // 9 -> abcdfg
         ]
 
         var digits: [[Int]]
@@ -52,7 +54,9 @@ struct Day8: Day {
             """
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             func characterToNumber(c: Character) -> Int {
                 switch c {
                 case "a":
@@ -94,22 +98,25 @@ struct Day8: Day {
             let permutations = Array((0..<7).permutations())
             let permutation = self.permutation(for: digits, permutations: permutations)
 
-            return Int(digits: output.map {
-                let bitPattern = $0
-                    .map { permutation[$0] }
-                    .reduce(0) { $0 | (1 << $1) }
-                let digit = Self.patterns.firstIndex(of: bitPattern)!
+            return Int(
+                digits: output.map {
+                    let bitPattern =
+                        $0
+                        .map { permutation[$0] }
+                        .reduce(0) { $0 | (1 << $1) }
+                    let digit = Self.patterns.firstIndex(of: bitPattern)!
 
-                return digit
-            })
+                    return digit
+                }
+            )
         }
 
         private func digitMatchesPermutation(_ pattern: [Int], _ permutation: [Int]) -> Bool {
             Self.patterns.contains(where: { candidate in
-                candidate.nonzeroBitCount == pattern.count &&
-                pattern.allSatisfy {
-                    (candidate >> permutation[$0]) & 1 == 1
-                }
+                candidate.nonzeroBitCount == pattern.count
+                    && pattern.allSatisfy {
+                        (candidate >> permutation[$0]) & 1 == 1
+                    }
             })
         }
 

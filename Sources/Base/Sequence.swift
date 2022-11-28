@@ -55,10 +55,8 @@ extension Sequence {
     @inlinable
     public func count(where predicate: (Element) throws -> Bool) rethrows -> Int {
         var count = 0
-        for e in self {
-            if try predicate(e) {
-                count += 1
-            }
+        for e in self where try predicate(e) {
+            count += 1
         }
         return count
     }
@@ -142,7 +140,9 @@ extension ArraySlice {
 
 extension SetAlgebra {
     @discardableResult
-    public mutating func insert<S: Sequence>(contentsOf newElements: S) -> [(inserted: Bool, memberAfterInsert: Self.Element)] where S.Element == Element {
+    public mutating func insert<S: Sequence>(
+        contentsOf newElements: S
+    ) -> [(inserted: Bool, memberAfterInsert: Self.Element)] where S.Element == Element {
         newElements.map {
             insert($0)
         }

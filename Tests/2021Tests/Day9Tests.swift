@@ -9,17 +9,17 @@ class Day9Tests: XCTestCase {
         let partOne = await day.partOne()
         XCTAssertEqual(Int(partOne), 577)
         let partTwo = await day.partTwo()
-        XCTAssertEqual(Int(partTwo), 1069200)
+        XCTAssertEqual(Int(partTwo), 1_069_200)
     }
 
     func testSimpleProblem1() throws {
         let example = """
-        2199943210
-        3987894921
-        9856789892
-        8767896789
-        9899965678
-        """
+            2199943210
+            3987894921
+            9856789892
+            8767896789
+            9899965678
+            """
         let heightMap = try XCTUnwrap(Day9.HeightMap(rawValue: example))
         let lowPoints = heightMap.findLowPoints()
         XCTAssertEqual(lowPoints.count, 4)

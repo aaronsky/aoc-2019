@@ -4,7 +4,9 @@ import Base
 struct Day25: Day {
     var floor: Seafloor
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         floor = input.decode()!
     }
 
@@ -29,7 +31,9 @@ struct Day25: Day {
             ""
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let lines = rawValue.components(separatedBy: "\n")
 
             guard let width = lines.first?.count else {
@@ -69,8 +73,7 @@ struct Day25: Day {
 
             for cuke in eastCukes {
                 let newPosition = Point2(x: (cuke.x + 1) % width, y: cuke.y)
-                if !eastCukes.contains(newPosition) &&
-                    !southCukes.contains(newPosition) {
+                if !eastCukes.contains(newPosition) && !southCukes.contains(newPosition) {
                     newEast.insert(newPosition)
                 } else {
                     newEast.insert(cuke)
@@ -79,8 +82,7 @@ struct Day25: Day {
 
             for cuke in southCukes {
                 let newPosition = Point2(x: cuke.x, y: (cuke.y + 1) % height)
-                if !southCukes.contains(newPosition) &&
-                    !newEast.contains(newPosition) {
+                if !southCukes.contains(newPosition) && !newEast.contains(newPosition) {
                     newSouth.insert(newPosition)
                 } else {
                     newSouth.insert(cuke)

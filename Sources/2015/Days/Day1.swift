@@ -4,7 +4,9 @@ import Base
 struct Day1: Day {
     let pattern: String
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         pattern = input.raw
     }
 

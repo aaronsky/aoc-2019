@@ -67,7 +67,9 @@ extension SignedInteger where Self: FixedWidthInteger {
 public struct Digits<I: BinaryInteger>: Sequence {
     var value: I
 
-    init(_ value: I) {
+    init(
+        _ value: I
+    ) {
         self.value = value
     }
 
@@ -86,11 +88,15 @@ public struct Digits<I: BinaryInteger>: Sequence {
 }
 
 extension Int {
-    public init<S: Sequence>(bits: S) where S.Element == Bool {
+    public init<S: Sequence>(
+        bits: S
+    ) where S.Element == Bool {
         self = bits.reduce(0, { $0 * 2 + ($1 ? 1 : 0) })
     }
 
-    public init<S: Sequence>(digits: S) where S.Element == Self {
+    public init<S: Sequence>(
+        digits: S
+    ) where S.Element == Self {
         self = digits.reduce(0, { $0 * 10 + $1 })
     }
 }

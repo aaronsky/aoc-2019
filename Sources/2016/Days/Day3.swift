@@ -3,19 +3,23 @@ import Base
 struct Day3: Day {
     var input: Input
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         self.input = input
     }
 
     func partOne() async -> String {
-        let triangles: [Triangle] = input
+        let triangles: [Triangle] =
+            input
             .decodeMany(separatedBy: "\n")
             .filter { $0.isValid }
         return "\(triangles.count)"
     }
 
     func partTwo() async -> String {
-        let triangles: [Triangle] = input
+        let triangles: [Triangle] =
+            input
             .decodeMany(separatedBy: "\n")
             .chunks(ofCount: 3)
             .flatMap { (rows: ArraySlice<Triangle>) -> [Triangle] in
@@ -40,23 +44,28 @@ struct Day3: Day {
         var c: Int
 
         var isValid: Bool {
-            a + b > c &&
-            a + c > b &&
-            b + c > a
+            a + b > c && a + c > b && b + c > a
         }
 
         var rawValue: String {
             "\(a) \(b) \(c)"
         }
 
-        init(a: Int, b: Int, c: Int) {
+        init(
+            a: Int,
+            b: Int,
+            c: Int
+        ) {
             self.a = a
             self.b = b
             self.c = c
         }
 
-        init?(rawValue: String) {
-            let components = rawValue
+        init?(
+            rawValue: String
+        ) {
+            let components =
+                rawValue
                 .trimmingCharacters(in: .whitespacesAndNewlines)
                 .components(separatedBy: " ")
                 .filter { !$0.isEmpty }
@@ -67,10 +76,11 @@ struct Day3: Day {
             }
 
             guard let a = Int(components[0]),
-                  let b = Int(components[1]),
-                  let c = Int(components[2]) else {
-                      return nil
-                  }
+                let b = Int(components[1]),
+                let c = Int(components[2])
+            else {
+                return nil
+            }
 
             self.init(a: a, b: b, c: c)
         }

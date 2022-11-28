@@ -4,7 +4,9 @@ import OrderedCollections
 struct Day4: Day {
     var game: Game
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         game = input.decode()!
         precondition(game.boards.count == 100)
     }
@@ -29,7 +31,9 @@ struct Day4: Day {
             ""
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let components = rawValue.components(separatedBy: "\n\n")
             draws = components.first?.components(separatedBy: ",").compactMap(Int.init) ?? []
             boards = components.dropFirst().compactMap(Board.init)
@@ -56,7 +60,8 @@ struct Day4: Day {
 
                 for i in boardsToCheck {
                     guard !winners.contains(i),
-                          boards[i].markIfNeeded(draw) else {
+                        boards[i].markIfNeeded(draw)
+                    else {
                         continue
                     }
 
@@ -81,7 +86,9 @@ struct Day4: Day {
                 ""
             }
 
-            init?(rawValue: String) {
+            init?(
+                rawValue: String
+            ) {
                 var numbers: OrderedSet<Int> = []
 
                 let rows = rawValue.components(separatedBy: "\n")
@@ -110,9 +117,10 @@ struct Day4: Day {
             /// - Returns:true if the change causes a bingo
             mutating func markIfNeeded(_ number: Int) -> Bool {
                 guard let index = numbers.firstIndex(of: number),
-                      !hits.contains(index) else {
-                          return false
-                      }
+                    !hits.contains(index)
+                else {
+                    return false
+                }
 
                 hits.insert(index)
 
@@ -125,8 +133,7 @@ struct Day4: Day {
                 for point in hits.map(position) {
                     rowHits[point.x, default: 0] += 1
                     colHits[point.y, default: 0] += 1
-                    if rowHits[point.x] == width ||
-                        colHits[point.y] == width {
+                    if rowHits[point.x] == width || colHits[point.y] == width {
                         return true
                     }
                 }
@@ -139,7 +146,8 @@ struct Day4: Day {
             }
 
             func score(for hit: Int) -> Int {
-                hit * numbers
+                hit
+                    * numbers
                     .indices
                     .lazy
                     .filter { !hits.contains($0) }

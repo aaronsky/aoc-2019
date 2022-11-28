@@ -3,7 +3,9 @@ import Base
 struct Day5: Day {
     var strings: [String]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         strings = input.components(separatedBy: "\n")
     }
 
@@ -38,7 +40,8 @@ struct Day5: Day {
                 || ch == "e"
                 || ch == "i"
                 || ch == "o"
-                || ch == "u" {
+                || ch == "u"
+            {
                 countVowels += 1
 
                 if countVowels >= 3 {
@@ -56,7 +59,8 @@ struct Day5: Day {
                 if previousChar == "a" && ch == "b"
                     || previousChar == "c" && ch == "d"
                     || previousChar == "p" && ch == "q"
-                    || previousChar == "x" && ch == "y" {
+                    || previousChar == "x" && ch == "y"
+                {
                     satisfiesRuleThree = false
                 }
             }

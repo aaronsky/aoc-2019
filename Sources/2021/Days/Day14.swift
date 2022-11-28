@@ -4,7 +4,9 @@ import Base
 struct Day14: Day {
     var formula: PolymerFormula
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         formula = input.decode()!
     }
 
@@ -30,7 +32,9 @@ struct Day14: Day {
             """
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let components = rawValue.components(separatedBy: "\n\n").prefix(2)
             guard components.count == 2 else {
                 return nil
@@ -45,7 +49,7 @@ struct Day14: Day {
                         return nil
                     }
                     return (pair[0], Character(pair[1]))
-            }
+                }
             formulae = Dictionary(uniqueKeysWithValues: formulaPairs)
         }
 

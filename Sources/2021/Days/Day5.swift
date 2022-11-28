@@ -4,11 +4,15 @@ import RegexBuilder
 struct Day5: Day {
     var vents: [Vent]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         self.init(vents: input.decodeMany(separatedBy: "\n"))
     }
 
-    init(vents: [Vent]) {
+    init(
+        vents: [Vent]
+    ) {
         self.vents = vents
     }
 
@@ -70,12 +74,19 @@ struct Day5: Day {
             "\(start.x),\(start.y) -> \(end.x),\(end.y)"
         }
 
-        init(startX: Int, startY: Int, endX: Int, endY: Int) {
+        init(
+            startX: Int,
+            startY: Int,
+            endX: Int,
+            endY: Int
+        ) {
             self.start = Point2(x: startX, y: startY)
             self.end = Point2(x: endX, y: endY)
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let pattern = Regex {
                 TryCapture {
                     OneOrMore(.digit)

@@ -3,8 +3,11 @@ import Base
 struct Day8: Day {
     var strings: [String]
 
-    init(_ input: Input) throws {
-        strings = input
+    init(
+        _ input: Input
+    ) throws {
+        strings =
+            input
             .components(separatedBy: "\n")
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
     }

@@ -4,7 +4,9 @@ import Base
 struct Day11: Day {
     var octopuses: Octopuses
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         octopuses = input.decode()!
     }
 
@@ -40,12 +42,16 @@ struct Day11: Day {
             octopuses.description
         }
 
-        init?(rawValue: String) {
-            octopuses = Matrix(rawValue
-                                .components(separatedBy: "\n")
-                                .flatMap { $0.map { Int(String($0))! } },
-                               rowWidth: 10,
-                               rows: 10)
+        init?(
+            rawValue: String
+        ) {
+            octopuses = Matrix(
+                rawValue
+                    .components(separatedBy: "\n")
+                    .flatMap { $0.map { Int(String($0))! } },
+                rowWidth: 10,
+                rows: 10
+            )
         }
 
         /// - Returns: number of flashes in step

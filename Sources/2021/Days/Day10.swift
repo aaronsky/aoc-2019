@@ -4,7 +4,9 @@ import Base
 struct Day10: Day {
     var lines: [String]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         lines = input.components(separatedBy: "\n")
     }
 
@@ -30,7 +32,8 @@ struct Day10: Day {
 
     func partTwo() async -> String {
         let (incompletions, _) = findBadLines()
-        let score = incompletions
+        let score =
+            incompletions
             .map { comp in
                 comp.reduce(into: 0) { acc, c in
                     acc *= 5
@@ -76,7 +79,9 @@ struct Day10: Day {
 
         var line: [Character]
 
-        init(_ line: String) {
+        init(
+            _ line: String
+        ) {
             self.line = Array(line)
         }
 

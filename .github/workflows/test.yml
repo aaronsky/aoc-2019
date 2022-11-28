@@ -19,12 +19,4 @@ jobs:
       - name: Build
         run: swift build
       - name: Run tests
-        run: |- 
-          swift test \
-            --skip "Advent2015Tests" \
-            --skip "Advent2016Tests" \
-            --skip "Advent2017Tests" \
-            --skip "Advent2018Tests" \
-            --skip "Advent2019Tests" \
-            --skip "Advent2020Tests" \
-            --skip "Advent2021Tests"
+        run: make test

@@ -3,7 +3,9 @@ import Base
 struct Day2: Day {
     var rom: [Int]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         rom = input.decodeMany(separatedBy: ",")
     }
 

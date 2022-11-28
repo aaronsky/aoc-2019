@@ -3,7 +3,9 @@ import Base
 struct Day4: Day {
     var range: PasswordRange
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         range = input.decode()!
     }
 
@@ -29,8 +31,11 @@ struct Day4: Day {
                 .filter(self.isValid)
         }
 
-        init?(rawValue: String) {
-            let components = rawValue
+        init?(
+            rawValue: String
+        ) {
+            let components =
+                rawValue
                 .components(separatedBy: "-")
                 .prefix(2)
                 .compactMap(Int.init)
@@ -38,7 +43,10 @@ struct Day4: Day {
             self.init(start: components[0], end: components[1])
         }
 
-        init(start: Int, end: Int) {
+        init(
+            start: Int,
+            end: Int
+        ) {
             self.start = start
             self.end = end
         }

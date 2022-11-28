@@ -62,22 +62,26 @@ extension AdjacencyList: Graph {
     public mutating func addDirectedEdge(from source: T, to destination: T, weight: Double?) {
         insert(source)
 
-        let edge = Edge(source: source,
-                        destination: destination,
-                        weight: weight)
+        let edge = Edge(
+            source: source,
+            destination: destination,
+            weight: weight
+        )
 
         inner[source]!.append(edge)
     }
 }
 
 extension AdjacencyList: Sequence {
-    public func makeIterator() -> Dictionary<T, Array<Edge<T>>>.Keys.Iterator {
+    public func makeIterator() -> Dictionary<T, [Edge<T>]>.Keys.Iterator {
         inner.keys.makeIterator()
     }
 }
 
 extension AdjacencyList: ExpressibleByArrayLiteral {
-    public init(arrayLiteral elements: (T, [Edge<T>])...) {
+    public init(
+        arrayLiteral elements: (T, [Edge<T>])...
+    ) {
         self.init()
         for element in elements {
             insert(element.0, edges: element.1)

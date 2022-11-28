@@ -9,7 +9,7 @@ class Day21Tests: XCTestCase {
         let partOne = await day.partOne()
         XCTAssertEqual(Int(partOne), 571032)
         let partTwo = await day.partTwo()
-        XCTAssertEqual(Int(partTwo), 49975322685009)
+        XCTAssertEqual(Int(partTwo), 49_975_322_685_009)
     }
 
     func testSimpleProblem1() {
@@ -21,6 +21,6 @@ class Day21Tests: XCTestCase {
     func testSimpleProblem2() {
         let game = Day21.DiceGame(startPlayerOneAt: 4, startPlayerTwoAt: 8)
         let universes = game.playNonDeterministically()
-        XCTAssertEqual(universes, 444356092776315)
+        XCTAssertEqual(universes, 444_356_092_776_315)
     }
 }

@@ -4,7 +4,9 @@ struct Day3: Day {
     var numbers: [[Bool]]
     var numberLength: Int
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         numbers = input.components(separatedBy: "\n").map { $0.map { $0 == "1" ? true : false } }
         numberLength = numbers.first!.count
     }
@@ -49,9 +51,10 @@ struct Day3: Day {
         }
 
         guard let o2Rating = o2Remaining.first,
-              let co2Rating = co2Remaining.first else {
-                  preconditionFailure("Missing ratings in data sets.")
-              }
+            let co2Rating = co2Remaining.first
+        else {
+            preconditionFailure("Missing ratings in data sets.")
+        }
 
         let o2 = Int(bits: o2Rating)
         let co2 = Int(bits: co2Rating)

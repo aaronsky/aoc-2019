@@ -4,7 +4,9 @@ import Base
 struct Day19: Day {
     var scanners: [Scanner]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         scanners = input.decodeMany(separatedBy: "\n\n")
     }
 
@@ -43,11 +45,13 @@ struct Day19: Day {
                     continue
                 }
 
-                let new = Scanner(beacons: unknown
-                                    .beacons
-                                    .map {
-                    rotation * $0 + offset
-                })
+                let new = Scanner(
+                    beacons: unknown
+                        .beacons
+                        .map {
+                            rotation * $0 + offset
+                        }
+                )
 
                 visited.append(new)
                 allBeacons.insert(contentsOf: new.beacons)
@@ -63,32 +67,40 @@ struct Day19: Day {
         var beacons: [Point3]
 
         var rawValue: String {
-            "--- scanner 0 ---\n" + beacons
+            "--- scanner 0 ---\n"
+                + beacons
                 .map {
                     "\($0.x),\($0.y),\($0.z)"
                 }
                 .joined(separator: "\n")
         }
 
-        init(beacons: [Point3]) {
+        init(
+            beacons: [Point3]
+        ) {
             self.beacons = beacons
         }
 
-        init?(rawValue: String) {
-            beacons = rawValue
+        init?(
+            rawValue: String
+        ) {
+            beacons =
+                rawValue
                 .split(separator: "\n")
                 .dropFirst()
                 .compactMap {
-                    let xyz = $0
+                    let xyz =
+                        $0
                         .split(separator: ",")
                         .prefix(3)
 
                     guard xyz.count == 3,
-                          let x = Int(xyz[0]),
-                          let y = Int(xyz[1]),
-                          let z = Int(xyz[2]) else {
-                              return nil
-                          }
+                        let x = Int(xyz[0]),
+                        let y = Int(xyz[1]),
+                        let z = Int(xyz[2])
+                    else {
+                        return nil
+                    }
 
                     return Point3(x: x, y: y, z: z)
                 }
@@ -115,38 +127,39 @@ struct Day19: Day {
     }
 
     struct RotationMatrix {
-        let matrix: (
-            x: (x: Int, y: Int, z: Int),
-            y: (x: Int, y: Int, z: Int),
-            z: (x: Int, y: Int, z: Int)
-        )
+        let matrix:
+            (
+                x: (x: Int, y: Int, z: Int),
+                y: (x: Int, y: Int, z: Int),
+                z: (x: Int, y: Int, z: Int)
+            )
 
         static var all: [Self] {
             [
-                Self(matrix: (( 1,  0,  0), ( 0,  1,  0), ( 0,  0,  1))),
-                Self(matrix: (( 1,  0,  0), ( 0, -1,  0), ( 0,  0, -1))),
-                Self(matrix: (( 1,  0,  0), ( 0,  0,  1), ( 0, -1,  0))),
-                Self(matrix: (( 1,  0,  0), ( 0,  0, -1), ( 0,  1,  0))),
-                Self(matrix: ((-1,  0,  0), ( 0,  1,  0), ( 0,  0, -1))),
-                Self(matrix: ((-1,  0,  0), ( 0, -1,  0), ( 0,  0,  1))),
-                Self(matrix: ((-1,  0,  0), ( 0,  0,  1), ( 0,  1,  0))),
-                Self(matrix: ((-1,  0,  0), ( 0,  0, -1), ( 0, -1,  0))),
-                Self(matrix: (( 0,  1,  0), ( 1,  0,  0), ( 0,  0, -1))),
-                Self(matrix: (( 0,  1,  0), (-1,  0,  0), ( 0,  0,  1))),
-                Self(matrix: (( 0,  1,  0), ( 0,  0,  1), ( 1,  0,  0))),
-                Self(matrix: (( 0,  1,  0), ( 0,  0, -1), (-1,  0,  0))),
-                Self(matrix: (( 0, -1,  0), ( 1,  0,  0), ( 0,  0,  1))),
-                Self(matrix: (( 0, -1,  0), (-1,  0,  0), ( 0,  0, -1))),
-                Self(matrix: (( 0, -1,  0), ( 0,  0,  1), (-1,  0,  0))),
-                Self(matrix: (( 0, -1,  0), ( 0,  0, -1), ( 1,  0,  0))),
-                Self(matrix: (( 0,  0,  1), ( 1,  0,  0), ( 0,  1,  0))),
-                Self(matrix: (( 0,  0,  1), (-1,  0,  0), ( 0, -1,  0))),
-                Self(matrix: (( 0,  0,  1), ( 0,  1,  0), (-1,  0,  0))),
-                Self(matrix: (( 0,  0,  1), ( 0, -1,  0), ( 1,  0,  0))),
-                Self(matrix: (( 0,  0, -1), ( 1,  0,  0), ( 0, -1,  0))),
-                Self(matrix: (( 0,  0, -1), (-1,  0,  0), ( 0,  1,  0))),
-                Self(matrix: (( 0,  0, -1), ( 0,  1,  0), ( 1,  0,  0))),
-                Self(matrix: (( 0,  0, -1), ( 0, -1,  0), (-1,  0,  0))),
+                Self(matrix: ((1, 0, 0), (0, 1, 0), (0, 0, 1))),
+                Self(matrix: ((1, 0, 0), (0, -1, 0), (0, 0, -1))),
+                Self(matrix: ((1, 0, 0), (0, 0, 1), (0, -1, 0))),
+                Self(matrix: ((1, 0, 0), (0, 0, -1), (0, 1, 0))),
+                Self(matrix: ((-1, 0, 0), (0, 1, 0), (0, 0, -1))),
+                Self(matrix: ((-1, 0, 0), (0, -1, 0), (0, 0, 1))),
+                Self(matrix: ((-1, 0, 0), (0, 0, 1), (0, 1, 0))),
+                Self(matrix: ((-1, 0, 0), (0, 0, -1), (0, -1, 0))),
+                Self(matrix: ((0, 1, 0), (1, 0, 0), (0, 0, -1))),
+                Self(matrix: ((0, 1, 0), (-1, 0, 0), (0, 0, 1))),
+                Self(matrix: ((0, 1, 0), (0, 0, 1), (1, 0, 0))),
+                Self(matrix: ((0, 1, 0), (0, 0, -1), (-1, 0, 0))),
+                Self(matrix: ((0, -1, 0), (1, 0, 0), (0, 0, 1))),
+                Self(matrix: ((0, -1, 0), (-1, 0, 0), (0, 0, -1))),
+                Self(matrix: ((0, -1, 0), (0, 0, 1), (-1, 0, 0))),
+                Self(matrix: ((0, -1, 0), (0, 0, -1), (1, 0, 0))),
+                Self(matrix: ((0, 0, 1), (1, 0, 0), (0, 1, 0))),
+                Self(matrix: ((0, 0, 1), (-1, 0, 0), (0, -1, 0))),
+                Self(matrix: ((0, 0, 1), (0, 1, 0), (-1, 0, 0))),
+                Self(matrix: ((0, 0, 1), (0, -1, 0), (1, 0, 0))),
+                Self(matrix: ((0, 0, -1), (1, 0, 0), (0, -1, 0))),
+                Self(matrix: ((0, 0, -1), (-1, 0, 0), (0, 1, 0))),
+                Self(matrix: ((0, 0, -1), (0, 1, 0), (1, 0, 0))),
+                Self(matrix: ((0, 0, -1), (0, -1, 0), (-1, 0, 0))),
             ]
         }
 

@@ -3,7 +3,9 @@ import Base
 struct Day11: Day {
     var rom: [Int]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         rom = input.decodeMany(separatedBy: ",")
     }
 
@@ -21,9 +23,10 @@ struct Day11: Day {
         let panels = robot.navigatePanels(from: .white)
 
         guard let (xLow, xHigh) = panels.map(\.key.x).minAndMax(),
-              let (yLow, yHigh) = panels.map(\.key.y).minAndMax() else {
-                  return ""
-              }
+            let (yLow, yHigh) = panels.map(\.key.y).minAndMax()
+        else {
+            return ""
+        }
         let xRange = xLow...xHigh
         let yRange = yLow...yHigh
 
@@ -48,7 +51,9 @@ struct Day11: Day {
         var position: Point2 = .zero
         var direction: Direction = .up
 
-        init(program: Intcode) {
+        init(
+            program: Intcode
+        ) {
             self.program = program
         }
 
@@ -56,8 +61,7 @@ struct Day11: Day {
             var visited = [position: start]
             var panelWantsColor = true
 
-        loop:
-            while true {
+            loop: while true {
                 switch program.run() {
                 case .waitingForInput:
                     program.set(input: visited[position, default: .black].rawValue)

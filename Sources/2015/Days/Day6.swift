@@ -3,7 +3,9 @@ import Base
 struct Day6: Day {
     var instructions: [Instruction]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         instructions = input.decodeMany(separatedBy: "\n")
     }
 
@@ -94,7 +96,9 @@ struct Day6: Day {
             "\(action) \(start) through \(end)"
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let coordsStr: String
             if let c = rawValue.strippingPrefix(Action.on.rawValue) {
                 coordsStr = c
@@ -109,7 +113,8 @@ struct Day6: Day {
                 return nil
             }
 
-            let coords = coordsStr
+            let coords =
+                coordsStr
                 .trimmingCharacters(in: .whitespaces)
                 .components(separatedBy: "through")
                 .map { $0.trimmingCharacters(in: .whitespaces) }
@@ -117,13 +122,15 @@ struct Day6: Day {
 
             let (startStr, endStr) = (coords[0], coords[1])
 
-            let startComps = startStr
+            let startComps =
+                startStr
                 .components(separatedBy: ",")
                 .prefix(2)
                 .compactMap(Int.init)
             start = (startComps[0], startComps[1])
 
-            let endComps = endStr
+            let endComps =
+                endStr
                 .components(separatedBy: ",")
                 .prefix(2)
                 .compactMap(Int.init)

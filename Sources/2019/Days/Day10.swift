@@ -3,7 +3,9 @@ import Base
 struct Day10: Day {
     var map: AsteroidMap
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         map = input.decode()!
     }
 
@@ -33,22 +35,30 @@ struct Day10: Day {
             asteroids[self.width * x + y]
         }
 
-        init(asteroids: [Point2], width: Int, height: Int) {
+        init(
+            asteroids: [Point2],
+            width: Int,
+            height: Int
+        ) {
             self.asteroids = asteroids
             self.width = width
             self.height = height
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             var width = 0
             var height = 0
 
-            let asteroids = rawValue
+            let asteroids =
+                rawValue
                 .components(separatedBy: "\n")
                 .enumerated()
                 .flatMap { (y: Int, row: String) -> [Point2] in
                     height = max(y, height)
-                    let rows = row
+                    let rows =
+                        row
                         .enumerated()
                         .compactMap { (x: Int, coord: Character) -> Point2? in
                             switch Body(rawValue: String(coord)) {
@@ -104,9 +114,10 @@ struct Day10: Day {
             var sortedAngles: [Double] = []
             for (angle, _) in angles {
                 sortedAngles.append(angle)
-                angles[angle]?.sort(by: { (a, b) in
-                    a.manhattanDistance(to: coord) < b.manhattanDistance(to: coord)
-                })
+                angles[angle]?
+                    .sort(by: { (a, b) in
+                        a.manhattanDistance(to: coord) < b.manhattanDistance(to: coord)
+                    })
             }
 
             sortedAngles.sort()
@@ -144,7 +155,9 @@ struct Day10: Day {
             }
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             switch rawValue {
             case ".":
                 self = .space

@@ -5,7 +5,9 @@ import RegexBuilder
 struct Day13: Day {
     var paper: TransparentPaper
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         paper = input.decode()!
     }
 
@@ -48,7 +50,9 @@ struct Day13: Day {
                 "fold along \(axis.rawValue)=\(position)"
             }
 
-            init?(rawValue: String) {
+            init?(
+                rawValue: String
+            ) {
                 let pattern = Regex {
                     ZeroOrMore(.any)
                     Capture {
@@ -66,7 +70,7 @@ struct Day13: Day {
                 }
 
                 guard let match = try? pattern.firstMatch(in: rawValue),
-                      let axis = Axis(rawValue: String(match.1))
+                    let axis = Axis(rawValue: String(match.1))
                 else {
                     return nil
                 }
@@ -84,8 +88,11 @@ struct Day13: Day {
             """
         }
 
-        init?(rawValue: String) {
-            let components = rawValue
+        init?(
+            rawValue: String
+        ) {
+            let components =
+                rawValue
                 .components(separatedBy: "\n\n")
                 .prefix(2)
 
@@ -102,8 +109,8 @@ struct Day13: Day {
                         let pos = $0.components(separatedBy: ",").prefix(2)
 
                         guard pos.count == 2,
-                              let x = Int(pos[0]),
-                              let y = Int(pos[1])
+                            let x = Int(pos[0]),
+                            let y = Int(pos[1])
                         else {
                             return nil
                         }
@@ -112,7 +119,8 @@ struct Day13: Day {
                     }
             )
 
-            folds = foldsRaw
+            folds =
+                foldsRaw
                 .components(separatedBy: "\n")
                 .compactMap(Fold.init)
 

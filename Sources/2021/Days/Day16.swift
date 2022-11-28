@@ -4,7 +4,9 @@ import Base
 struct Day16: Day {
     var message: Packet
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         message = input.decode()!
     }
 
@@ -39,11 +41,13 @@ struct Day16: Day {
             case 2:
                 return subpackets.min {
                     $0.evaluated < $1.evaluated
-                }!.evaluated
+                }!
+                .evaluated
             case 3:
                 return subpackets.max {
                     $0.evaluated < $1.evaluated
-                }!.evaluated
+                }!
+                .evaluated
             case 4:
                 return value
             case 5:
@@ -57,12 +61,17 @@ struct Day16: Day {
             }
         }
 
-        init(version: Int, typeID: Int) {
+        init(
+            version: Int,
+            typeID: Int
+        ) {
             self.version = version
             self.typeID = typeID
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             var bits = rawValue.flatMap {
                 Int("\($0)", radix: 16)!
                     .bits
@@ -72,7 +81,9 @@ struct Day16: Day {
             self.init(bits: &bits[...])
         }
 
-        private init(bits: inout ArraySlice<Bool>) {
+        private init(
+            bits: inout ArraySlice<Bool>
+        ) {
             let version = Int(bits: bits.popFirst(3))
             let typeID = Int(bits: bits.popFirst(3))
 

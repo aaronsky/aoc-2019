@@ -4,7 +4,9 @@ import Base
 struct Day1: Day {
     var nums: [Int]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         nums = input.decodeMany(separatedBy: "\n")
     }
 

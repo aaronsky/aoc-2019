@@ -3,7 +3,9 @@ import Base
 struct Day3: Day {
     var instructions: [Direction]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         instructions = input.raw.map(Direction.init)
     }
 
@@ -56,12 +58,15 @@ struct Day3: Day {
         var x: Int
         var y: Int
 
-        init(_ x: Int, _ y: Int) {
+        init(
+            _ x: Int,
+            _ y: Int
+        ) {
             self.x = x
             self.y = y
         }
 
-        static func +=(left: inout Point, right: Point) {
+        static func += (left: inout Point, right: Point) {
             left.x += right.x
             left.y += right.y
         }
@@ -86,7 +91,9 @@ struct Day3: Day {
             }
         }
 
-        init(_ c: Character) {
+        init(
+            _ c: Character
+        ) {
             switch c {
             case "^":
                 self = .up

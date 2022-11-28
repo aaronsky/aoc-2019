@@ -29,25 +29,40 @@ public struct Matrix<Element>: Collection, CustomStringConvertible, ExpressibleB
         elements.endIndex
     }
 
-    public init(_ elements: [Element], rowWidth: Int, rows: Int) {
+    public init(
+        _ elements: [Element],
+        rowWidth: Int,
+        rows: Int
+    ) {
         self.elements = elements
         self.rowWidth = rowWidth
         self.rows = rows
     }
 
-    public init(_ elements: [Element], rowWidth: Int) {
+    public init(
+        _ elements: [Element],
+        rowWidth: Int
+    ) {
         self.init(elements, rowWidth: rowWidth, rows: elements.chunks(ofCount: rowWidth).count)
     }
 
-    public init(_ elements: [[Element]]) {
+    public init(
+        _ elements: [[Element]]
+    ) {
         self.init(elements.flatMap { $0 }, rowWidth: elements.first?.count ?? 0, rows: elements.count)
     }
 
-    public init(repeating: Element, rowWidth: Int, rows: Int) {
+    public init(
+        repeating: Element,
+        rowWidth: Int,
+        rows: Int
+    ) {
         self.init(Array(repeating: repeating, count: rowWidth * rows), rowWidth: rowWidth, rows: rows)
     }
 
-    public init(arrayLiteral elements: Element...) {
+    public init(
+        arrayLiteral elements: Element...
+    ) {
         self.init(elements, rowWidth: elements.count, rows: 1)
     }
 
@@ -71,10 +86,7 @@ public struct Matrix<Element>: Collection, CustomStringConvertible, ExpressibleB
 
     public subscript(position: (x: Int, y: Int)) -> Element {
         get {
-            guard position.x >= 0 &&
-                    position.x < rowWidth &&
-                    position.y >= 0 &&
-                    position.y < rows
+            guard position.x >= 0 && position.x < rowWidth && position.y >= 0 && position.y < rows
             else {
                 fatalError("Matrix out of bounds error: \(position) is not a valid coordinate")
             }
@@ -82,10 +94,7 @@ public struct Matrix<Element>: Collection, CustomStringConvertible, ExpressibleB
             return self[index(of: position)]
         }
         set {
-            guard position.x >= 0 &&
-                    position.x < rowWidth &&
-                    position.y >= 0 &&
-                    position.y < rows
+            guard position.x >= 0 && position.x < rowWidth && position.y >= 0 && position.y < rows
             else {
                 return
             }
@@ -107,45 +116,50 @@ public struct Matrix<Element>: Collection, CustomStringConvertible, ExpressibleB
     }
 
     public func indicesSurrounding(index: Index, includingDiagonals: Bool = false) -> [Index] {
-        indicesSurrounding(position: position(of: index),
-                           includingDiagonals: includingDiagonals)
+        indicesSurrounding(
+            position: position(of: index),
+            includingDiagonals: includingDiagonals
+        )
     }
 
     public func indicesSurrounding(position: (x: Int, y: Int), includingDiagonals: Bool = false) -> [Index] {
-        positionsSurrounding(position: position,
-                             includingDiagonals: includingDiagonals)
-            .map(index(of:))
+        positionsSurrounding(
+            position: position,
+            includingDiagonals: includingDiagonals
+        )
+        .map(index(of:))
     }
 
     public func positionsSurrounding(index: Index, includingDiagonals: Bool = false) -> [(x: Int, y: Int)] {
-        positionsSurrounding(position: position(of: index),
-                             includingDiagonals: includingDiagonals)
+        positionsSurrounding(
+            position: position(of: index),
+            includingDiagonals: includingDiagonals
+        )
     }
 
-    public func positionsSurrounding(position: (x: Int, y: Int), includingDiagonals: Bool = false) -> [(x: Int, y: Int)] {
+    public func positionsSurrounding(position: (x: Int, y: Int), includingDiagonals: Bool = false) -> [(x: Int, y: Int)]
+    {
         let (x, y) = position
         var adjacents = [
-            (x, y - 1), // N
-            (x - 1, y), // W
-            (x, y + 1), // S
-            (x + 1, y), // E
+            (x, y - 1),  // N
+            (x - 1, y),  // W
+            (x, y + 1),  // S
+            (x + 1, y),  // E
         ]
 
         if includingDiagonals {
             adjacents.append(contentsOf: [
-                (x - 1, y - 1), // NW
-                (x - 1, y + 1), // SW
-                (x + 1, y + 1), // SE
-                (x + 1, y - 1), // NE
+                (x - 1, y - 1),  // NW
+                (x - 1, y + 1),  // SW
+                (x + 1, y + 1),  // SE
+                (x + 1, y - 1),  // NE
             ])
         }
 
-        return adjacents
+        return
+            adjacents
             .filter { p in
-                p.0 >= 0 &&
-                p.0 < rowWidth &&
-                p.1 >= 0 &&
-                p.1 < rows
+                p.0 >= 0 && p.0 < rowWidth && p.1 >= 0 && p.1 < rows
             }
     }
 }

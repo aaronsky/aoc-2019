@@ -9,7 +9,9 @@ struct Intcode: CustomDebugStringConvertible {
         memory.debugDescription
     }
 
-    init(program: [Int]) {
+    init(
+        program: [Int]
+    ) {
         memory = Memory(program: program)
     }
 
@@ -50,37 +52,35 @@ struct Intcode: CustomDebugStringConvertible {
                 self.getArgument(code: code, index: 0),
                 self.getArgument(code: code, index: 1),
                 self.getArgument(code: code, index: 2)
-        )
+            )
             add(augend, addend, sum)
             return .stride(4)
         case .multiply:
             let (multiplier, multiplicand, product) = (
-                    self.getArgument(code: code, index: 0),
-                    self.getArgument(code: code, index: 1),
-                    self.getArgument(code: code, index: 2)
+                self.getArgument(code: code, index: 0),
+                self.getArgument(code: code, index: 1),
+                self.getArgument(code: code, index: 2)
             )
             mult(multiplier, multiplicand, product)
             return .stride(4)
         case .load:
-            if let pendingInput = pendingInput, let input = pendingInput.value {
-                ld(pendingInput.arg, input)
-                self.pendingInput = nil
-                return .stride(2)
-            } else {
+            guard let pendingInput = pendingInput, let input = pendingInput.value else {
                 let arg = getArgument(code: code, index: 0)
                 self.pendingInput = Input(arg: arg, value: nil)
                 return .interrupt(.waitingForInput)
             }
+            ld(pendingInput.arg, input)
+            self.pendingInput = nil
+            return .stride(2)
         case .output:
-            if pendingOutput != nil {
-                self.pendingOutput = nil
-                return .stride(2)
-            } else {
+            guard pendingOutput != nil else {
                 let arg = getArgument(code: code, index: 0)
                 let output = outputArgument(arg)
                 self.pendingOutput = output
                 return .interrupt(.output(output))
             }
+            self.pendingOutput = nil
+            return .stride(2)
         case .jumpIfTrue:
             let (arg0, arg1) = (
                 self.getArgument(code: code, index: 0),
@@ -98,7 +98,7 @@ struct Intcode: CustomDebugStringConvertible {
                 self.getArgument(code: code, index: 0),
                 self.getArgument(code: code, index: 1),
                 self.getArgument(code: code, index: 2)
-        )
+            )
             lessThan(lhs, rhs, addr)
             return .stride(4)
         case .equals:
@@ -106,7 +106,7 @@ struct Intcode: CustomDebugStringConvertible {
                 self.getArgument(code: code, index: 0),
                 self.getArgument(code: code, index: 1),
                 self.getArgument(code: code, index: 2)
-        )
+            )
             equals(lhs, rhs, addr)
             return .stride(4)
         case .setRelativeBase:
@@ -143,7 +143,11 @@ struct Intcode: CustomDebugStringConvertible {
         memory[sum] = memory[augend] + memory[addend]
     }
 
-    mutating func mult(_ multiplier: InstructionArgument, _ multiplicand: InstructionArgument, _ product: InstructionArgument) {
+    mutating func mult(
+        _ multiplier: InstructionArgument,
+        _ multiplicand: InstructionArgument,
+        _ product: InstructionArgument
+    ) {
         memory[product] = memory[multiplier] * memory[multiplicand]
     }
 
@@ -156,19 +160,17 @@ struct Intcode: CustomDebugStringConvertible {
     }
 
     mutating func jumpIfTrue(_ arg0: InstructionArgument, _ arg1: InstructionArgument) -> ProgramCounter {
-        if memory[arg0] != 0 {
-            return .jump(memory[arg1])
-        } else {
+        guard memory[arg0] != 0 else {
             return .stride(3)
         }
+        return .jump(memory[arg1])
     }
 
     mutating func jumpIfFalse(_ arg0: InstructionArgument, _ arg1: InstructionArgument) -> ProgramCounter {
-        if memory[arg0] == 0 {
-            return .jump(memory[arg1])
-        } else {
+        guard memory[arg0] == 0 else {
             return .stride(3)
         }
+        return .jump(memory[arg1])
     }
 
     mutating func lessThan(_ lhs: InstructionArgument, _ rhs: InstructionArgument, _ addr: InstructionArgument) {
@@ -201,7 +203,9 @@ struct Intcode: CustomDebugStringConvertible {
             "\(ram)"
         }
 
-        init(program: [Int]) {
+        init(
+            program: [Int]
+        ) {
             ram = .init(repeating: 0, count: program.count * 2)
             ram.replaceSubrange(..<program.count, with: program)
             programSize = program.count
@@ -258,7 +262,10 @@ struct Intcode: CustomDebugStringConvertible {
         case immediate(Int)
         case relative(Int)
 
-        init(mode: Int, value: Int) {
+        init(
+            mode: Int,
+            value: Int
+        ) {
             switch mode {
             case 0:
                 self = .position(value)

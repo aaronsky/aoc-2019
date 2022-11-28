@@ -3,7 +3,9 @@ import Base
 struct Day2: Day {
     private var instructions: [Instruction]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         instructions = input.decodeMany(separatedBy: "\n")
     }
 
@@ -17,7 +19,11 @@ struct Day2: Day {
         return "\(position.position.x * position.position.y)"
     }
 
-    private func depth(from instructions: [Instruction], starting point: Point2 = .zero, shouldUseHeading: Bool = false) -> Vector2 {
+    private func depth(
+        from instructions: [Instruction],
+        starting point: Point2 = .zero,
+        shouldUseHeading: Bool = false
+    ) -> Vector2 {
         instructions.reduce(into: Vector2(point)) { vec, instruction in
             switch (instruction.direction, shouldUseHeading) {
             case (.up, true):
@@ -54,7 +60,9 @@ struct Day2: Day {
             "\(direction.rawValue) \(units)"
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let components = rawValue.components(separatedBy: " ").prefix(2)
             precondition(components.count == 2)
             guard let direction = Direction(rawValue: components[0]) else { return nil }
@@ -62,7 +70,10 @@ struct Day2: Day {
             self.init(direction: direction, units: units)
         }
 
-        init(direction: Direction, units: Int) {
+        init(
+            direction: Direction,
+            units: Int
+        ) {
             self.direction = direction
             self.units = units
         }
@@ -72,11 +83,16 @@ struct Day2: Day {
         var position: Point2
         var heading: Int = 0
 
-        init(_ point: Point2) {
+        init(
+            _ point: Point2
+        ) {
             self.init(x: point.x, y: point.y)
         }
 
-        init(x: Int, y: Int) {
+        init(
+            x: Int,
+            y: Int
+        ) {
             position = Point2(x: x, y: y)
         }
     }

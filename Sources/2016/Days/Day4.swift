@@ -5,12 +5,15 @@ import RegexBuilder
 struct Day4: Day {
     var rooms: [Room]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         rooms = input.decodeMany(separatedBy: "\n")
     }
 
     func partOne() async -> String {
-        let realRooms = rooms
+        let realRooms =
+            rooms
             .filter(\.isReal)
             .sum(of: \.sectorID)
 
@@ -54,13 +57,19 @@ struct Day4: Day {
             "\(name)-\(sectorID)[\(checksum)]"
         }
 
-        init(name: String, sectorID: Int, checksum: String) {
+        init(
+            name: String,
+            sectorID: Int,
+            checksum: String
+        ) {
             self.name = name
             self.sectorID = sectorID
             self.checksum = checksum
         }
 
-        init?(rawValue: String) {
+        init?(
+            rawValue: String
+        ) {
             let pattern = Regex {
                 Capture {
                     ZeroOrMore {

@@ -9,16 +9,16 @@ class Day6Tests: XCTestCase {
         let partOne = await day.partOne()
         XCTAssertEqual(Int(partOne), 393019)
         let partTwo = await day.partTwo()
-        XCTAssertEqual(Int(partTwo), 1757714216975)
+        XCTAssertEqual(Int(partTwo), 1_757_714_216_975)
     }
 
     func testSmallSample1() {
-        let day = Day6(fish: [3,4,3,1,2])
+        let day = Day6(fish: [3, 4, 3, 1, 2])
         XCTAssertEqual(day.totalFishAfter(days: 80), 5934)
     }
 
     func testSmallSample2() {
-        let day = Day6(fish: [3,4,3,1,2])
-        XCTAssertEqual(day.totalFishAfter(days: 256), 26984457539)
+        let day = Day6(fish: [3, 4, 3, 1, 2])
+        XCTAssertEqual(day.totalFishAfter(days: 256), 26_984_457_539)
     }
 }

@@ -6,7 +6,9 @@ struct Day17: Day {
     var targetX: ClosedRange<Int>
     var targetY: ClosedRange<Int>
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         let minXRef = Reference<Int>()
         let maxXRef = Reference<Int>()
         let minYRef = Reference<Int>()

@@ -14,16 +14,16 @@ class Day25Tests: XCTestCase {
 
     func testSimpleProblem1() throws {
         let input = """
-        v...>>.vv>
-        .vv>>.vv..
-        >>.>v>...v
-        >>v>>.>.v.
-        v>v.vv.v..
-        >.>>..v...
-        .vv..>.>v.
-        v.v..>>v.v
-        ....v..v.>
-        """
+            v...>>.vv>
+            .vv>>.vv..
+            >>.>v>...v
+            >>v>>.>.v.
+            v>v.vv.v..
+            >.>>..v...
+            .vv..>.>v.
+            v.v..>>v.v
+            ....v..v.>
+            """
         var floor = try XCTUnwrap(Day25.Seafloor(rawValue: input))
         let count = floor.stepUntilStable()
         XCTAssertEqual(count, 58)

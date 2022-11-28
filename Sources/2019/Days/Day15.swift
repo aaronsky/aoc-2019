@@ -1,7 +1,9 @@
 import Base
 
 struct Day15: Day {
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
 
     }
 
