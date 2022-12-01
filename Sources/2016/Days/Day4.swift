@@ -29,9 +29,8 @@ struct Day4: Day {
         var sectorID: Int
         var checksum: String
 
-        /**
-         A room is real (not a decoy) if the checksum is the five most common letters in the encrypted name, in order, with ties broken by alphabetization.
-         */
+        /// A room is real (not a decoy) if the checksum is the five most common letters in the
+        /// encrypted name, in order, with ties broken by alphabetization.
         var isReal: Bool {
             name
                 .reduce(into: [Character: Int]()) { acc, c in

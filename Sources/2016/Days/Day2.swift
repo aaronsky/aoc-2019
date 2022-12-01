@@ -43,12 +43,6 @@ struct Day2: Day {
 
         var problem: Problem
 
-        init(
-            problem: Problem
-        ) {
-            self.problem = problem
-        }
-
         func keyPressed(_ instructions: [Instruction], startingFrom key: String) -> String {
             var current = key
             for instruction in instructions {
