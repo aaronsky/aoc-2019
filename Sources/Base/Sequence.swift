@@ -10,6 +10,12 @@ extension Sequence where Element: Numeric {
     }
 }
 
+extension Sequence where Element == String {
+    public var integers: [Int] {
+        compactMap(Int.init)
+    }
+}
+
 extension Sequence {
     public func sum(of transform: (Element) throws -> Int) rethrows -> Int {
         var sum = 0
@@ -125,6 +131,10 @@ extension Collection {
         }
 
         return try dropFirst().reduce(into: first, updateAccumulatingResult)
+    }
+
+    public func split(on isBoundary: (Element) -> Bool, includeEmpty: Bool = true) -> [SubSequence] {
+        return split(omittingEmptySubsequences: !includeEmpty, whereSeparator: isBoundary)
     }
 }
 

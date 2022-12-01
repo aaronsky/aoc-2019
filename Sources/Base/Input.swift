@@ -11,6 +11,10 @@ public struct Input {
         contents
     }
 
+    public var lines: [String] {
+        contents.lines
+    }
+
     public init(day: Int, in bundle: Bundle) async throws {
         guard let url = bundle.url(forResource: Input.fileName(for: day),
                                    withExtension: "txt",
@@ -54,9 +58,14 @@ public struct Input {
     }
 
     public func decodeMany<T, S: StringProtocol>(separatedBy separator: S, transform: @escaping (String) -> T?) -> [T] {
-        contents
-            .components(separatedBy: separator)
+        lines
             .filter { !$0.isEmpty } // skip empty lines
             .compactMap(transform)
+    }
+}
+
+extension String {
+    public var lines: [String] {
+        components(separatedBy: "\n")
     }
 }
