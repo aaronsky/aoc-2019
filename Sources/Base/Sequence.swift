@@ -14,6 +14,10 @@ extension Sequence where Element == String {
     public var integers: [Int] {
         compactMap(Int.init)
     }
+
+    public var characters: [[String.Element]] {
+        map(Array.init)
+    }
 }
 
 extension Sequence {
@@ -135,6 +139,16 @@ extension Collection {
 
     public func split(on isBoundary: (Element) -> Bool, includeEmpty: Bool = true) -> [SubSequence] {
         return split(omittingEmptySubsequences: !includeEmpty, whereSeparator: isBoundary)
+    }
+
+    public func split(at index: Index) -> (left: SubSequence, right: SubSequence) {
+        let left = self[startIndex..<index]
+        let right = self[index..<endIndex]
+        return (left, right)
+    }
+
+    public var middleIndex: Index {
+        index(startIndex, offsetBy: count / 2)
     }
 }
 

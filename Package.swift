@@ -13,12 +13,15 @@ let allYears = [
     2022,
 ]
 
+// !!!: Update this every year.
+let currentYear = 2022
+
 func adventTargetName(_ year: Int) -> String {
     "Advent\(year)"
 }
 
-func adventTarget(year: Int) -> [Target] {
-    [
+func adventTarget(year: Int, isTesting: Bool = true) -> [Target] {
+    var targets: [Target] = [
         .target(
             name: adventTargetName(year),
             dependencies: [
@@ -32,14 +35,19 @@ func adventTarget(year: Int) -> [Target] {
                 .copy("Inputs")
             ]
         ),
-        .testTarget(
-            name: "\(adventTargetName(year))Tests",
-            dependencies: [
-                .target(name: adventTargetName(year))
-            ],
-            path: "Tests/\(year)Tests"
-        ),
     ]
+    if isTesting {
+        targets.append(
+            .testTarget(
+                name: "\(adventTargetName(year))Tests",
+                dependencies: [
+                    .target(name: adventTargetName(year))
+                ],
+                path: "Tests/\(year)Tests"
+            )
+        )
+    }
+    return targets
 }
 
 let package = Package(
@@ -81,5 +89,7 @@ let package = Package(
             name: "BaseTests",
             dependencies: ["Base"]
         ),
-    ] + allYears.flatMap(adventTarget)
+    ] + allYears.flatMap {
+        adventTarget(year: $0, isTesting: $0 == currentYear)
+    }
 )
