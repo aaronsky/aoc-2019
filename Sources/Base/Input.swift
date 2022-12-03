@@ -26,7 +26,7 @@ public struct Input {
     }
 
     init(contentsOf url: URL) async throws {
-        contents = try String(contentsOf: url)
+        contents = try String(String(contentsOf: url).dropLast())
     }
 
     private static func fileName(for day: Int) -> String {
@@ -67,5 +67,18 @@ public struct Input {
 extension String {
     public var lines: [String] {
         components(separatedBy: "\n")
+    }
+}
+
+extension Character {
+    public var alphabeticalIndex: Int? {
+        lowercased()
+            .first?
+            .asciiValue
+            .map { Int($0) - 97 }
+    }
+
+    public var alphabeticalOrdinal: Int? {
+        alphabeticalIndex.map { $0 + 1 }
     }
 }

@@ -172,3 +172,16 @@ extension SetAlgebra {
         }
     }
 }
+
+extension Sequence where Element: Sequence, Element.Element: Hashable {
+    public var intersection: Set<Element.Element> {
+        var iter = makeIterator()
+        guard let first = iter.next() else { return [] }
+        var intersection = Set(first)
+        while let next = iter.next() {
+            intersection.formIntersection(Set(next))
+            if intersection.isEmpty { break }
+        }
+        return intersection
+    }
+}

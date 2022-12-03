@@ -5,18 +5,18 @@ struct Day3: Day {
     var sacks: [String]
 
     init(_ input: Input) throws {
-        sacks = input.lines.dropLast()
+        sacks = input.lines
     }
 
     func partOne() async -> String {
         let sum = sacks
             .map { $0.split(at: $0.middleIndex) }
             .compactMap {
-                Set($0.left)
-                    .intersection(Set($0.right))
+                [$0.left, $0.right]
+                    .intersection
                     .first
             }
-            .sum(of: itemValue(_:))
+            .sum(of: \.priority)
 
         return "\(sum)"
     }
@@ -24,26 +24,15 @@ struct Day3: Day {
     func partTwo() async -> String {
         let sum = sacks
             .chunks(ofCount: 3)
-            .compactMap { sacks in
-                Set(sacks[sacks.startIndex])
-                    .intersection(Set(sacks[sacks.index(after: sacks.startIndex)]))
-                    .intersection(Set(sacks[sacks.index(before: sacks.endIndex)]))
-                    .first
-            }
-            .sum(of: itemValue(_:))
+            .compactMap { $0.intersection.first }
+            .sum(of: \.priority)
 
         return "\(sum)"
     }
+}
 
-    func itemValue(_ c: Character) -> Int {
-        guard let cv = c.asciiValue else { fatalError() }
-        switch cv {
-        case 65...90:
-            return Int(cv) - 38
-        case 97...122:
-            return Int(cv) - 96
-        default:
-            fatalError()
-        }
+extension Character {
+    fileprivate var priority: Int {
+        isLowercase ? alphabeticalOrdinal! : alphabeticalOrdinal! + 26
     }
 }
