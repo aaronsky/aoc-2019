@@ -185,10 +185,3 @@ extension Sequence where Element: Sequence, Element.Element: Hashable {
         return intersection
     }
 }
-
-extension ClosedRange {
-    @inlinable
-    public func contains(_ other: ClosedRange<Bound>) -> Bool {
-        lowerBound <= other.lowerBound && upperBound >= other.upperBound
-    }
-}
