@@ -1,26 +1,31 @@
 import Foundation
 
 extension Sequence where Element: Numeric {
+    @inlinable
     public var sum: Element {
         reduce(0, +)
     }
 
+    @inlinable
     public var product: Element {
         reduce(1, *)
     }
 }
 
 extension Sequence where Element == String {
+    @inlinable
     public var integers: [Int] {
         compactMap(Int.init)
     }
 
+    @inlinable
     public var characters: [[String.Element]] {
         map(Array.init)
     }
 }
 
 extension Sequence {
+    @inlinable
     public func sum(of transform: (Element) throws -> Int) rethrows -> Int {
         var sum = 0
         for e in self {
@@ -29,6 +34,7 @@ extension Sequence {
         return sum
     }
 
+    @inlinable
     public func product(of transform: (Element) throws -> Int) rethrows -> Int {
         var product = 1
         for e in self {
@@ -91,12 +97,25 @@ extension Sequence where Element: Equatable {
 }
 
 extension Collection where Element: BinaryInteger {
-    var average: Double {
+    @inlinable
+    public var average: Double {
         guard !isEmpty else {
             return .nan
         }
 
         return Double(sum) / Double(count)
+    }
+}
+
+extension Collection where Element: Hashable {
+    @inlinable
+    public var allUnique: Bool {
+        var seen = Set<Element>()
+        for item in self {
+            if seen.contains(item) { return false }
+            seen.insert(item)
+        }
+        return true
     }
 }
 
@@ -121,6 +140,7 @@ extension Collection {
         return self[index(startIndex, offsetBy: medianDistance)]
     }
 
+    @inlinable
     public func reduce(_ nextPartialResult: (Element, Element) throws -> Element) rethrows -> Element? {
         guard let first = first else {
             return nil
@@ -129,6 +149,7 @@ extension Collection {
         return try dropFirst().reduce(first, nextPartialResult)
     }
 
+    @inlinable
     public func reduce(_ updateAccumulatingResult: (inout Element, Element) throws -> Void) rethrows -> Element? {
         guard let first = first else {
             return nil
@@ -137,32 +158,38 @@ extension Collection {
         return try dropFirst().reduce(into: first, updateAccumulatingResult)
     }
 
+    @inlinable
     public func split(on isBoundary: (Element) -> Bool, includeEmpty: Bool = true) -> [SubSequence] {
         return split(omittingEmptySubsequences: !includeEmpty, whereSeparator: isBoundary)
     }
 
+    @inlinable
     public func split(at index: Index) -> (left: SubSequence, right: SubSequence) {
         let left = self[startIndex..<index]
         let right = self[index..<endIndex]
         return (left, right)
     }
 
+    @inlinable
     public var middleIndex: Index {
         index(startIndex, offsetBy: count / 2)
     }
 }
 
 extension ArraySlice {
+    @inlinable
     public mutating func popFirst() -> Element {
         removeFirst()
     }
 
+    @inlinable
     public mutating func popFirst(_ k: Int) -> [Element] {
         (0..<k).map { _ in popFirst() }
     }
 }
 
 extension SetAlgebra {
+    @inlinable
     @discardableResult
     public mutating func insert<S: Sequence>(
         contentsOf newElements: S
@@ -174,6 +201,7 @@ extension SetAlgebra {
 }
 
 extension Sequence where Element: Sequence, Element.Element: Hashable {
+    @inlinable
     public var intersection: Set<Element.Element> {
         var iter = makeIterator()
         guard let first = iter.next() else { return [] }
