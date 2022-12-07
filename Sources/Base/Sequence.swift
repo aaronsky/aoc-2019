@@ -87,6 +87,36 @@ extension Sequence {
     public func zip<OtherSequence: Sequence>(_ other: OtherSequence) -> Zip2Sequence<Self, OtherSequence> {
         Swift.zip(self, other)
     }
+
+    @inlinable
+    public func min<Value: Comparable>(of value: (Element) -> Value) -> Value? {
+        var out: Value?
+
+        for element in self {
+            if let last = out {
+                out = Swift.min(last, value(element))
+            } else {
+                out = value(element)
+            }
+        }
+
+        return out
+    }
+
+    @inlinable
+    public func max<Value: Comparable>(of value: (Element) -> Value) -> Value? {
+        var out: Value?
+
+        for element in self {
+            if let last = out {
+                out = Swift.max(last, value(element))
+            } else {
+                out = value(element)
+            }
+        }
+
+        return out
+    }
 }
 
 extension Sequence where Element: Equatable {

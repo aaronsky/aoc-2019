@@ -34,7 +34,7 @@ func adventTarget(year: Int, isTesting: Bool = true) -> [Target] {
             resources: [
                 .copy("Inputs")
             ]
-        ),
+        )
     ]
     if isTesting {
         targets.append(
@@ -89,7 +89,8 @@ let package = Package(
             name: "BaseTests",
             dependencies: ["Base"]
         ),
-    ] + allYears.flatMap {
-        adventTarget(year: $0, isTesting: $0 == currentYear)
-    }
+    ]
+        + allYears.flatMap {
+            adventTarget(year: $0, isTesting: $0 == currentYear)
+        }
 )

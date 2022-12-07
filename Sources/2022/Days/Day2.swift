@@ -22,7 +22,9 @@ struct Day2: Day {
 
     var moves: [(String, String)]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         moves = input.lines.compactMap {
             let moves = $0.components(separatedBy: " ")
             guard moves.count == 2 else { return nil }

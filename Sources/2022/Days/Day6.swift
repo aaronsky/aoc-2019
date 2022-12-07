@@ -4,7 +4,9 @@ import Base
 struct Day6: Day {
     var stream: String
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         stream = input.raw
     }
 

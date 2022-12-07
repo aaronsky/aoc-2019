@@ -3,8 +3,8 @@ GIT_REPO_TOPLEVEL := $(shell git rev-parse --show-toplevel)
 
 # Formatting
 SWIFT_FORMAT_BIN := swift format
-SWIFT_FORMAT_CONFIG_FILE := $(GIT_REPO_TOPLEVEL)/.swift-format.json
-FORMAT_PATHS := $(GIT_REPO_TOPLEVEL)/Package.swift $(GIT_REPO_TOPLEVEL)/Sources $(GIT_REPO_TOPLEVEL)/Tests
+SWIFT_FORMAT_CONFIG_FILE := "$(GIT_REPO_TOPLEVEL)/.swift-format.json"
+FORMAT_PATHS := "$(GIT_REPO_TOPLEVEL)/Package.swift" "$(GIT_REPO_TOPLEVEL)/Sources" "$(GIT_REPO_TOPLEVEL)/Tests"
 
 # Tasks
 

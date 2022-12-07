@@ -13,7 +13,9 @@ struct Day5: Day {
         var from: Int
         var to: Int
 
-        init(from contents: String) throws {
+        init(
+            from contents: String
+        ) throws {
             let countRef = Reference<Int>()
             let fromRef = Reference<Int>()
             let toRef = Reference<Int>()
@@ -30,7 +32,11 @@ struct Day5: Day {
             self.init(count: match[countRef], from: match[fromRef], to: match[toRef])
         }
 
-        init(count: Int, from: Int, to: Int) {
+        init(
+            count: Int,
+            from: Int,
+            to: Int
+        ) {
             self.count = count
             self.from = from
             self.to = to
@@ -39,19 +45,21 @@ struct Day5: Day {
 
     var crates: [[String]] = [
         [""],
-        ["B","S","V","Z","G","P","W"],
-        ["J","V","B","C","Z","F"],
-        ["V","L","M","H","N","Z","D","C"],
-        ["L","D","M","Z","P","F","J","B"],
-        ["V","F","C","G","J","B","Q","H"],
-        ["G","F","Q","T","S","L","B"],
-        ["L","G","C","Z","V"],
-        ["N","L","G"],
-        ["J","F","H","C"],
+        ["B", "S", "V", "Z", "G", "P", "W"],
+        ["J", "V", "B", "C", "Z", "F"],
+        ["V", "L", "M", "H", "N", "Z", "D", "C"],
+        ["L", "D", "M", "Z", "P", "F", "J", "B"],
+        ["V", "F", "C", "G", "J", "B", "Q", "H"],
+        ["G", "F", "Q", "T", "S", "L", "B"],
+        ["L", "G", "C", "Z", "V"],
+        ["N", "L", "G"],
+        ["J", "F", "H", "C"],
     ]
     var instructions: [Instruction]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         let pieces = input.lines.split(on: \.isEmpty)
         guard pieces.count == 2 else { throw ParsingError.malformedInput }
         let (_, rawInstructions) = (pieces[0], pieces[1])
