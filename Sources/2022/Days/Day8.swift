@@ -5,7 +5,9 @@ struct Day8: Day {
     var grid: Matrix<Int>
     let directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-    init(_ input: Input) throws {
+    init(
+        _ input: Input
+    ) throws {
         grid = Matrix(input.lines.map { $0.map { Int(String($0))! } })
     }
 

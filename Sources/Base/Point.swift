@@ -45,6 +45,12 @@ public struct Point2: Equatable, Hashable {
         ]
     }
 
+    public func vector(towards other: Self) -> Vector2 {
+        if other == self { return .zero }
+
+        return Vector2(x: other.x - x, y: other.y - y)
+    }
+
     public static func + (_ lhs: Self, _ rhs: Self) -> Self {
         Self(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
@@ -52,6 +58,33 @@ public struct Point2: Equatable, Hashable {
     public static func += (_ lhs: inout Self, _ rhs: Self) {
         lhs.x += rhs.x
         lhs.y += rhs.y
+    }
+
+    public static func - (_ lhs: Self, _ rhs: Self) -> Self {
+        Self(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
+    }
+
+    public static func -= (_ lhs: inout Self, _ rhs: Self) {
+        lhs.x -= rhs.x
+        lhs.y -= rhs.y
+    }
+
+    public static func + (_ lhs: Self, _ rhs: Vector2) -> Self {
+        Self(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+
+    public static func += (_ lhs: inout Self, _ rhs: Vector2) {
+        lhs.x += rhs.x
+        lhs.y += rhs.y
+    }
+
+    public static func - (_ lhs: Self, _ rhs: Vector2) -> Self {
+        Self(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
+    }
+
+    public static func -= (_ lhs: inout Self, _ rhs: Vector2) {
+        lhs.x -= rhs.x
+        lhs.y -= rhs.y
     }
 }
 
@@ -93,6 +126,26 @@ public struct Point3: Equatable, Hashable {
     }
 
     public static func -= (_ lhs: inout Self, _ rhs: Self) {
+        lhs.x -= rhs.x
+        lhs.y -= rhs.y
+        lhs.z -= rhs.z
+    }
+
+    public static func + (_ lhs: Self, _ rhs: Vector3) -> Self {
+        Self(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+
+    public static func += (_ lhs: inout Self, _ rhs: Vector3) {
+        lhs.x += rhs.x
+        lhs.y += rhs.y
+        lhs.z += rhs.z
+    }
+
+    public static func - (_ lhs: Self, _ rhs: Vector3) -> Self {
+        Self(x: lhs.x - rhs.x, y: lhs.y - rhs.y, z: lhs.z - rhs.z)
+    }
+
+    public static func -= (_ lhs: inout Self, _ rhs: Vector3) {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
         lhs.z -= rhs.z
