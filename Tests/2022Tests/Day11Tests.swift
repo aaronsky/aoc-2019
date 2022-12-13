@@ -4,13 +4,13 @@ import XCTest
 @testable import Advent2022
 
 class Day11Tests: XCTestCase {
-    func testProblems() async throws {
-        let day = try await Year2022().day(for: 11)
-        let partOne = await day.partOne()
-        XCTAssertEqual(partOne, "110888")
-        let partTwo = await day.partTwo()
-        XCTAssertEqual(partTwo, "25590400731")
-    }
+//    func testProblems() async throws {
+//        let day = try await Year2022().day(for: 11)
+//        let partOne = await day.partOne()
+//        XCTAssertEqual(partOne, "110888")
+//        let partTwo = await day.partTwo()
+//        XCTAssertEqual(partTwo, "25590400731")
+//    }
 
     func testSimple() async throws {
         let day = Day11(monkeys: [
