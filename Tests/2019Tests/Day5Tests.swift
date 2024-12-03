@@ -1,14 +1,12 @@
-import Foundation
-import XCTest
+import Testing
 
 @testable import Advent2019
 
-class Day5Tests: XCTestCase {
-    func testProblems() async throws {
-        let day = try await Year2019().day(for: 5)
-        let problem = await day.partOne()
-        XCTAssertEqual(Int(problem), 8_805_067)
-        let nothing = await day.partTwo()
-        XCTAssertEqual(nothing, "")
-    }
+@Test
+func day5() async throws {
+    let day = try await Year2019().day(for: 5)
+    let partOne = await day.partOne()
+    #expect(Int(partOne) == 8_805_067)
+    let partTwo = await day.partTwo()
+    #expect(partTwo == "")
 }

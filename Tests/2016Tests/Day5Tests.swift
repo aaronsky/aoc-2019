@@ -1,10 +1,8 @@
-import Foundation
-import XCTest
+import Testing
 
 @testable import Advent2016
 
-class Day5Tests: XCTestCase {
-    func testProblems() async throws {
-        _ = try await Year2016().day(for: 5)
-    }
+@Test
+func day5() async throws {
+    _ = try await Year2016().day(for: 5)
 }

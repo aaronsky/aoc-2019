@@ -1,30 +1,29 @@
-import Foundation
-import XCTest
+import Testing
 
 @testable import Advent2019
 
-class Day8Tests: XCTestCase {
-    func testProblems() async throws {
-        let day = try await Year2019().day(for: 8)
-        let problem = await day.partOne()
-        XCTAssertEqual(
-            problem,
-            "100100110001100111101111010010100101001010000100001111010000100001110011100100101000010110100001000010010100101001010000100001001001100011101000011110"
-        )
-        let nothing = await day.partTwo()
-        XCTAssertEqual(nothing, "")
-    }
+@Test
+func day8() async throws {
+    let day = try await Year2019().day(for: 8)
+    let partOne = await day.partOne()
+    #expect(
+        partOne
+            == "100100110001100111101111010010100101001010000100001111010000100001110011100100101000010110100001000010010100101001010000100001001001100011101000011110"
+    )
+    let partTwo = await day.partTwo()
+    #expect(partTwo == "")
+}
 
-    func testSimpleProgram1() {
-        let pixels = "0222112222120000"
-        let layers = [Day8.Layer](
-            rawImage: Day8.RawImage(
-                pixels: pixels,
-                width: 2,
-                height: 2
-            )
+@Test
+func day8_simpleProgram1() async throws {
+    let pixels = "0222112222120000"
+    let layers = [Day8.Layer](
+        rawImage: Day8.RawImage(
+            pixels: pixels,
+            width: 2,
+            height: 2
         )
-        let combined = Day8.Layer(combining: layers)
-        XCTAssertEqual(combined.description, "0110")
-    }
+    )
+    let combined = Day8.Layer(combining: layers)
+    #expect(combined.description == "0110")
 }

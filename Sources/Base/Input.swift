@@ -16,9 +16,13 @@ public struct Input {
     }
 
     public init(day: Int, in bundle: Bundle) async throws {
-        guard let url = bundle.url(forResource: Input.fileName(for: day),
-                                   withExtension: "txt",
-                                   subdirectory: "Inputs") else {
+        guard
+            let url = bundle.url(
+                forResource: Input.fileName(for: day),
+                withExtension: "txt",
+                subdirectory: "Inputs"
+            )
+        else {
             throw Error.fileNotFound("\(Input.fileName(for: day)).txt")
         }
 
@@ -53,13 +57,14 @@ public struct Input {
         decodeMany(separatedBy: separator, transform: T.init)
     }
 
-    public func decodeMany<T: RawRepresentable, S: StringProtocol>(separatedBy separator: S) -> [T] where T.RawValue == String {
+    public func decodeMany<T: RawRepresentable, S: StringProtocol>(separatedBy separator: S) -> [T]
+    where T.RawValue == String {
         decodeMany(separatedBy: separator, transform: T.init)
     }
 
     public func decodeMany<T, S: StringProtocol>(separatedBy separator: S, transform: @escaping (String) -> T?) -> [T] {
         lines
-            .filter { !$0.isEmpty } // skip empty lines
+            .filter { !$0.isEmpty }  // skip empty lines
             .compactMap(transform)
     }
 }

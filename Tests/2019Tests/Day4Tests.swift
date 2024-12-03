@@ -1,30 +1,30 @@
-import Foundation
-import XCTest
+import Testing
 
 @testable import Advent2019
 
-class Day4Tests: XCTestCase {
-    func testProblems() async throws {
-        let day = try await Year2019().day(for: 4)
-        let problem = await day.partOne()
-        XCTAssertEqual(Int(problem), 1196)
-        let nothing = await day.partTwo()
-        XCTAssertEqual(nothing, "")
-    }
+@Test
+func day4() async throws {
+    let day = try await Year2019().day(for: 4)
+    let partOne = await day.partOne()
+    #expect(Int(partOne) == 1196)
+    let partTwo = await day.partTwo()
+    #expect(partTwo == "")
+}
 
-    func testSimpleProgram1() {
-        let range = Day4.PasswordRange(start: 112233, end: 112233)
-        XCTAssertTrue(range.isValid(112233))
-    }
+@Test
+func day4_simpleProgram1() async throws {
+    let range = Day4.PasswordRange(start: 112233, end: 112233)
+    #expect(range.isValid(112233))
+}
 
-    func testSimpleProgram2() {
-        let range = Day4.PasswordRange(start: 123444, end: 123444)
-        XCTAssertFalse(range.isValid(123444))
-    }
+@Test
+func day4_simpleProgram2() async throws {
+    let range = Day4.PasswordRange(start: 123444, end: 123444)
+    #expect(!range.isValid(123444))
+}
 
-    func testSimpleProgram3() {
-        let range = Day4.PasswordRange(start: 111122, end: 111122)
-        XCTAssertTrue(range.isValid(111122))
-    }
-
+@Test
+func day4_simpleProgram3() async throws {
+    let range = Day4.PasswordRange(start: 111122, end: 111122)
+    #expect(range.isValid(111122))
 }

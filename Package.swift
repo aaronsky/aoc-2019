@@ -11,10 +11,12 @@ let allYears = [
     2020,
     2021,
     2022,
+    2023,
+    2024,
 ]
 
 // !!!: Update this every year.
-let currentYear = 2022
+let currentYear = 2024
 
 func adventTargetName(_ year: Int) -> String {
     "Advent\(year)"
@@ -84,10 +86,6 @@ let package = Package(
                 .product(name: "Algorithms", package: "swift-algorithms"),
                 .product(name: "Collections", package: "swift-collections"),
             ]
-        ),
-        .testTarget(
-            name: "BaseTests",
-            dependencies: ["Base"]
         ),
     ]
         + allYears.flatMap {

@@ -8,15 +8,17 @@ struct Day10: Day {
         case noop
 
         init?(rawValue: String) {
-            if let match = rawValue.firstMatch(of: Regex {
-                "addx "
-                TryCapture {
-                    Optionally("-")
-                    OneOrMore(.digit)
-                } transform: {
-                    Int($0)
+            if let match = rawValue.firstMatch(
+                of: Regex {
+                    "addx "
+                    TryCapture {
+                        Optionally("-")
+                        OneOrMore(.digit)
+                    } transform: {
+                        Int($0)
+                    }
                 }
-            }) {
+            ) {
                 self = .addx(match.1)
             } else if rawValue == "noop" {
                 self = .noop
@@ -58,8 +60,10 @@ struct Day10: Day {
             grid.map {
                 $0.map {
                     $0 ? "#" : " "
-                }.joined()
-            }.joined(separator: "\n")
+                }
+                .joined()
+            }
+            .joined(separator: "\n")
         )
 
         return "EPJBRKAH"

@@ -7,7 +7,8 @@ struct Day13: Day {
 
     init(_ input: Input) throws {
         let decoder = JSONDecoder()
-        packets = try input
+        packets =
+            try input
             .raw
             .split(separator: "\n\n")
             .compactMap { element in
@@ -24,7 +25,8 @@ struct Day13: Day {
     }
 
     func partOne() async -> String {
-        let sum = packets
+        let sum =
+            packets
             .enumerated()
             .filter { (_, pair) in
                 pair.0 < pair.1
